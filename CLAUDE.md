@@ -56,3 +56,9 @@ Content goes here...
 
 ## Git Workflow
 Always commit changes with descriptive messages and push to trigger Vercel deployment.
+
+## Images
+Store post images in `public/images/posts/` with naming convention: `[slug]-[n].jpg`
+
+## Conversion Script
+`scripts/convert-substack.mjs` - Converts Substack HTML exports to MDX (used for initial import)
