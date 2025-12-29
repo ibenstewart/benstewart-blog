@@ -29,9 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${stixTwoText.className}`}>
-      <body className="antialiased tracking-tight">
+      <body className="antialiased tracking-tight text-lg">
         <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 bg-white dark:bg-black text-gray-900 dark:text-gray-100">
-          <main className="max-w-[60ch] mx-auto w-full space-y-6 mt-0 md:mt-16">
+          <main className="max-w-[75ch] mx-auto w-full space-y-6 mt-0 md:mt-16">
             {children}
           </main>
           <Footer />
