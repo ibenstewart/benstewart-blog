@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef } from 'react';
+import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 import Link from 'next/link';
 import { highlight } from 'sugar-high';
 
@@ -8,6 +8,34 @@ type ListProps = ComponentPropsWithoutRef<'ul'>;
 type ListItemProps = ComponentPropsWithoutRef<'li'>;
 type AnchorProps = ComponentPropsWithoutRef<'a'>;
 type BlockquoteProps = ComponentPropsWithoutRef<'blockquote'>;
+
+// Custom component types
+type CalloutProps = {
+  children: ReactNode;
+  type?: 'insight' | 'warning' | 'tip' | 'story';
+};
+
+type PullQuoteProps = {
+  children: ReactNode;
+  author?: string;
+};
+
+type DividerProps = {
+  style?: 'dots' | 'line' | 'space' | 'wave';
+};
+
+type KeyPointProps = {
+  children: ReactNode;
+};
+
+type ScenarioProps = {
+  speaker: string;
+  children: ReactNode;
+};
+
+type TLDRProps = {
+  children: ReactNode;
+};
 
 const components = {
   h1: (props: HeadingProps) => (
@@ -106,6 +134,72 @@ const components = {
       className="ml-[0.075em] border-l-3 border-gray-300 pl-4 text-gray-700 dark:border-gray-600 dark:text-gray-300"
       {...props}
     />
+  ),
+  hr: () => (
+    <div className="my-10 flex items-center justify-center gap-2">
+      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+    </div>
+  ),
+  // Custom components
+  Callout: ({ children, type = 'insight' }: CalloutProps) => {
+    const styles = {
+      insight: 'bg-blue-50 border-blue-200 dark:bg-blue-950/30 dark:border-blue-800',
+      warning: 'bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800',
+      tip: 'bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-800',
+      story: 'bg-purple-50 border-purple-200 dark:bg-purple-950/30 dark:border-purple-800',
+    };
+    return (
+      <div className={`my-6 rounded-lg border-l-4 p-4 ${styles[type]}`}>
+        {children}
+      </div>
+    );
+  },
+  PullQuote: ({ children, author }: PullQuoteProps) => (
+    <figure className="my-8 px-4">
+      <blockquote className="text-xl md:text-2xl font-medium text-gray-800 dark:text-gray-200 italic border-l-4 border-gray-800 dark:border-gray-200 pl-4">
+        {children}
+      </blockquote>
+      {author && (
+        <figcaption className="mt-3 text-sm text-gray-600 dark:text-gray-400 pl-4">
+          — {author}
+        </figcaption>
+      )}
+    </figure>
+  ),
+  Divider: ({ style = 'dots' }: DividerProps) => {
+    if (style === 'space') return <div className="my-12" />;
+    if (style === 'line') return <hr className="my-10 border-gray-200 dark:border-gray-700" />;
+    if (style === 'wave') return (
+      <div className="my-10 flex items-center justify-center text-gray-300 dark:text-gray-600 text-2xl tracking-widest">
+        ~ ~ ~
+      </div>
+    );
+    return (
+      <div className="my-10 flex items-center justify-center gap-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+        <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+        <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+      </div>
+    );
+  },
+  KeyPoint: ({ children }: KeyPointProps) => (
+    <div className="my-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+      <p className="text-lg font-medium text-gray-900 dark:text-gray-100">{children}</p>
+    </div>
+  ),
+  Scenario: ({ speaker, children }: ScenarioProps) => (
+    <div className="my-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+      <span className="font-medium text-gray-700 dark:text-gray-300">{speaker}:</span>{' '}
+      <span className="text-gray-600 dark:text-gray-400 italic">{children}</span>
+    </div>
+  ),
+  TLDR: ({ children }: TLDRProps) => (
+    <div className="my-8 p-5 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+      <div className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">TL;DR</div>
+      <div className="text-gray-800 dark:text-gray-200 font-medium">{children}</div>
+    </div>
   ),
 };
 
