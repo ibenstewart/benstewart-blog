@@ -24,6 +24,24 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Safe area support for iPhone notch/dynamic island */
+.safe-top {
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-top {
+    padding-top: calc(1.5rem + env(safe-area-inset-top));
+  }
+  .safe-bottom {
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+}
+
 h1,
 h2,
 h3,
