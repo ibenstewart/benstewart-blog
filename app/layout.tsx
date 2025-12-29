@@ -1,11 +1,9 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { STIX_Two_Text } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 
-const inter = Inter({ subsets: ['latin'] });
-const stixTwoText = STIX_Two_Text({
+const dmSans = DM_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700']
 });
@@ -28,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${stixTwoText.className}`}>
+    <html lang="en" className={`${dmSans.className}`}>
       <body className="antialiased tracking-tight text-lg">
         <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 bg-white dark:bg-black text-gray-900 dark:text-gray-100">
           <main className="max-w-[75ch] mx-auto w-full space-y-6 mt-0 md:mt-16">
