@@ -3,6 +3,8 @@
 ## Project Overview
 Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing about software engineering and leadership.
 
+**Site URL:** https://www.benstewart.ai
+
 ## Tech Stack
 - **Framework:** Next.js 15 with App Router
 - **Styling:** Tailwind CSS
@@ -39,13 +41,15 @@ Content goes here...
 4. Add to homepage list in `app/page.mdx` (if featuring)
 5. Commit and push - Vercel auto-deploys
 
+**IMPORTANT:** New pages are automatically included in `app/sitemap.ts` for posts. If adding a new top-level page (not a post), add the route to the `routes` array in `app/sitemap.ts`.
+
 ## Key Files
 - `app/layout.tsx` - Main layout, font, metadata
 - `app/page.mdx` - Homepage
 - `app/posts/page.tsx` - Posts listing page
 - `mdx-components.tsx` - MDX component styling
 - `app/globals.css` - Global styles
-- `app/sitemap.ts` - Auto-generated sitemap
+- `app/sitemap.ts` - Auto-generated sitemap (posts auto-included, static pages need manual addition)
 
 ## Style Notes
 - Page width: 75ch
