@@ -24,17 +24,17 @@ function formatDate(dateString: string) {
 export default function PostsPage() {
   return (
     <div>
-      <h1 className="text-xl md:text-2xl font-medium mb-8">Writing</h1>
+      <h1 className="text-2xl md:text-3xl font-medium mb-8">Writing</h1>
       <div className="space-y-4">
         {posts.map((post) => (
           <div key={post.slug}>
             <Link
               href={`/posts/${post.slug}`}
-              className="underline decoration-neutral-500 underline-offset-[2.5px] hover:decoration-neutral-400 dark:decoration-neutral-500 dark:hover:decoration-neutral-600 transition-colors"
+              className="text-lg underline decoration-neutral-500 underline-offset-[2.5px] hover:decoration-neutral-400 dark:decoration-neutral-500 dark:hover:decoration-neutral-600 transition-colors"
             >
               {post.title}
             </Link>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-base text-gray-500 dark:text-gray-400 mt-1">
               {formatDate(post.date)}
             </p>
           </div>
