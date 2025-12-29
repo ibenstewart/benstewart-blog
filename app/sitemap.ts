@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-const SITE_URL = 'https://benstewart.blog';
+const SITE_URL = 'https://www.benstewart.ai';
 
 async function getPostSlugs(dir: string) {
   const entries = await fs.readdir(dir, {
@@ -31,7 +31,7 @@ export default async function sitemap() {
       lastModified: new Date().toISOString()
     }));
 
-  const routes = ['', '/posts'].map((route) => ({
+  const routes = ['', '/posts', '/bio'].map((route) => ({
     url: `${SITE_URL}${route}`,
     lastModified: new Date().toISOString()
   }));
