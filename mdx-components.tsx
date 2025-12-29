@@ -37,6 +37,16 @@ type TLDRProps = {
   children: ReactNode;
 };
 
+type TimelineProps = {
+  children: ReactNode;
+};
+
+type EventProps = {
+  year: string;
+  title: string;
+  children?: ReactNode;
+};
+
 const components = {
   h1: (props: HeadingProps) => (
     <h1 className="text-2xl md:text-3xl font-medium mb-1" {...props} />
@@ -199,6 +209,26 @@ const components = {
     <div className="my-8 p-5 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
       <div className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">TL;DR</div>
       <div className="text-gray-800 dark:text-gray-200 font-medium">{children}</div>
+    </div>
+  ),
+  Timeline: ({ children }: TimelineProps) => (
+    <div className="my-8 relative">
+      <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700" />
+      <div className="space-y-6">
+        {children}
+      </div>
+    </div>
+  ),
+  Event: ({ year, title, children }: EventProps) => (
+    <div className="relative pl-8">
+      <div className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-[3px] border-gray-400 dark:border-gray-500 bg-white dark:bg-black" />
+      <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+        <span className="text-sm font-medium text-gray-500 dark:text-gray-400 tabular-nums">{year}</span>
+        <span className="font-medium text-gray-900 dark:text-gray-100">{title}</span>
+      </div>
+      {children && (
+        <p className="mt-1 text-gray-600 dark:text-gray-400 text-base">{children}</p>
+      )}
     </div>
   ),
 };
