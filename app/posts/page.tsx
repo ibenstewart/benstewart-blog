@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 const posts = [
+  { slug: 'sustainable', title: 'Sustainable Pace Just Got Faster' },
   { slug: 'a-prompt-to-your-leadership-style', title: 'A prompt to your leadership style' },
   { slug: 'the-truth-about-authentic-leadership', title: 'The Truth About Authentic Leadership' },
   { slug: 'waist', title: 'W.A.I.S.T.' },
