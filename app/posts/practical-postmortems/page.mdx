@@ -1,0 +1,93 @@
+export const metadata = {
+  title: "Practical Postmortems",
+  date: "2018-10-18",
+  subtitle: "How to learn from incidents without burning your team"
+};
+
+# Practical Postmortems
+
+It's been an hour since the incident started. Your team has been firefighting since lunch. The sun went down somewhere in the middle of it, and everyone looks exhausted.
+
+Finally, leadership calls it: incident closed. Systems stable. Everyone can go home.
+
+As the team disperses, someone says what everyone's thinking: "See you at the postmortem..."
+
+---
+
+## What a Postmortem Actually Is
+
+A postmortem is a meeting held after an incident, while details are still fresh, to figure out what happened and how to prevent it from happening again.
+
+The word sounds ominous. Like an autopsy. And in some organisations, that's exactly what it feels like—a death march where middle management finds someone to blame.
+
+<Callout type="warning">
+If your postmortems are about finding someone to throw under the bus, you have a culture problem that no process can fix. A SQL server outage is the least of your worries.
+</Callout>
+
+Done right, postmortems are about **learning**. That's the entire point. Not punishment. Not blame. Learning.
+
+---
+
+## The Manager's Responsibility
+
+Here's the uncomfortable truth: as a manager, you need to take accountability for incidents in your area. Even when—especially when—someone on your team made a mistake.
+
+Your ego cannot come before the humans in your team.
+
+If people fear the postmortem, they'll hide information. They'll cover tracks. They'll point fingers at each other. You'll never get to the real issues, and you'll keep having the same incidents over and over.
+
+<KeyPoint>
+Psychological safety isn't a nice-to-have in postmortems. It's the prerequisite for them working at all.
+</KeyPoint>
+
+---
+
+## Running the Meeting
+
+### Who to Invite
+
+Open it up. Anyone in the company who wants to attend should be welcome. But make sure the people who actually discovered, handled, and resolved the incident are there. Record it for those who can't make it.
+
+Book a room with whiteboards and sticky notes. You'll want to visualise the timeline and capture actions.
+
+### Setting the Scene
+
+Start by explaining how the incident was discovered and what problems surfaced initially. Set context. Get everyone on the same page about what actually happened before diving into why.
+
+### Guiding the Discussion
+
+Your job is to ask questions, not provide answers. Guide rather than direct.
+
+Good questions to ask:
+- Where could we have caught this earlier?
+- What monitoring would have helped?
+- What if the person who fixed it wasn't available?
+- Where are the knowledge gaps?
+- What documentation is missing?
+- What process failed?
+
+<Callout type="insight">
+Beware hindsight bias. It's easy to say "we should have seen that coming" when you already know the outcome. Focus on what was actually knowable at the time.
+</Callout>
+
+### Actions
+
+Finish by summarising findings and assigning remediation tasks. Integrate them into your normal workflow based on severity. A critical fix goes into the next sprint. A nice-to-have goes on the backlog.
+
+---
+
+## The Point
+
+Shit happens. Learn from it.
+
+The best teams treat incidents as opportunities to improve. They exercise their incident response like a muscle, getting faster and better each time. Mean time to resolution goes down. Recurrence goes down. Confidence goes up.
+
+The worst teams treat incidents as crimes to be solved and criminals to be punished. They learn nothing, and the same problems keep happening.
+
+Choose which kind of team you want to be.
+
+---
+
+<TLDR>
+Postmortems are for learning, not blame. As a manager, take accountability—your ego can't come before your team's psychological safety. Run the meeting by asking questions, not providing answers. Focus on what was knowable at the time, not hindsight. Assign actions and integrate them into normal work. Shit happens. Learn from it.
+</TLDR>
