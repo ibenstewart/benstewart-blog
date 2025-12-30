@@ -1,0 +1,130 @@
+export const metadata = {
+  title: "I Built This Blog With Claude Code",
+  date: "2024-12-30",
+  subtitle: "And it's writing this post right now"
+};
+
+# I Built This Blog With Claude Code
+
+Here's a strange confession: I'm not entirely sure how much of this blog I actually wrote.
+
+Not the posts themselves—those are mine, drawn from years of making mistakes, learning from them, and occasionally writing something useful down. But the infrastructure? The code that turns my rambling MDX files into the clean pages you're reading? That was a collaboration with Claude Code, and I use that word carefully.
+
+---
+
+## The Starting Point
+
+I had a problem. Years of writing on Substack had produced around fourteen posts about engineering leadership—thoughts on managing up, the basic boss formula, why sustainable pace matters. Good stuff, I thought. But it was trapped in someone else's platform, formatted however Substack wanted, with no real ownership of the underlying content.
+
+I wanted something simpler. My own domain. Version-controlled content. No subscription prompts. Just writing.
+
+The catch? I hadn't built a website from scratch in years. The JavaScript ecosystem had moved on. Next.js 15, App Router, Tailwind v4, MDX—I understood the concepts but not the specifics.
+
+<KeyPoint>
+Claude Code didn't just help me build a blog. It taught me modern web development in the process.
+</KeyPoint>
+
+## How It Actually Worked
+
+I started with a vague prompt: "I want to migrate my Substack posts to a personal blog on my own domain."
+
+What followed was a genuine back-and-forth. Claude suggested Next.js with MDX for content. I agreed. It scaffolded the project structure. I asked questions. It explained choices. When I didn't like something—a font, a spacing decision, the way code blocks looked—I said so, and we iterated.
+
+The migration script is a good example. My Substack exports were messy HTML files with embedded images, tracking pixels, and subscribe buttons baked in. Claude wrote a conversion script that:
+
+- Parsed the HTML and extracted the actual content
+- Downloaded images to a local folder with sensible naming
+- Stripped all the Substack-specific cruft
+- Generated clean MDX files with proper metadata
+
+I reviewed the script. It made sense. I ran it. Fourteen posts converted in seconds.
+
+<Callout type="insight">
+The script still lives in `/scripts/convert-substack.mjs`. It's not generic—it's specifically for my export format. That's fine. It solved my problem.
+</Callout>
+
+## The Components
+
+Early on, I found myself wanting to highlight certain passages differently. Key points. Callouts. Pull quotes. The kind of visual hierarchy that makes long-form content more readable.
+
+I described what I wanted. Claude built `mdx-components.tsx`—a set of React components I could use directly in my posts:
+
+```jsx
+<KeyPoint>
+This is important and should stand out.
+</KeyPoint>
+
+<Callout type="warning">
+But this is a warning about something.
+</Callout>
+
+<PullQuote author="Someone Smart">
+A memorable quote goes here.
+</PullQuote>
+```
+
+I didn't have to learn the intricacies of MDX component registration. I didn't have to debug the integration with Next.js 15's app router. I described what I wanted, reviewed what Claude produced, and adjusted where needed.
+
+---
+
+## What Surprised Me
+
+Three things stood out about building this way.
+
+**First, the speed was disorienting.** Tasks that would have taken me hours of documentation-reading and Stack Overflow-searching happened in minutes. Not because Claude was doing the work *for* me, but because it was doing the tedious parts while I focused on decisions.
+
+**Second, I learned more than I expected.** When Claude suggested using Tailwind's `75ch` max-width for readability, I asked why. It explained optimal line length for reading comprehension. When it set up dark mode, I understood the CSS variables approach because I'd asked questions along the way.
+
+**Third, the code is genuinely simple.** I was worried I'd end up with an over-engineered mess I couldn't maintain. Instead, the codebase is minimal. A layout file. A few components. MDX posts in folders. That's it. When something needs changing, I understand where to look.
+
+<Callout type="story">
+There's a file called `CLAUDE.md` in the root of this project. It's a context file—a way to give Claude the background it needs to help effectively. The fact that such a file exists, and that maintaining it is useful, says something about how this kind of development works.
+</Callout>
+
+## The Meta Moment
+
+And now here's the recursive bit: Claude Code is writing this post.
+
+I asked it to look at my existing posts, understand my style, and write something about how we built this blog together. It read my writing about authentic leadership and sustainable pace. It noticed I use first-person narrative, practical examples, and `<TLDR>` boxes at the end. It saw that I avoid corporate jargon but don't shy away from complexity.
+
+Then it wrote this.
+
+I'll edit it, of course. Add my own thoughts. Cut the bits that don't sound like me. But the bones came from an AI that had read enough of my writing to approximate my voice.
+
+Is that strange? I think it's mostly honest. Every writer borrows. Every voice is shaped by what we've read. Claude has just read me, specifically, and reflected something back.
+
+---
+
+## What I'd Tell Someone Considering This
+
+If you're thinking about using Claude Code—or any AI coding assistant—for a project like this, here's what I've learned:
+
+**Start with a real problem.** "Play with AI" is not a goal. "Migrate my writing to a platform I control" is. The specificity gives the collaboration direction.
+
+**Stay in the loop.** This isn't about typing a prompt and walking away. The best results came from genuine back-and-forth. Question the suggestions. Push back on defaults. The AI doesn't know your taste until you show it.
+
+**Keep it simple.** AI can generate complexity as easily as simplicity. Probably easier. Your job is to resist unnecessary abstraction. If you can't explain why something exists, it probably shouldn't.
+
+**Use it to learn.** The efficiency gains are real, but the learning opportunity is bigger. Every suggestion is a chance to ask "why?" You'll come out understanding more than you went in.
+
+<KeyPoint>
+Claude Code is a collaborator, not a replacement. The humans still need to make decisions, set direction, and maintain quality standards.
+</KeyPoint>
+
+## The Irony Isn't Lost on Me
+
+I write about leadership—about being authentic, about the humanity required to lead well, about why AI won't replace the fundamentally human parts of management.
+
+And yet here I am, having built my platform for those ideas using AI, now writing about that process with AI assistance.
+
+I don't think that's contradictory. Tools are tools. A calculator doesn't make mathematics less valuable. Spell check doesn't make writing less meaningful. Claude Code doesn't make the decisions I encode in this blog less mine.
+
+What matters is that I can explain every choice. I understand the code. I own the content. The infrastructure serves the writing, and the writing is still fundamentally about humans leading humans.
+
+That hasn't changed. The tools just got more interesting.
+
+---
+
+<TLDR>
+I built this entire blog using Claude Code—from Substack migration to custom MDX components to the design system. The process was collaborative, not automated: I made decisions, Claude handled implementation, and I learned modern web development along the way. The meta twist? Claude also wrote this post, based on reading my existing writing. The tools are powerful, but the human still sets direction and maintains standards.
+</TLDR>
