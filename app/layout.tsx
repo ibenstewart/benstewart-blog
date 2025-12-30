@@ -44,7 +44,8 @@ export default function RootLayout({
 
 function Footer() {
   const links = [
-    { name: 'linkedin', url: 'https://www.linkedin.com/in/ben-stewart-90944595/' }
+    { name: 'linkedin', url: 'https://www.linkedin.com/in/ben-stewart-90944595/' },
+    { name: 'contact', url: 'mailto:ben@benstewart.ai' }
   ];
 
   return (
