@@ -62,6 +62,7 @@ Available components in `mdx-components.tsx`:
 - `app/page.mdx` - Homepage
 - `app/bio/page.mdx` - Bio page with timeline
 - `app/posts/page.tsx` - Posts listing page
+- `app/speaking/page.tsx` - Speaking page (videos, podcasts, articles)
 - `mdx-components.tsx` - Custom MDX components
 - `app/globals.css` - Global styles (includes safe area CSS)
 - `app/sitemap.ts` - Auto-generated sitemap
@@ -82,3 +83,23 @@ Store post images in `public/images/posts/` with naming convention: `[slug]-[n].
 
 ## Conversion Script
 `scripts/convert-substack.mjs` - Converts Substack HTML exports to MDX (used for initial import)
+
+## Speaking Page
+The speaking page (`app/speaking/page.tsx`) displays videos, podcasts, and articles. To add content, edit the arrays at the top of the file:
+
+```typescript
+// Videos - YouTube embeds that play on site
+const videos = [
+  { videoId: 'ABC123', title: 'Talk Title', event: 'Conference', date: '2024' },
+];
+
+// Podcasts - external links
+const podcasts = [
+  { title: 'Episode', show: 'Podcast Name', url: 'https://...', date: '2024' },
+];
+
+// Articles - external links
+const articles = [
+  { title: 'Article', publication: 'Publication', url: 'https://...', date: '2024' },
+];
+```
