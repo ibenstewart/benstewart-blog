@@ -31,7 +31,7 @@ export default async function sitemap() {
       lastModified: new Date().toISOString()
     }));
 
-  const routes = ['', '/posts', '/bio'].map((route) => ({
+  const routes = ['', '/posts', '/bio', '/speaking'].map((route) => ({
     url: `${SITE_URL}${route}`,
     lastModified: new Date().toISOString()
   }));
