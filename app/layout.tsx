@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import Link from 'next/link';
 
 export { viewport } from './viewport';
 
@@ -44,24 +45,41 @@ export default function RootLayout({
 
 function Footer() {
   const links = [
-    { name: 'linkedin', url: 'https://www.linkedin.com/in/ben-stewart-90944595/' },
-    { name: 'contact', url: 'mailto:ben@benstewart.ai' }
+    { name: 'posts', url: '/posts', external: false },
+    { name: 'linkedin', url: 'https://www.linkedin.com/in/ben-stewart-90944595/', external: true },
+    { name: 'contact', url: 'mailto:ben@benstewart.ai', external: true }
   ];
 
   return (
     <footer className="mt-12 text-center">
       <div className="flex justify-center space-x-4 tracking-tight">
-        {links.map((link) => (
-          <a
-            key={link.name}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-500 hover:text-gray-400 dark:text-gray-500 dark:hover:text-gray-600 transition-colors duration-200"
-          >
-            {link.name}
-          </a>
-        ))}
+        {links.map((link) => {
+          const linkClasses = "text-gray-500 hover:text-gray-400 dark:text-gray-500 dark:hover:text-gray-600 transition-colors duration-200";
+
+          if (link.external) {
+            return (
+              <a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkClasses}
+              >
+                {link.name}
+              </a>
+            );
+          }
+
+          return (
+            <Link
+              key={link.name}
+              href={link.url}
+              className={linkClasses}
+            >
+              {link.name}
+            </Link>
+          );
+        })}
       </div>
     </footer>
   );
