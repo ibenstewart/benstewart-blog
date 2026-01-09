@@ -21,7 +21,7 @@ export const metadata = {
 
 I've been building an iOS app with AI coding tools. Specifically, using something called Ralph.
 
-Ralph is a pattern for running AI CLIs in a loop. You write a PRD with acceptance criteria, set up a progress file, and run Claude Code (or whatever) repeatedly until the checklist is done. Matt Pocock wrote the definitive guide on it. The name comes from The Simpsons—Ralph Wiggum is well-meaning but needs guardrails. Same energy.
+Ralph is a pattern for running AI CLIs in a loop. You write a PRD with acceptance criteria, set up a progress file, and run Claude Code (or whatever) repeatedly until the checklist is done. Matt Pocock wrote the definitive guide on it. The name comes from The Simpsons. Ralph Wiggum is well-meaning but needs guardrails. Same energy.
 
 Here's the strange part: it works. I kicked off a run, went to make coffee, came back to working features committed to my repo.
 
@@ -31,14 +31,14 @@ And here's the stranger part: the automation isn't the interesting bit.
 
 ## The PRD Is the Work
 
-Before I could run Ralph, I had to write a PRD. Not a vague list of features—a proper document with acceptance criteria, verification steps, and a clear definition of done for each item.
+Before I could run Ralph, I had to write a PRD. Not a vague list of features. A proper document with acceptance criteria, verification steps, and a clear definition of done for each item.
 
 That PRD took real thought. I used Claude to help draft it, which meant I had to actually articulate what I wanted. What does "add tab bar navigation" mean, specifically? What are the tabs? What icons? What happens when you tap them? Where do the files go?
 
-By the time the PRD was done, the hard work was finished.
+By the time the PRD was done... the hard work was finished.
 
 <KeyPoint>
-Translating that spec into code was almost mechanical. A junior engineer could have taken that PRD and produced roughly the same output as Ralph. Just slower. Ralph's advantage isn't capability—it's speed and the fact that it doesn't get bored.
+Translating that spec into code was almost mechanical. A junior engineer could have taken that PRD and produced roughly the same output as Ralph. Just slower. Ralph's advantage isn't capability. It's speed and the fact that it doesn't get bored.
 </KeyPoint>
 
 ---
@@ -47,36 +47,32 @@ Translating that spec into code was almost mechanical. A junior engineer could h
 
 Here's the contrarian take: Ralph is incidental. The pattern underneath is what matters.
 
-PRD with acceptance criteria → small tasks → progress tracking → verification before commit.
+PRD with acceptance criteria. Small tasks. Progress tracking. Verification before commit.
 
 That workflow works whether Ralph executes it, a junior engineer executes it, or you execute it yourself. The AI is just one possible executor. A fast one, sure. But the discipline is the asset, not the tool.
 
 If Anthropic disappeared tomorrow, I'd keep the PRD template. I'd keep the checklist structure. I'd keep the habit of defining done before writing code. Ralph gave me a reason to build that muscle. The muscle stays even if Ralph goes.
 
-<Callout type="insight">
-Everyone's asking "Will AI replace engineers?" Wrong question. That assumes there's a fixed amount of work to be done. Finish the backlog, ship the product, go home. But that's not how software works. Work expands to fill capacity. Give engineers better tools and they don't do the same work faster—they do more ambitious work.
-</Callout>
-
 ---
 
-## What This Means for Teams
+## The Wrong Question
 
-The discourse around AI and engineering jobs is stuck in a zero-sum frame. AI takes jobs or it doesn't. Engineers get replaced or they don't.
+Everyone's asking "will AI replace engineers?" That assumes there's a fixed amount of work to be done. Finish the backlog, ship the product, go home.
 
-That's not what I see when I use Ralph.
+But that's not how software works. Work expands to fill capacity. Give engineers better tools and they don't do the same work faster. They do more ambitious work.
 
-I see leverage. I see the ability to take on more ambitious projects because the mechanical parts have a release valve. I see engineers freed up to do the work that actually requires judgment—architecture, requirements, knowing what *not* to build.
+I don't see Ralph replacing anyone. I see leverage. I see engineers freed up to do the work that actually requires judgment. Architecture. Requirements. Knowing what *not* to build.
 
-The engineers who thrive won't be the ones racing against AI. They'll be the ones who know how to specify work clearly enough that AI can execute it. That's not a new skill. It's the old skill of writing good specs, delegation, and clear thinking. It's just more valuable now.
+The engineers who thrive won't be the ones racing against AI. They'll be the ones who know how to specify work clearly enough that AI can execute it. That's not a new skill, by the way. It's the old skill of writing good specs, delegation, and clear thinking. It's just more valuable now.
 
-Ralph didn't replace anyone on my team. Ralph made me better at defining what needs to be built.
-
-That's the point.
+<KeyPoint>
+Ralph didn't replace anyone on my team. Ralph made me better at defining what needs to be built. (Which, honestly, I should have been better at anyway.)
+</KeyPoint>
 
 ---
 
 <TLDR>
-Ralph is a pattern for running AI coding tools in a loop against a PRD. It works. But the automation isn't the interesting part—the PRD is. By the time you've written a clear spec with acceptance criteria, the hard thinking is done. The AI is just a fast executor. The engineers who thrive won't be racing against AI; they'll be the ones who know how to specify work clearly. The discipline of defining work well is the real asset, not the tool.
+Ralph is a pattern for running AI coding tools in a loop against a PRD. It works. But the automation isn't the interesting part—the PRD is. By the time you've written a clear spec with acceptance criteria, the hard thinking is done. The engineers who thrive won't be racing against AI; they'll be the ones who know how to specify work clearly. The discipline of defining work well is the real asset, not the tool.
 </TLDR>
 
 ---
