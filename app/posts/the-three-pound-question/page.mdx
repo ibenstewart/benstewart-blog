@@ -19,96 +19,78 @@ export const metadata = {
 
 ![Clawdbot, ready to work](/images/posts/the-three-pound-question-0.jpg)
 
-I've got an old iMac sitting in my loft doing nothing useful. One of those ones that's too old to update but too expensive to throw out. So when developers kept talking about [Clawdbot](https://github.com/codeium/clawdbot)—an open-source AI assistant that's picked up 8,000 GitHub stars in a few weeks—I figured I'd give it something to do.
+I've got an old iMac sitting in my loft doing nothing useful, one of those ones that's too old to update but too expensive to throw out. So when I saw that viral post on Twitter about [Clawdbot](https://github.com/codeium/clawdbot)—an open-source AI assistant that's picked up 8,000 GitHub stars in a few weeks—I figured I'd give the iMac something to do.
 
-The setup took about an hour. Connected it to Telegram, gave it one skill, sandboxed everything else. I wasn't about to let some AI assistant I'd just heard of anywhere near my actual email or calendar. I'm very much all in on AI, but I'm not an idiot.
+The setup took about an hour, connecting it to Telegram, giving it one skill, and sandboxing everything else because I wasn't about to let some AI assistant I'd just heard of anywhere near my actual email or calendar. I'm very much all in on AI, but I'm not an idiot.
 
-Then I started asking it questions. How does this work? What can you do? Show me something interesting.
+Then I started asking it questions, the usual getting-to-know-you stuff: How does this work? What can you do? Show me something interesting.
 
-**Three pounds.** That's what it cost me to have what was basically a getting-to-know-you conversation with a chatbot. At API rates, this thing burns money like it's got somewhere to be.
+**Three pounds.** That's what it cost me to have what was basically a casual conversation with a chatbot, and for me to get true ROI on this, I would need to set some kind of budget which I know I can do through the Claude API.
 
-So that killed any idea of using it day-to-day. But here's the thing... I don't think that's the point.
+So that killed any idea of using it day-to-day, at least without thinking through the economics properly. But here's the thing... I don't think that's the point.
 
 ---
 
 ## What I Actually Saw
 
-Forget what Clawdbot does today. Look at what it's trying to do.
-
-Most AI tools we use are reactive. You ask a question, you get an answer. You write a prompt, you get code. You open the chat, you get help.
-
-Clawdbot is different. It messages you first.
+Forget what Clawdbot does today and look at what it's trying to do, because most AI tools we use are reactive—you ask a question and you get an answer, you write a prompt and you get code, you open the chat and you get help. Clawdbot is different because it messages you first.
 
 <KeyPoint>
-Morning briefings. Alerts when something changes. Scheduled research that just arrives. It's trying to be an actual assistant, not a fancy search box.
+Morning briefings, alerts when something changes, scheduled research that just arrives in your Telegram. It's trying to be an actual assistant, not a fancy search box.
 </KeyPoint>
 
-The memory system caught my attention too. It stores context as Markdown files in folders. If it learns something wrong, you can literally `git revert` it. Try doing that with whatever black-box RAG system your company is probably building right now.
+The memory system caught my attention too, because it stores context as Markdown files in folders, which means if it learns something wrong you can literally `git revert` it. Try doing that with whatever black-box RAG system your company is probably building right now.
 
-And it can extend itself. Ask it to do something it can't do, and it'll write a new skill, reload itself, and try again. I watched it happen. It's weird in a good way.
+And it can extend itself, which is where things get interesting. Ask it to do something it can't do, and it'll write a new skill, reload itself, and try again. I watched it happen and it's weird in a good way, like seeing a junior developer figure something out on their own.
 
 <Callout type="warning">
-None of this is polished. The cost model is broken. The security story is "be careful" (which isn't a security story). It's clearly a power-user toy, not a product.
-
-But the shape of something is there.
+None of this is polished—the cost model is broken, the security story is "be careful" (which isn't a security story), and it's clearly a power-user toy rather than a product. But the shape of something is there.
 </Callout>
 
 ---
 
 ## The Question I Can't Stop Thinking About
 
-We spend a lot of time talking about AI at work. Chatbots for customers. Copilots for developers. AI-powered this and that. All reactive. All waiting for someone to ask.
+We spend a lot of time talking about AI at work—chatbots for customers, copilots for developers, AI-powered this and that—but all of it is reactive, all of it waiting for someone to ask. What would it look like to have an AI layer that actually knows your systems, that monitors your tooling and surfaces problems before you ask, that can take actions rather than just answer questions?
 
-What would it look like to have an AI layer that actually knows your systems? That monitors your tooling and surfaces problems before you ask? That can take actions, not just answer questions?
+I don't mean Clawdbot specifically, I mean the pattern underneath it.
 
-I don't mean Clawdbot specifically. I mean the pattern.
-
-Think about an agent that understands your incident management, your deployment pipelines, your team communication patterns. One that messages you when something looks wrong, not after you've spent an hour figuring out there's a problem. One that can actually do something about it.
+Think about an agent that understands your incident management, your deployment pipelines, your team communication patterns, and that messages you when something looks wrong rather than after you've spent an hour figuring out there's a problem. One that can actually do something about it.
 
 "The deployment to staging has been stuck for 20 minutes. I've checked the logs and it's waiting on a database migration lock. Want me to investigate?"
 
-That's not a chatbot. That's infrastructure that thinks.
+That's not a chatbot, that's infrastructure that thinks.
 
 ---
 
 ## Why We're Not Ready (But Should Be Thinking About It)
 
-We're probably not ready to build this. The cost isn't there yet—£3 for a conversation is absurd at scale. The security and compliance questions are genuinely hard. Multi-user, audit trails, data residency. All the stuff that matters when you're not one person messing about on an old iMac.
+We're probably not ready to build this yet because the cost isn't there—£3 for a conversation is absurd at scale—and the security and compliance questions are genuinely hard when you start thinking about multi-user, audit trails, and data residency. All the stuff that matters when you're not one person messing about on an old iMac.
 
-But the shape is clear.
+But the shape is clear, which means the question is whether we wait for someone else to build it or start thinking about what our version would actually need.
 
 <KeyPoint>
-The question is whether we wait for someone else to build it, or start thinking about what our version would actually need.
+Because here's what I think happens: someone will build this properly, they'll figure out the cost model and solve the security story and make it work at scale, and the companies that have been thinking about what their version looks like will move fast while the ones that haven't will be playing catch-up.
 </KeyPoint>
 
-Because here's what I think happens: someone will build this properly. They'll figure out the cost model. They'll solve the security story. They'll make it work at scale. And the companies that have been thinking about what their version looks like will move fast. The ones that haven't will be playing catch-up.
-
-We've been conditioned to think of AI as reactive because that's what the tools do. You go to ChatGPT. You invoke Claude. You prompt Copilot. The mental model is "I initiate, AI responds."
-
-That's about to flip.
+We've been conditioned to think of AI as reactive because that's what the tools do—you go to ChatGPT, you invoke Claude, you prompt Copilot, and the mental model is always "I initiate, AI responds." That's about to flip.
 
 ---
 
 ## The Shape of What's Coming
 
-Reactive AI is a tool. Proactive AI is infrastructure.
+Reactive AI is a tool, but proactive AI is infrastructure, and there's a meaningful difference between the two. Tools are things you pick up when you need them, while infrastructure runs whether you're paying attention or not, monitoring and acting and telling you when something's wrong before you knew to look.
 
-Tools are things you pick up when you need them. Infrastructure runs whether you're paying attention or not. It monitors. It acts. It tells you when something's wrong before you knew to look.
-
-We've built decades of infrastructure that's entirely reactive. Alerts that fire after thresholds are breached. Monitoring dashboards you have to check. Logs you have to grep. We've normalised this because that's what was possible.
+We've built decades of infrastructure that's entirely reactive—alerts that fire after thresholds are breached, monitoring dashboards you have to check, logs you have to grep—and we've normalised this because that's what was possible.
 
 <Callout type="insight">
-What if your infrastructure could think? Not "here's a metric" but "here's what's probably wrong and here's what I already tried to fix it."
-
-That's not science fiction. That's just expensive right now.
+What if your infrastructure could think? Not "here's a metric" but "here's what's probably wrong and here's what I already tried to fix it." That's not science fiction, that's just expensive right now.
 </Callout>
 
-I spent £3 and a weekend to understand this question better. To see what proactive AI actually feels like, even in a janky prototype running on a decade-old iMac.
-
-Probably worth it.
+I spent £3 and a weekend to understand this question better, to see what proactive AI actually feels like even in a janky prototype running on a decade-old iMac. Probably worth it.
 
 ---
 
 <TLDR>
-Three quid bought me a conversation with Clawdbot, an open-source AI assistant that messages you first instead of waiting to be asked. The cost model is broken and it's clearly a power-user toy, but it shows the shape of something we're not building yet: proactive AI that monitors your systems and surfaces problems before you look. Reactive AI is a tool. Proactive AI is infrastructure. The question isn't whether this happens—it's whether you'll be ready when it does.
+Three quid bought me a conversation with Clawdbot, an open-source AI assistant that messages you first instead of waiting to be asked, and while the cost model is broken and it's clearly a power-user toy, it shows the shape of something we're not building yet: proactive AI that monitors your systems and surfaces problems before you look. Reactive AI is a tool, but proactive AI is infrastructure, and the question isn't whether this happens—it's whether you'll be ready when it does.
 </TLDR>
