@@ -25,7 +25,7 @@ The setup took about an hour, connecting it to Telegram, giving it one skill, an
 
 Then I started asking it questions, the usual getting-to-know-you stuff: How does this work? What can you do? Show me something interesting.
 
-**Three pounds.** That's what it cost me to have what was basically a casual conversation with a chatbot, and for me to get true ROI on this, I would need to set some kind of budget which I know I can do through the Claude API.
+**Three pounds.** That's what it cost me to have what was basically a casual conversation with a chatbot, and to make this sustainable I'd need to set a budget through the API, which felt like overkill for a weekend experiment.
 
 So that killed any idea of using it day-to-day, at least without thinking through the economics properly. But here's the thing... I don't think that's the point.
 
@@ -65,7 +65,7 @@ That's not a chatbot, that's infrastructure that thinks.
 
 ## Why We're Not Ready (But Should Be Thinking About It)
 
-We're probably not ready to build this yet because the cost isn't there—£3 for a conversation is absurd at scale—and the security and compliance questions are genuinely hard when you start thinking about multi-user, audit trails, and data residency. All the stuff that matters when you're not one person messing about on an old iMac.
+We're probably not ready to build this yet because the cost isn't there—£3 for a conversation is absurd at scale—and the security and compliance questions are genuinely hard when you start thinking about multi-user access, audit trails, and data residency. The stuff that matters when you're building for an organisation rather than tinkering on a weekend.
 
 But the shape is clear, which means the question is whether we wait for someone else to build it or start thinking about what our version would actually need.
 
@@ -73,7 +73,7 @@ But the shape is clear, which means the question is whether we wait for someone 
 Because here's what I think happens: someone will build this properly, they'll figure out the cost model and solve the security story and make it work at scale, and the companies that have been thinking about what their version looks like will move fast while the ones that haven't will be playing catch-up.
 </KeyPoint>
 
-We've been conditioned to think of AI as reactive because that's what the tools do—you go to ChatGPT, you invoke Claude, you prompt Copilot, and the mental model is always "I initiate, AI responds." That's about to flip.
+We've been conditioned to think of AI as reactive because that's what the tools do—you go to ChatGPT, you invoke Claude, you prompt Copilot, and the mental model is always "I initiate, AI responds." That mental model is about to flip.
 
 ---
 
@@ -87,10 +87,12 @@ We've built decades of infrastructure that's entirely reactive—alerts that fir
 What if your infrastructure could think? Not "here's a metric" but "here's what's probably wrong and here's what I already tried to fix it." That's not science fiction, that's just expensive right now.
 </Callout>
 
-I spent £3 and a weekend to understand this question better, to see what proactive AI actually feels like even in a janky prototype running on a decade-old iMac. Probably worth it.
+I spent £3 and a weekend to understand this question better, to see what proactive AI actually feels like even in a janky prototype. Probably worth it.
+
+If you're running a platform team or thinking about internal tooling, start sketching what proactive would look like in your world. Not the polished version—the shape of it. What would your systems tell you if they could talk first?
 
 ---
 
 <TLDR>
-Three quid bought me a conversation with Clawdbot, an open-source AI assistant that messages you first instead of waiting to be asked, and while the cost model is broken and it's clearly a power-user toy, it shows the shape of something we're not building yet: proactive AI that monitors your systems and surfaces problems before you look. Reactive AI is a tool, but proactive AI is infrastructure, and the question isn't whether this happens—it's whether you'll be ready when it does.
+Three quid bought me a conversation with Clawdbot, an open-source AI assistant that messages you first instead of waiting to be asked, and while the cost model is broken and it's clearly a power-user toy, it shows the shape of something we're not building yet: proactive AI that monitors your systems and surfaces problems before you look. Reactive AI is a tool, but proactive AI is infrastructure. The question isn't whether this happens—it's whether you'll be ready when it does. Start sketching the shape now.
 </TLDR>
