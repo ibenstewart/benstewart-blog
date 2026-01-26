@@ -103,3 +103,108 @@ const articles = [
   { title: 'Article', publication: 'Publication', url: 'https://...', date: '2024' },
 ];
 ```
+
+---
+
+## Tone of Voice Guide
+
+When writing blog posts, follow Ben's distinctive voice:
+
+### Core Principles
+
+**Conversational but not casual** - Write like you're having a pint with a colleague who respects honesty over politeness. Direct sentences. Clear points. No fluff.
+
+**Pragmatic over theoretical** - Lead with practical reality, not abstract concepts. Start with "here's what happened" not "here's what the research says."
+
+**Opinionated but self-aware** - Take strong positions ("that's backwards", "this is wrong") but acknowledge your own failures and contradictions.
+
+### Voice Patterns
+
+**Opening hooks:**
+- Drop the reader into a specific moment: "It's 9:58am and you've been preparing..."
+- Start with the counterintuitive: "Here's the strange part: it works."
+- Lead with the contrarian take: "That debate is over. Speed won."
+
+**Sentence structure:**
+- Mix short punchy sentences with longer explanatory ones
+- Use fragments for emphasis. Like this.
+- Front-load the main point, then explain: "Ralph didn't replace anyone on my team. Ralph made me better at defining what needs to be built."
+
+**Tone markers:**
+- Swear strategically (1-2 times per post, when it adds punch)
+- Use parenthetical asides to add personality: "(Which, honestly, I should have been better at anyway.)"
+- Rhetorical questions that challenge assumptions: "So if nothing ever runs to plan, why do we find it so hard to admit it?"
+
+**Section headers:**
+- Short, declarative: "The wrong question", "What actual speed looks like"
+- Sometimes just the key phrase: "W.A.I.S.T.", "The Point"
+
+### Content Structure
+
+**Always include:**
+- **Opening scenario or hook** (1-3 paragraphs)
+- **Clear thesis statement** (often after the hook)
+- **2-4 main sections** with headers
+- **Concrete examples** (real situations, not hypotheticals)
+- **KeyPoint or Callout boxes** for emphasis (1-3 per post)
+- **TLDR at the end** (3-5 sentences summarizing the core argument)
+
+**Common patterns:**
+- Lead with a story or concrete situation
+- Introduce the contrarian/counterintuitive idea
+- Explain why the conventional wisdom is wrong
+- Show what actually works (with examples)
+- End with the broader implication or lesson
+
+### Language Choices
+
+**Prefer:**
+- "Here's the thing..." over "One might consider..."
+- "That's backwards" over "That may not be optimal"
+- "Shit happens" over "challenges occur"
+- "You bottled it" over "you made a suboptimal decision"
+- Active voice: "you failed" not "a failure occurred"
+
+**Avoid:**
+- Corporate speak ("leverage synergies", "circle back")
+- Hedging unnecessarily ("perhaps", "possibly", "it might be")
+- Overlong explanations of obvious points
+- Academic distancing ("one could argue")
+
+### Specific Techniques
+
+**Callbacks and self-awareness:**
+- Reference your own failures: "I've been guilty of this"
+- Admit ongoing struggles: "I have to improve in the follow habit a lot"
+- Question your own advice: "self-reflecting, I'm wondering how often I'm failing my own advice"
+
+**Metaphors and analogies:**
+- Use concrete, visual comparisons: "watermelon effect - green on the outside but red when you delve into it"
+- Tech culture references: Ralph Wiggum, The Simpsons
+- Simple physical analogies: running a race, building a machine
+
+**Emphasis devices:**
+- Bold text for key phrases in explanations
+- Italics for verbal emphasis or internal dialogue
+- CAPS for occasional strong emphasis (sparingly)
+
+### Audience Awareness
+
+**Primary audience:** Engineering leaders and senior engineers who:
+- Value practical experience over theory
+- Appreciate directness
+- Are tired of bullshit and corporate speak
+- Want actionable insights, not motivational content
+
+**Tone balance:**
+- Confident without arrogance
+- Honest without being preachy
+- Challenging without being dismissive
+- Human without oversharing
+
+### Post Length
+
+Most posts run 600-1200 words. Structure:
+- 100-200 word opening
+- 400-800 words of main content (2-4 sections)
+- 100-200 word closing/TLDR
