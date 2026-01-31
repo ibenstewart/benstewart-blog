@@ -1,0 +1,82 @@
+type ArticleJsonLdProps = {
+  title: string;
+  description: string;
+  date: string;
+  url: string;
+  image?: string;
+};
+
+export function ArticleJsonLd({ title, description, date, url, image }: ArticleJsonLdProps) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: description,
+    datePublished: date,
+    dateModified: date,
+    url: url,
+    author: {
+      '@type': 'Person',
+      name: 'Ben Stewart',
+      url: 'https://www.benstewart.ai/bio',
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Ben Stewart',
+      url: 'https://www.benstewart.ai',
+    },
+    ...(image && { image: image }),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
+
+export function PersonJsonLd() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Ben Stewart',
+    url: 'https://www.benstewart.ai',
+    jobTitle: 'Engineering Leader',
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Skyscanner',
+    },
+    sameAs: [
+      'https://www.linkedin.com/in/ben-stewart-90944595/',
+    ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
+
+export function WebsiteJsonLd() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Ben Stewart',
+    url: 'https://www.benstewart.ai',
+    description: 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.',
+    author: {
+      '@type': 'Person',
+      name: 'Ben Stewart',
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
