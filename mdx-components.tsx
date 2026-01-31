@@ -1,6 +1,7 @@
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 import Link from 'next/link';
 import { highlight } from 'sugar-high';
+import { ArticleJsonLd } from './app/components/JsonLd';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -45,6 +46,14 @@ type EventProps = {
   year: string;
   title: string;
   children?: ReactNode;
+};
+
+type PostSchemaProps = {
+  title: string;
+  description: string;
+  date: string;
+  slug: string;
+  image?: string;
 };
 
 const components = {
@@ -230,6 +239,15 @@ const components = {
         <p className="mt-1 text-gray-600 dark:text-gray-400 text-base">{children}</p>
       )}
     </div>
+  ),
+  PostSchema: ({ title, description, date, slug, image }: PostSchemaProps) => (
+    <ArticleJsonLd
+      title={title}
+      description={description}
+      date={date}
+      url={`https://www.benstewart.ai/posts/${slug}`}
+      image={image}
+    />
   ),
 };
 

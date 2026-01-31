@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import Link from 'next/link';
+import { WebsiteJsonLd } from './components/JsonLd';
 
 export { viewport } from './viewport';
 
@@ -20,7 +21,16 @@ export const metadata: Metadata = {
     default: 'Ben Stewart',
     template: '%s | Ben Stewart'
   },
-  description: 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.'
+  description: 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.',
+  openGraph: {
+    type: 'website',
+    locale: 'en_GB',
+    siteName: 'Ben Stewart',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@ibenstewart',
+  },
 };
 
 export default function RootLayout({
@@ -31,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.className}`}>
       <body className="antialiased tracking-tight text-lg">
+        <WebsiteJsonLd />
         <div className="min-h-screen flex flex-col justify-between p-8 bg-white dark:bg-black text-gray-900 dark:text-gray-100 safe-top safe-bottom">
           <main className="max-w-[75ch] mx-auto w-full space-y-6 mt-4 md:mt-16">
             {children}

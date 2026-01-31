@@ -3,33 +3,57 @@ import path from 'path';
 
 const SITE_URL = 'https://www.benstewart.ai';
 
-async function getPostSlugs(dir: string) {
+type PostInfo = {
+  slug: string;
+  date: string | null;
+};
+
+async function getPostsWithDates(dir: string): Promise<PostInfo[]> {
   const entries = await fs.readdir(dir, {
     recursive: true,
     withFileTypes: true
   });
-  return entries
+
+  const posts = entries
     .filter((entry) => entry.isFile() && entry.name === 'page.mdx')
     .map((entry) => {
       const relativePath = path.relative(
         dir,
         path.join(entry.parentPath, entry.name)
       );
-      return path.dirname(relativePath);
+      return {
+        slug: path.dirname(relativePath).replace(/\\/g, '/'),
+        filePath: path.join(entry.parentPath, entry.name)
+      };
     })
-    .map((slug) => slug.replace(/\\/g, '/'));
+    .filter((post) => post.slug !== '.');
+
+  const postsWithDates: PostInfo[] = await Promise.all(
+    posts.map(async (post) => {
+      try {
+        const content = await fs.readFile(post.filePath, 'utf-8');
+        const dateMatch = content.match(/date:\s*["'](\d{4}-\d{2}-\d{2})["']/);
+        return {
+          slug: post.slug,
+          date: dateMatch ? dateMatch[1] : null
+        };
+      } catch {
+        return { slug: post.slug, date: null };
+      }
+    })
+  );
+
+  return postsWithDates;
 }
 
 export default async function sitemap() {
   const postsDirectory = path.join(process.cwd(), 'app', 'posts');
-  const slugs = await getPostSlugs(postsDirectory);
+  const postsWithDates = await getPostsWithDates(postsDirectory);
 
-  const posts = slugs
-    .filter((slug) => slug !== '.')
-    .map((slug) => ({
-      url: `${SITE_URL}/posts/${slug}`,
-      lastModified: new Date().toISOString()
-    }));
+  const posts = postsWithDates.map((post) => ({
+    url: `${SITE_URL}/posts/${post.slug}`,
+    lastModified: post.date ? new Date(post.date).toISOString() : new Date().toISOString()
+  }));
 
   const routes = ['', '/posts', '/bio', '/speaking'].map((route) => ({
     url: `${SITE_URL}${route}`,
