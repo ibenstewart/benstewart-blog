@@ -1,7 +1,7 @@
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 import Link from 'next/link';
 import { highlight } from 'sugar-high';
-import { ArticleJsonLd } from './app/components/JsonLd';
+import { ArticleJsonLd, PersonJsonLd } from './app/components/JsonLd';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -265,6 +265,7 @@ const components = {
       image={image}
     />
   ),
+  PersonSchema: () => <PersonJsonLd />,
 };
 
 declare global {

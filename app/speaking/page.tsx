@@ -1,8 +1,18 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Speaking",
-  description: "Conference talks, podcast appearances, and articles by Ben Stewart"
+  description: "Conference talks, podcast appearances, and articles by Ben Stewart",
+  alternates: {
+    canonical: 'https://www.benstewart.ai/speaking'
+  },
+  openGraph: {
+    title: "Speaking - Ben Stewart",
+    description: "Conference talks, podcast appearances, and articles by Ben Stewart",
+    url: "https://www.benstewart.ai/speaking",
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630 }],
+  }
 };
 
 function YouTubeEmbed({ videoId, title }: { videoId: string; title: string }) {

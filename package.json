@@ -4,7 +4,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "delete": "rm -rf app/n"
+    "delete": "rm -rf app/n",
+    "validate-posts": "node scripts/validate-posts.mjs"
   },
   "dependencies": {
     "@next/mdx": "15.3.3",
