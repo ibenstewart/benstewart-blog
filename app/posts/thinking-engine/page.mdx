@@ -1,0 +1,212 @@
+export const metadata = {
+  title: "I Built a System Where AI Agents Argue About Strategy",
+  date: "2026-02-20",
+  subtitle: "The disagreements are the point.",
+  description: "How I use multi-agent AI to stress-test my thinking before it reaches a room full of people who won't push back hard enough.",
+  openGraph: {
+    title: "I Built a System Where AI Agents Argue About Strategy",
+    description: "How I use multi-agent AI to stress-test my thinking before it reaches a room full of people who won't push back hard enough.",
+    url: "https://www.benstewart.ai/posts/thinking-engine",
+    images: [{
+      url: "https://www.benstewart.ai/images/posts/thinking-engine-0.jpg",
+      width: 1200,
+      height: 630,
+    }],
+  }
+};
+
+# I Built a System Where AI Agents Argue About Strategy
+
+*How I use multi-agent AI to stress-test my thinking before it reaches a room full of people who won't push back hard enough.*
+
+I built a thing that changed how I think about strategy. Not a product. Not an app. A folder of markdown files and a set of instructions that turns Claude into something genuinely useful: a system where multiple AI personas analyse the same question independently, then a synthesis tells me where they disagree before it tells me where they agree.
+
+It sounds like overkill. It's not.
+
+Here's why I built it: most strategic thinking inside companies follows a predictable path. Someone poses a question. The most senior person offers their frame. The group gravitates toward it. You get one lens, one set of assumptions, and because the person talking usually has a decent track record, nobody pushes back hard enough.
+
+The result is strategy that feels rigorous but is actually narrow. I wanted to fix that for how I prepare for the conversations that matter.
+
+## How it works
+
+When I pose a strategic question, the system does four things.
+
+It spawns multiple AI "agents," each with a distinct analytical lens. A platform economist who thinks in aggregation theory and value capture. An antifragility analyst who's looking for the kill shot. A behavioural strategist who thinks everyone is solving the wrong problem. A disruption theorist who wants to know what you're not seeing. A systems architect who asks what's actually buildable. And a red team agent who picks your most dangerous competitor and attacks your strategy from their perspective.
+
+Each agent analyses independently, in a separate parallel process, with only their own persona loaded. They can't see what the others are saying. They can't hedge toward each other. They have to commit to what their lens reveals.
+
+Then a synthesis step identifies where they disagree first, then where they agree.
+
+<KeyPoint>
+Consensus is easy. Tension is where you learn something.
+</KeyPoint>
+
+And finally, before anything gets saved, I have to answer three questions that keep the whole thing honest. More on that in a minute.
+
+## Why personas, not prompts
+
+You could just ask Claude to think about something from multiple perspectives. But you'll get a polite, balanced, hedged answer. Everything will feel reasonable. Nothing will be uncomfortable.
+
+The difference is structure. Each agent has a full persona file that defines their analytical lens, their signature questions, their tone, and crucially, how they specifically apply to your situation. The personas aren't generic.
+
+<Callout type="warning">
+The antifragility analyst doesn't just "consider tail risks." It knows your business. It knows that every marketplace sitting between supply and demand is a turkey before Thanksgiving. Every day of growth confirms the thesis. The turkey gets fatter. But the turkey's model of the world is a single point of failure.
+</Callout>
+
+The behavioural strategist doesn't just "consider psychology." It reframes the entire question. When I asked about AI-powered product innovation, every other agent was thinking about how to make search faster or smarter. The behavioural strategist came back with something like:
+
+<PullQuote>People don't want the process eliminated. They want it to feel fair. An AI that makes things faster solves a problem your customers don't actually have. An AI that says 'here's why you won't regret this decision' solves the problem they've always had.</PullQuote>
+
+That reframe changed how I think about the product. And it came from a persona file, not a clever prompt.
+
+## The part I got wrong first
+
+I need to be honest about something. The first version of this system was rubbish.
+
+It was an opinion engine. I'd pose a question, the agents would produce confident, articulate, well-structured analysis... and none of it was grounded in anything. It was AI doing what AI does best: producing text that sounds authoritative regardless of whether it's true.
+
+The early outputs read like a McKinsey deck. Lots of frameworks, lots of "we believe," lots of confident assertions with no evidence underneath. And because I'd designed the system to produce exactly this kind of output, I initially thought it was working. The analysis felt insightful. It confirmed some of my existing beliefs. It challenged others in ways that felt productive.
+
+But when I tried to act on it, I couldn't. Because I'd ask myself "why do I believe this?" and the answer was "because an AI said it convincingly."
+
+<PullQuote>That's not strategy. That's expensive confirmation bias with better formatting.</PullQuote>
+
+The fix was two things. First, I added an evidence layer. Agents now have to ground their analysis in observable facts, not assertions. If the platform economist says "value is migrating to the infrastructure layer," the system needs to point at something real: a market trend, a competitor move, a customer behaviour shift. Opinions without evidence get flagged.
+
+Second (and this was the bigger change), I built the "So What?" gate.
+
+## The "So What?" gate
+
+This is the part that actually makes the system useful, and it's the part most people skip when they build something similar.
+
+After every synthesis, before anything gets saved to the knowledge base, the system asks me three questions:
+
+<Callout type="insight">
+**What will you DO differently because of this analysis?** A specific meeting, email, decision, conversation. Not "I feel more prepared." Not "this gave me a new perspective." A concrete action with a name and a date attached.
+
+**What in this analysis surprised you?** If the answer is nothing, the system just confirmed what I already believed. And it says so, explicitly. "This analysis reinforced your existing position. Consider whether you posed the question in a way that invited genuine challenge."
+
+**What are you choosing to ignore, and why?** Which agent didn't resonate? Was it because their analysis was weak, or because it was uncomfortable? This question surfaces blind spots and conscious bets in the same move.
+</Callout>
+
+If I can't name a concrete action, the system asks whether it should bother saving the insights at all. This keeps the knowledge base honest. It only contains things that actually changed how I think or act. Not things that sounded clever.
+
+## Alternative futures, not predictions
+
+Strategic questions don't have one future. They have several plausible ones. The system maintains a set of "realities," alternative futures that your strategy needs to survive.
+
+For a marketplace business, these might be: an agent economy where AI agents transact directly and consumers never visit your platform. A consolidation reality where three tech giants own the AI layer. A fragmentation reality where open source wins and AI is a commodity. A new entrant reality where an AI-native startup makes your category irrelevant. And a status quo reality where AI is incremental and existing players adapt.
+
+Every agent analysis includes a reality check. "How does this insight hold up across futures?"
+
+Here's where it gets useful. When I ran an analysis on product strategy, the antifragility agent's analysis was terrifying in the agent economy reality (your revenue model breaks suddenly, not gradually) but largely irrelevant in the status quo reality. That delta, the gap between "existential threat" and "doesn't matter," is exactly the kind of information you can't see without the framework.
+
+<KeyPoint>
+An insight that only works in one future is a bet. An insight that works across multiple futures is strategy. The system makes that distinction explicit.
+</KeyPoint>
+
+That means I walk into conversations knowing which of my recommendations are robust and which are gambles.
+
+## Compounding knowledge
+
+After passing the gate, the system extracts and files insights, mental models, predictions (with check-by dates), and decisions. Every new session starts by reading this accumulated knowledge. So session six is meaningfully smarter than session one. Not because the AI improved, but because the context is richer.
+
+The knowledge base is designed to shrink as well as grow. When evidence contradicts a stored belief, it gets flagged and removed. When a prediction's check-by date arrives, the system prompts an autopsy. Was it right? What did we learn? Should dependent insights be revised?
+
+After a few months of use, the system has accumulated a body of company-specific strategic knowledge that makes every analysis more grounded and less generic. Generic strategy advice is useless. Everyone knows that. The compounding system tilts toward specificity over time, which is where the real value lives.
+
+## What I've actually learned
+
+**Disagreement-first synthesis changes everything.** When you lead with "where do agents agree," you get comfortable confirmation of the majority view. When you lead with "where do they disagree," you surface the actual strategic questions that need answering. I've started applying this principle in real meetings too. "Before we align, where do we disagree?" It's a better opening question than most people think.
+
+**The evidence layer was non-negotiable.** Without it, you're building a very sophisticated way to generate opinions. Opinions are cheap. Grounded analysis is hard, which is exactly why it's worth doing.
+
+**The "So What?" gate is the most important feature.** Without it, the system produces impressive-sounding analysis that flatters your existing beliefs. With it, you're forced to be honest about whether anything actually changed.
+
+**The red team agent is uncomfortably good.** It picks the most dangerous competitor for each topic and attacks your strategy from their perspective. It regularly identifies the fatal flaw that the other agents missed. It's the agent I dread reading and learn the most from.
+
+<Callout type="story">
+This isn't a replacement for human strategic conversation. It's preparation for it. The best outcome isn't "the system told me what to do." It's walking into a room having already processed the question from six different angles, knowing where the real tensions are, and being ready to push the conversation toward the disagreements that matter.
+</Callout>
+
+## Build your own: a starter prompt
+
+The full system is a CLAUDE.md file, a folder of persona files, and a knowledge base. But you can get 80% of the value with a single prompt. Here's a starter version you can paste into a Claude project or use as a system prompt:
+
+```
+You are a strategic analysis system that uses multiple analytical
+perspectives to stress-test ideas.
+
+When I pose a strategic question, do the following:
+
+## Step 1: Spawn Agents
+Analyse the question from these five perspectives. Each perspective
+must commit to a clear position. No hedging.
+
+1. THE PLATFORM ECONOMIST - Who captures value? Where does power
+   accumulate? What are the network effects and switching costs?
+   Think in terms of aggregation, platforms, and value chain
+   positioning.
+
+2. THE ANTIFRAGILITY ANALYST - What kills this strategy suddenly?
+   Where is the hidden fragility? What looks like strength but is
+   actually a single point of failure? Think in terms of tail risks,
+   optionality, and convexity.
+
+3. THE BEHAVIOURAL STRATEGIST - What problem do people actually
+   have (vs the problem you think they have)? Where are you solving
+   the wrong thing? What would a psychologist see that an economist
+   wouldn't? Think in terms of human behaviour, framing effects,
+   and counterintuitive solutions.
+
+4. THE DISRUPTION THEORIST - What are you not seeing? Who is
+   building something "worse" that will be good enough? Where is
+   the low-end or new-market disruption? What job is actually being
+   hired for?
+
+5. THE RED TEAM - Pick the single most dangerous competitor or
+   threat. Assume their strategy is brilliant and well-funded. How
+   do they destroy this strategy? What is the attack vector nobody
+   is discussing?
+
+## Step 2: Synthesise (Disagreement First)
+After all five perspectives, write a synthesis that:
+- Starts with WHERE THE AGENTS DISAGREE (the tensions,
+  contradictions, and unresolved questions)
+- Then covers where they agree (but only after the disagreements)
+- Identifies which insights are robust across multiple plausible
+  futures and which only work in one scenario
+- Names the single most important question this analysis surfaces
+  but does not answer
+
+## Step 3: The "So What?" Gate
+After the synthesis, ask me:
+1. What will you DO differently because of this analysis?
+   (Name a specific action.)
+2. What surprised you? (If nothing, say so - the analysis just
+   confirmed existing beliefs.)
+3. What are you choosing to ignore, and why?
+
+If I cannot name a concrete action, ask whether this analysis was
+worth doing and what question I should have asked instead.
+
+## Rules
+- Each agent must cite observable evidence for key claims, not
+  just assertions
+- Each agent must commit to a position. "It depends" is not
+  allowed.
+- The synthesis must start with disagreements. Do not lead with
+  consensus.
+- Be direct. No corporate language. No hedging. Say the
+  uncomfortable thing.
+```
+
+<Callout type="tip">
+Start with three agents, one set of alternative futures, and the "So What?" gate. Add complexity only when you've earned it. To make it compound over time, add a `knowledge-base/` folder and tell the system to read it at the start of every session and write validated insights to it after the gate.
+</Callout>
+
+*This system runs on Claude and is built entirely from markdown files and a structured instruction prompt. There's no app. There's no database. It's a thinking tool that happens to accumulate institutional memory. The entire thing cost me a weekend to build and has changed how I prepare for every strategic conversation since.*
+
+<TLDR>
+Most strategic thinking inside companies is narrow because nobody pushes back hard enough on the most senior person's frame. I built a system where multiple AI agents, each with a distinct analytical lens, analyse the same question independently and can't see each other's work. The synthesis leads with **disagreements first, not consensus**. The key feature is a "So What?" gate that forces you to name a concrete action before anything gets saved. Without it, you're just building expensive confirmation bias with better formatting. The system compounds knowledge over time and tests every insight against multiple plausible futures, so you know which recommendations are robust and which are gambles.
+</TLDR>
