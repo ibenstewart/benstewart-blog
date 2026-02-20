@@ -21,31 +21,27 @@ export const metadata = {
 
 I built a thing that changed how I think about strategy. Not a product. Not an app. A folder of markdown files and a set of instructions that turns Claude into something genuinely useful: a system where multiple AI personas analyse the same question independently, then a synthesis tells me where they disagree before it tells me where they agree.
 
-It sounds like overkill. It's not.
+This might sound like overkill. I don't think it is yet.
 
-Here's why I built it: most strategic thinking inside companies follows a predictable path. Someone poses a question. The most senior person offers their frame. The group gravitates toward it. You get one lens, one set of assumptions, and because the person talking usually has a decent track record, nobody pushes back hard enough.
+Here's why I built it: most strategic thinking inside companies follows a predictable path. Someone poses a question, the most senior person offers their frame, and the group gravitates toward it. You get one lens, one set of assumptions, and because the person talking usually has a decent track record, nobody pushes back hard enough.
 
 The result is strategy that feels rigorous but is actually narrow. I wanted to fix that for how I prepare for the conversations that matter.
 
 ## How it works
 
-When I pose a strategic question, the system does four things.
+When I pose a strategic question, the system does four things:
 
-It spawns multiple AI "agents," each with a distinct analytical lens. A platform economist who thinks in aggregation theory and value capture. An antifragility analyst who's looking for the kill shot. A behavioural strategist who thinks everyone is solving the wrong problem. A disruption theorist who wants to know what you're not seeing. A systems architect who asks what's actually buildable. And a red team agent who picks your most dangerous competitor and attacks your strategy from their perspective.
+1. **It spawns multiple AI "agents," each with a distinct analytical lens.** A platform economist who thinks in aggregation theory and value capture. An antifragility analyst who's looking for the kill shot. A behavioural strategist who thinks everyone is solving the wrong problem. A disruption theorist who wants to know what you're not seeing. A systems architect who asks what's actually buildable. And a red team agent who picks your most dangerous competitor and attacks your strategy from their perspective.
 
-Each agent analyses independently, in a separate parallel process, with only their own persona loaded. They can't see what the others are saying. They can't hedge toward each other. They have to commit to what their lens reveals.
+2. **Each agent analyses independently,** in a separate parallel process, with only their own persona loaded. They can't see what the others are saying, can't hedge toward each other, and have to commit to what their lens reveals.
 
-Then a synthesis step identifies where they disagree first, then where they agree.
+3. **A synthesis step identifies where they disagree first, then where they agree.** Because consensus is easy. Tension is where you learn something.
 
-<KeyPoint>
-Consensus is easy. Tension is where you learn something.
-</KeyPoint>
-
-And finally, before anything gets saved, I have to answer three questions that keep the whole thing honest. More on that in a minute.
+4. **Before anything gets saved, I have to answer three questions** that keep the whole thing honest. More on that in a minute.
 
 ## Why personas, not prompts
 
-You could just ask Claude to think about something from multiple perspectives. But you'll get a polite, balanced, hedged answer. Everything will feel reasonable. Nothing will be uncomfortable.
+You could just ask Claude to think about something from multiple perspectives, but you'll get a polite, balanced, hedged answer where everything feels reasonable and nothing is uncomfortable.
 
 The difference is structure. Each agent has a full persona file that defines their analytical lens, their signature questions, their tone, and crucially, how they specifically apply to your situation. The personas aren't generic.
 
@@ -61,9 +57,9 @@ That reframe changed how I think about the product. And it came from a persona f
 
 ## The part I got wrong first
 
-I need to be honest about something. The first version of this system was rubbish.
+I need to be honest about something. The first version of this system was rotten.
 
-It was an opinion engine. I'd pose a question, the agents would produce confident, articulate, well-structured analysis... and none of it was grounded in anything. It was AI doing what AI does best: producing text that sounds authoritative regardless of whether it's true.
+It was an opinion engine. I'd pose a question, the agents would produce confident, articulate, well-structured analysis, and none of it was grounded in anything real. AI doing what AI does best: producing text that sounds authoritative regardless of whether it's true.
 
 The early outputs read like a McKinsey deck. Lots of frameworks, lots of "we believe," lots of confident assertions with no evidence underneath. And because I'd designed the system to produce exactly this kind of output, I initially thought it was working. The analysis felt insightful. It confirmed some of my existing beliefs. It challenged others in ways that felt productive.
 
@@ -93,7 +89,7 @@ If I can't name a concrete action, the system asks whether it should bother savi
 
 ## Alternative futures, not predictions
 
-Strategic questions don't have one future. They have several plausible ones. The system maintains a set of "realities," alternative futures that your strategy needs to survive.
+Strategic questions don't have one future, they have several plausible ones. The system maintains a set of "realities," alternative futures that your strategy needs to survive.
 
 For a marketplace business, these might be: an agent economy where AI agents transact directly and consumers never visit your platform. A consolidation reality where three tech giants own the AI layer. A fragmentation reality where open source wins and AI is a commodity. A new entrant reality where an AI-native startup makes your category irrelevant. And a status quo reality where AI is incremental and existing players adapt.
 
@@ -111,9 +107,9 @@ That means I walk into conversations knowing which of my recommendations are rob
 
 After passing the gate, the system extracts and files insights, mental models, predictions (with check-by dates), and decisions. Every new session starts by reading this accumulated knowledge. So session six is meaningfully smarter than session one. Not because the AI improved, but because the context is richer.
 
-The knowledge base is designed to shrink as well as grow. When evidence contradicts a stored belief, it gets flagged and removed. When a prediction's check-by date arrives, the system prompts an autopsy. Was it right? What did we learn? Should dependent insights be revised?
+The knowledge base is designed to shrink as well as grow. When evidence contradicts a stored belief, it gets flagged and removed. When a prediction's check-by date arrives, the system prompts an autopsy: was it right, what did we learn, and should dependent insights be revised?
 
-After a few months of use, the system has accumulated a body of company-specific strategic knowledge that makes every analysis more grounded and less generic. Generic strategy advice is useless. Everyone knows that. The compounding system tilts toward specificity over time, which is where the real value lives.
+After a few months of use, the system has accumulated a body of company-specific strategic knowledge that makes every analysis more grounded and less generic. Generic strategy advice is useless and everyone knows that, but the compounding system tilts toward specificity over time, which is where the real value lives.
 
 ## What I've actually learned
 
