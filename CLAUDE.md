@@ -129,6 +129,7 @@ When writing blog posts, follow Ben's distinctive voice:
 - Mix short punchy sentences with longer explanatory ones
 - Use fragments for emphasis. Like this.
 - Front-load the main point, then explain: "Ralph didn't replace anyone on my team. Ralph made me better at defining what needs to be built."
+- **NEVER start sentences with "And", "But", or "Because".** Restructure instead: use "though" mid-sentence, "yet" as a conjunction, or fold the clause into the previous sentence.
 
 **Tone markers:**
 - Swear strategically (1-2 times per post, when it adds punch)
@@ -165,11 +166,16 @@ When writing blog posts, follow Ben's distinctive voice:
 - "You bottled it" over "you made a suboptimal decision"
 - Active voice: "you failed" not "a failure occurred"
 
+**Punctuation:**
+- Use semi-colons instead of colons when joining clauses (e.g. "genuinely useful; a system" not "genuinely useful: a system"). Colons are only for introducing lists.
+- Write in **UK English** throughout (analyse, behaviour, colour, organise, etc.)
+
 **Avoid:**
 - Corporate speak ("leverage synergies", "circle back")
 - Hedging unnecessarily ("perhaps", "possibly", "it might be")
 - Overlong explanations of obvious points
 - Academic distancing ("one could argue")
+- Starting sentences with "And", "But", or "Because"
 
 ### Specific Techniques
 
