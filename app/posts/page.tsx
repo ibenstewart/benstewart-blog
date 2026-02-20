@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 const posts = [
+  { slug: 'thinking-engine', title: 'I Built a System Where AI Agents Argue About Strategy' },
   { slug: 'the-three-pound-question', title: 'The £3 Question' },
   { slug: 'ralph-isnt-the-point', title: "Ralph Isn't the Point. The PRD Is." },
   { slug: 'i-built-this-blog-with-claude-code', title: 'I Built This Blog With Claude Code' },
