@@ -86,11 +86,11 @@ This is the part that actually makes the system useful, and it's the part most p
 After every synthesis, before anything gets saved to the knowledge base, the system asks me three questions:
 
 <Callout type="insight">
-**What will you DO differently because of this analysis?** A specific meeting, email, decision, conversation. Not "I feel more prepared." Not "this gave me a new perspective." A concrete action with a name and a date attached.
+**1. What will you DO differently because of this analysis?** A specific meeting, email, decision, conversation. Not "I feel more prepared." Not "this gave me a new perspective." A concrete action with a name and a date attached.
 
-**What in this analysis surprised you?** If the answer is nothing, the system just confirmed what I already believed. It says so, explicitly. "This analysis reinforced your existing position. Consider whether you posed the question in a way that invited genuine challenge."
+**2. What in this analysis surprised you?** If the answer is nothing, the system just confirmed what I already believed. It says so, explicitly. "This analysis reinforced your existing position. Consider whether you posed the question in a way that invited genuine challenge."
 
-**What are you choosing to ignore, and why?** Which agent didn't resonate? Was it because their analysis was weak, or because it was uncomfortable? This question surfaces blind spots and conscious bets in the same move.
+**3. What are you choosing to ignore, and why?** Which agent didn't resonate? Was it because their analysis was weak, or because it was uncomfortable? This question surfaces blind spots and conscious bets in the same move.
 </Callout>
 
 If I can't name a concrete action, the system asks whether it should bother saving the insights at all. This keeps the knowledge base honest. It only contains things that **actually changed how I think or act**. Not things that sounded clever.
@@ -103,7 +103,7 @@ For a marketplace business, these might be; an agent economy where AI agents tra
 
 Every agent analysis includes a reality check. "How does this insight hold up across futures?"
 
-Here's where it gets useful. When I ran an analysis on product strategy, the antifragility agent's analysis was terrifying in the agent economy reality (your revenue model breaks suddenly, not gradually) yet largely irrelevant in the status quo reality. That delta; the gap between "existential threat" and "doesn't matter;" is exactly the kind of information you can't see without the framework.
+Here's where it gets useful. I ran an analysis on product strategy. In the agent economy reality, the antifragility agent flagged an existential threat; your revenue model doesn't erode gradually, it breaks suddenly. In the status quo reality, that same analysis was largely irrelevant. The gap between "existential threat" and "doesn't matter" is exactly the kind of information you can't see without the framework.
 
 <KeyPoint>
 An insight that only works in one future is a bet. An insight that works across multiple futures is strategy. The system makes that distinction explicit.
@@ -112,6 +112,8 @@ An insight that only works in one future is a bet. An insight that works across 
 That means I walk into conversations knowing which of my recommendations are robust and which are gambles.
 
 ## Compounding knowledge
+
+The idea of compounding knowledge was heavily inspired by [Compound Engineering from Every](https://every.to/); the principle that writing down what you learn and feeding it back into your process makes each iteration meaningfully better than the last.
 
 After passing the gate, the system extracts and files insights, mental models, predictions (with check-by dates), and decisions. Every new session starts by reading this accumulated knowledge. So session six is meaningfully smarter than session one. Not because the AI improved; the context is richer.
 
@@ -136,6 +138,8 @@ This isn't a replacement for human strategic conversation. It's preparation for 
 ## Build your own: a starter prompt
 
 The full system is a CLAUDE.md file, a folder of persona files, and a knowledge base. You can get 80% of the value with a single prompt, though. Here's a starter version you can paste into a Claude project or use as a system prompt:
+
+<Collapsible title="View the starter prompt">
 
 ```
 You are a strategic analysis system that uses multiple analytical
@@ -204,6 +208,8 @@ worth doing and what question I should have asked instead.
 - Be direct. No corporate language. No hedging. Say the
   uncomfortable thing.
 ```
+
+</Collapsible>
 
 <Callout type="tip">
 Start with three agents, one set of alternative futures, and the "So What?" gate. Add complexity only when you've earned it. To make it compound over time, add a `knowledge-base/` folder and tell the system to read it at the start of every session and write validated insights to it after the gate.

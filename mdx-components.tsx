@@ -38,6 +38,11 @@ type TLDRProps = {
   children: ReactNode;
 };
 
+type CollapsibleProps = {
+  title: string;
+  children: ReactNode;
+};
+
 type TimelineProps = {
   children: ReactNode;
 };
@@ -219,6 +224,17 @@ const components = {
       <div className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">TL;DR</div>
       <div className="text-gray-800 dark:text-gray-200 font-medium">{children}</div>
     </div>
+  ),
+  Collapsible: ({ title, children }: CollapsibleProps) => (
+    <details className="my-6 group">
+      <summary className="cursor-pointer select-none font-medium text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 transition-colors list-none flex items-center gap-2">
+        <span className="text-gray-400 dark:text-gray-500 transition-transform group-open:rotate-90">&#9654;</span>
+        {title}
+      </summary>
+      <div className="mt-3">
+        {children}
+      </div>
+    </details>
   ),
   Timeline: ({ children }: TimelineProps) => (
     <div className="my-8 relative">
