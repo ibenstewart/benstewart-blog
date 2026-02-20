@@ -15,8 +15,9 @@ Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing ab
 
 ## Quick Commands
 ```bash
-npm run dev      # Start dev server (uses Turbopack)
-npm run build    # Build for production (uses webpack)
+npm run dev              # Start dev server (uses Turbopack)
+npm run build            # Build for production (uses webpack)
+npm run validate-posts   # Check all posts have required SEO metadata
 ```
 
 ## Blog Post Structure
@@ -26,13 +27,34 @@ Posts live in `app/posts/[slug]/page.mdx` with this format:
 export const metadata = {
   title: "Post Title",
   date: "YYYY-MM-DD",
-  subtitle: "Optional subtitle"
+  subtitle: "Optional subtitle",
+  description: "A concise description for SEO and social sharing.",
+  alternates: {
+    canonical: 'https://www.benstewart.ai/posts/[slug]'
+  },
+  openGraph: {
+    title: "Post Title",
+    description: "A concise description for SEO and social sharing.",
+    url: "https://www.benstewart.ai/posts/[slug]",
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630 }],
+  }
 };
 
 # Post Title
 
+<PostSchema
+  title="Post Title"
+  description="A concise description for SEO and social sharing."
+  date="YYYY-MM-DD"
+  slug="[slug]"
+/>
+
 Content goes here...
 ```
+
+**Note:** If the post has a custom OG image, use a relative path for the `images` URL (e.g. `"/images/posts/[slug]-0.png"`) and add the `image` prop to `<PostSchema>` with the **absolute** URL (JSON-LD requires it).
+
+**Important:** The `title`, `description`, and `date` in `<PostSchema>` must match the values in the `metadata` export. The validation script checks for drift between them.
 
 ## Custom MDX Components
 Available components in `mdx-components.tsx`:
@@ -49,10 +71,11 @@ Available components in `mdx-components.tsx`:
 
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`
-2. Create `page.mdx` with metadata export and content
+2. Create `page.mdx` with metadata export (including canonical, openGraph, images) and `<PostSchema>` component
 3. Add to posts array in `app/posts/page.tsx`
 4. Add to homepage list in `app/page.mdx` (if featuring)
-5. Commit and push - Vercel auto-deploys
+5. Run `npm run validate-posts` to confirm all required SEO fields are present
+6. Commit and push - Vercel auto-deploys
 
 **IMPORTANT:** Posts are automatically included in the sitemap. If adding a new top-level page (not a post), add the route to the `routes` array in `app/sitemap.ts`.
 

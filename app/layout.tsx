@@ -26,6 +26,11 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_GB',
     siteName: 'Ben Stewart',
+    images: [{
+      url: '/images/og-default.png',
+      width: 1200,
+      height: 630,
+    }],
   },
   twitter: {
     card: 'summary_large_image',
