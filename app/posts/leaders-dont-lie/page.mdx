@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Leaders Don't Lie",
+  title: "Leaders Don't Lie: How to Report Project Status Honestly",
   date: "2023-09-18",
   subtitle: "Even when it looks bad on you",
   description: "Nothing ever runs exactly to plan. Leaders must tell the truth about project status even when it looks bad. Learn why honesty matters more than ego, and how to avoid the watermelon effect—projects that look green on the outside but are red inside.",
@@ -7,7 +7,7 @@ export const metadata = {
     canonical: 'https://www.benstewart.ai/posts/leaders-dont-lie'
   },
   openGraph: {
-    title: "Leaders Don't Lie - Even when it looks bad on you",
+    title: "Leaders Don't Lie: How to Report Project Status Honestly",
     description: "Nothing ever runs exactly to plan. Leaders must tell the truth about project status even when it looks bad. Learn why honesty matters more than ego, and how to avoid the watermelon effect—projects that look green on the outside but are red inside.",
     url: "https://www.benstewart.ai/posts/leaders-dont-lie",
     images: [{
@@ -21,12 +21,27 @@ export const metadata = {
 # Leaders Don't Lie
 
 <PostSchema
-  title="Leaders Don't Lie"
+  title="Leaders Don't Lie: How to Report Project Status Honestly"
   description="Nothing ever runs exactly to plan. Leaders must tell the truth about project status even when it looks bad. Learn why honesty matters more than ego, and how to avoid the watermelon effect—projects that look green on the outside but are red inside."
   date="2023-09-18"
   slug="leaders-dont-lie"
   image="https://www.benstewart.ai/images/posts/leaders-dont-lie-0.jpg"
 />
+
+<FAQJsonLd faqs={[
+  {
+    question: "What is the watermelon effect in project management?",
+    answer: "The watermelon effect describes a project that looks green on the outside (status reports say all is fine) but is red on the inside (things are actually going wrong). It usually surfaces two weeks before go-live when a critical problem can no longer be hidden."
+  },
+  {
+    question: "Why do leaders lie about project status?",
+    answer: "The most common reason is ego — admitting a project is in trouble feels like admitting personal failure. Engineers and leaders often believe they can recover the situation before anyone needs to know, which delays intervention and makes the eventual problem worse."
+  },
+  {
+    question: "How should a leader report a project that is behind schedule?",
+    answer: "Report amber or red status as soon as you know it, not when you're forced to. Give the facts: what's slipped, why, and what you're doing about it. An early amber status gives the organisation time to respond. A late red status after weeks of fake green destroys trust."
+  }
+]} />
 
 ![Leader presenting project status in a meeting](/images/posts/leaders-dont-lie-0.jpg)
 
@@ -60,6 +75,8 @@ At that precise moment you failed because leaders don't lie; no matter how bad i
 
 ---
 
+## Why nothing ever runs to plan
+
 You could have everything planned to the finest detail, only for something completely out of the blue to knock your perfectly planned little world into complete chaos.
 
 The scary thing? It's normal.
@@ -70,7 +87,7 @@ Nothing ever runs exactly to plan. **Ever**.
 
 So if nothing ever runs to plan, why do we find it so hard to admit it?
 
-**It looks bad on you.**
+## The ego problem: why leaders hide the truth
 
 The most common reason that we as humans don't want to tell the truth is because it makes us look bad. It's ego, pure and simple. A software engineer will pride themselves on how smart they are in their intended technology; they want to be the smartest person in the room.
 
@@ -92,6 +109,8 @@ I once dropped a temporary database table called #customers during the middle of
 
 ---
 
+## Beware the watermelon effect
+
 Shit happens and one of the biggest ways to show your team that the sky falls all the time is to openly admit when something isn't going well. The awesomeness of replying to a question with 'I don't know' rather than making up some bullshit shows your team that it's ok to tell the truth, even when it looks bad on you.
 
 Have you ever listened to someone discuss the status of a project and just knew deep in the pit of your stomach that something was wrong?
@@ -105,3 +124,9 @@ The watermelon is usually rolled out two weeks before go live when your lead eng
 The next time you are sat in front of your peers and your boss, ready to give them an update on Project X, don't feed them watermelon.
 
 <TLDR>Feed them the truth because until you embrace the reality that things don't go to plan you aren't ready to be a leader. That, unfortunately, is the truth.</TLDR>
+
+<RelatedPosts posts={[
+  { slug: "the-ideal-senior-engineer", title: "The Ideal Senior Engineer?" },
+  { slug: "shared-documents-are-not-shared-understanding", title: "Shared Documents Are Not Shared Understanding" },
+  { slug: "practical-postmortems", title: "Practical Postmortems" },
+]} />

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "The Ideal Senior Engineer?",
+  title: "What a Great Senior Engineer Actually Looks Like",
   date: "2023-09-18",
   subtitle: "What good looks like at the senior level",
   description: "What does a role model senior engineer actually look like? From coaching and mentoring to knowing when to speak, explore the traits that define exceptional senior engineers and why 'make before you manage' is the best career advice.",
@@ -7,7 +7,7 @@ export const metadata = {
     canonical: 'https://www.benstewart.ai/posts/the-ideal-senior-engineer'
   },
   openGraph: {
-    title: "The Ideal Senior Engineer? - What good looks like",
+    title: "What a Great Senior Engineer Actually Looks Like",
     description: "What does a role model senior engineer actually look like? From coaching and mentoring to knowing when to speak, explore the traits that define exceptional senior engineers and why 'make before you manage' is the best career advice.",
     url: "https://www.benstewart.ai/posts/the-ideal-senior-engineer",
     images: [{
@@ -21,16 +21,29 @@ export const metadata = {
 # The Ideal Senior Engineer?
 
 <PostSchema
-  title="The Ideal Senior Engineer?"
+  title="What a Great Senior Engineer Actually Looks Like"
   description="What does a role model senior engineer actually look like? From coaching and mentoring to knowing when to speak, explore the traits that define exceptional senior engineers and why 'make before you manage' is the best career advice."
   date="2023-09-18"
   slug="the-ideal-senior-engineer"
   image="https://www.benstewart.ai/images/posts/the-ideal-senior-engineer-0.png"
 />
 
-![Illustration of a senior software engineer at work](/images/posts/the-ideal-senior-engineer-0.png)
+<FAQJsonLd faqs={[
+  {
+    question: "What makes a great senior engineer?",
+    answer: "A great senior engineer is a multiplier, not a bottleneck or a superhero. They coach as much as they code, actively mentor engineers outside their own team, prioritise code reviews over their own work, and constantly question whether the team is spending time on the most impactful things. Technical skill matters, but leverage and judgment matter more at this level."
+  },
+  {
+    question: "Should engineers become managers or stay on the IC track?",
+    answer: "Neither path is inherently better, but the 'make before you manage' principle is worth taking seriously. Building things and shipping them to customers gives you a foundation that leadership theory alone cannot. The best time to consider moving into management is after you've spent years building at scale — not before."
+  },
+  {
+    question: "What is the biggest difference between a mid-level and senior engineer?",
+    answer: "The jump from mid-level to senior is larger than most career ladders make it look. A senior engineer is expected to operate independently across ambiguous problems, influence team direction, coach others, and think about what not to build — not just what to build. The output is measured in team impact, not personal velocity."
+  }
+]} />
 
-## Introduction
+![Illustration of a senior software engineer at work](/images/posts/the-ideal-senior-engineer-0.png)
 
 The vast majority of my writing is around the act of leadership and generally how I tend to manage the humans in my organisation.
 
@@ -52,7 +65,7 @@ Now if you want to go and read an awesome book on all of these jumps I will glad
 
 ---
 
-## The IC Path
+## The career path to senior engineer
 
 Back when I was a graduate… I always imagined Senior Engineers as these battle-worn white dudes who would rub their beards and sneer at my every suggestion. My bias is likely down to a number of stereotypes and my own experiences in media and communities, so please don't be offended! (*I am a battle-worn white dude with a beard after all*) Fast forward 15 or so years and I can happily say that my idea of a snr eng has been well and truly shattered; thankfully.
 
@@ -68,7 +81,7 @@ The possibilities are endless and that's **AWESOME**.
 
 <KeyPoint>The fact that in a lot of companies these days, you can try a role out to see if it fits you and your style is amazeballs and should be celebrated. There is nothing worse than a manager who no longer wants to be one but feels like they have to be.</KeyPoint>
 
-## The Role of a Senior
+## What a high-performing senior engineer actually looks like
 
 When thinking about how a snr eng fits into a technical organisation, it strikes me that we don't give a ton of support for aspiring engineers to show them what good looks like. The manager path is quite well documented with a ton of books, courses, and guidance on how to be a strong leader.
 
@@ -89,10 +102,14 @@ So if I sit back, as a manager in an org, and write down what a role model snr e
 - She wants to lead or at least help with documentation and design.
 - They don't burn the midnight oil frequently but on the rare occasion that the team needs a push, they lead from the front.
 
-## Closing
-
 I've personally felt for a long time that the role of a snr eng is likely the hardest in the tech industry. The amount of pressure, impact and overall focus that lands on the role of the senior engineers in your company is something you should spend serious time thinking about with your teams.
 
 How are you growing and supporting engineers who just got promoted to senior? How are you highlighting the positive role models in your organisation for others to aspire to be?
 
 <TLDR>'*Make* before you *manage*' is without a doubt the biggest bit of advice I repeat on a weekly basis to anyone who is thinking of becoming a manager at some point. The humans will continue to be there but the tech may in fact change every 3-5 year cycle depending on which field or area you are in. So the next time you have an engineer who is looking at becoming a manager ask them one simple question; 'what's the biggest thing you've ever broken?'</TLDR>
+
+<RelatedPosts posts={[
+  { slug: "leaders-dont-lie", title: "Leaders Don't Lie" },
+  { slug: "ralph-isnt-the-point", title: "Ralph Isn't the Point. The PRD Is." },
+  { slug: "am-i-technically-dangerous", title: "Am I Technically Dangerous?" },
+]} />

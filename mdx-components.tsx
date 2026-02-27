@@ -1,7 +1,8 @@
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 import Link from 'next/link';
 import { highlight } from 'sugar-high';
-import { ArticleJsonLd, PersonJsonLd } from './app/components/JsonLd';
+import { ArticleJsonLd, FAQJsonLd, PersonJsonLd } from './app/components/JsonLd';
+import { RelatedPosts } from './app/components/RelatedPosts';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -57,6 +58,7 @@ type PostSchemaProps = {
   title: string;
   description: string;
   date: string;
+  lastModified?: string;
   slug: string;
   image?: string;
 };
@@ -256,15 +258,18 @@ const components = {
       )}
     </div>
   ),
-  PostSchema: ({ title, description, date, slug, image }: PostSchemaProps) => (
+  PostSchema: ({ title, description, date, lastModified, slug, image }: PostSchemaProps) => (
     <ArticleJsonLd
       title={title}
       description={description}
       date={date}
+      lastModified={lastModified}
       url={`https://www.benstewart.ai/posts/${slug}`}
       image={image}
     />
   ),
+  FAQJsonLd: (props: { faqs: { question: string; answer: string }[] }) => <FAQJsonLd {...props} />,
+  RelatedPosts: (props: { posts: { slug: string; title: string }[] }) => <RelatedPosts {...props} />,
   PersonSchema: () => <PersonJsonLd />,
 };
 
