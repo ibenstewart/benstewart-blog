@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Sustainable Pace Just Got Faster",
+  title: "Sustainable Pace With AI: Why You're Probably Doing It Twice",
   date: "2024-12-29",
   subtitle: "Speed won. The question now is how you sustain it.",
   description: "AI has compressed iteration cycles so dramatically that last year's 'fast enough' is now slow. The debate is over—speed won. Learn why teams are burning out despite AI tools, and discover the substitution-not-addition principle for sustainable velocity.",
@@ -7,7 +7,7 @@ export const metadata = {
     canonical: 'https://www.benstewart.ai/posts/sustainable'
   },
   openGraph: {
-    title: "Sustainable Pace Just Got Faster",
+    title: "Sustainable Pace With AI: Why You're Probably Doing It Twice",
     description: "AI has compressed iteration cycles so dramatically that last year's 'fast enough' is now slow. The debate is over—speed won. Learn why teams are burning out despite AI tools, and discover the substitution-not-addition principle for sustainable velocity.",
     url: "https://www.benstewart.ai/posts/sustainable",
     images: [{ url: "/images/og-default.png", width: 1200, height: 630 }],
@@ -17,11 +17,26 @@ export const metadata = {
 # Sustainable Pace Just Got Faster
 
 <PostSchema
-  title="Sustainable Pace Just Got Faster"
+  title="Sustainable Pace With AI: Why You're Probably Doing It Twice"
   description="AI has compressed iteration cycles so dramatically that last year's 'fast enough' is now slow. The debate is over—speed won. Learn why teams are burning out despite AI tools, and discover the substitution-not-addition principle for sustainable velocity."
   date="2024-12-29"
   slug="sustainable"
 />
+
+<FAQJsonLd faqs={[
+  {
+    question: "Why are engineering teams burning out despite using AI tools?",
+    answer: "Most teams have added AI to their existing workflow rather than replacing any part of it. They generate code with AI but then review it as if it were a junior developer's first commit, effectively doing the work twice. This is the verification trap — AI usage without any process substitution."
+  },
+  {
+    question: "What is the substitution principle for AI productivity?",
+    answer: "Substitution means you do the work with AI or you do it manually — not both. If you generate code with AI, you review and improve it rather than rewriting it from scratch. If AI drafts a document, you edit it rather than writing your own version to compare. Addition without substitution doubles the workload."
+  },
+  {
+    question: "What is sustainable pace in software development?",
+    answer: "Sustainable pace is the speed at which a team can work indefinitely without burning out. The concept comes from Agile. The sustainable pace baseline has risen significantly since AI tools became widespread — teams that were moving fast enough in 2024 may now be slow by competitive standards."
+  }
+]} />
 
 For years, the debate in product teams was about sustainable pace versus moving fast. Could you ship quickly without burning people out? Was "move fast and break things" reckless, or just honest about what winning requires?
 
@@ -29,7 +44,7 @@ That debate is over. Speed won. The question now isn't whether to go fast, it's 
 
 ---
 
-## The law that explains why
+## The OODA loop: why faster iteration always wins
 
 In the 1970s, a military strategist called John Boyd developed a concept he called the OODA loop: **Observe, Orient, Decide, Act**. His argument was simple: in any competitive environment, the entity that can cycle through this loop faster will beat the one that cycles slower. It doesn't matter if your strategy is slightly better. If I can iterate three times while you iterate once, I'll learn faster, adapt quicker, and outmanoeuvre you.
 
@@ -45,7 +60,7 @@ The time it takes to go from idea to prototype to learning has collapsed. Teams 
 
 ---
 
-## The new baseline
+## How AI has raised the sustainable pace baseline for product teams
 
 Sustainable pace used to mean finding a rhythm your team could maintain indefinitely without burning out. That definition still holds. What's changed is the number.
 
@@ -55,7 +70,7 @@ For most product teams, the sustainable baseline just went up. Not because anyon
 
 ---
 
-## Why teams are burning out anyway
+## The verification trap: why AI tools are making some teams do everything twice
 
 So if AI makes things faster, why is everyone exhausted?
 
@@ -77,7 +92,7 @@ That's not sustainable pace at a higher baseline. That's two jobs.
 
 ---
 
-## What actual speed looks like
+## What sustainable AI velocity actually looks like
 
 The teams getting this right share one thing in common: **they stop things.**
 
@@ -92,3 +107,9 @@ You do the work with AI, or you do it manually. Not both.
 If you're using AI tools and you're more tired than before, check whether you're actually moving faster or just doing everything twice. The pace isn't the problem. The duplication is.
 
 </TLDR>
+
+<RelatedPosts posts={[
+  { slug: "ralph-isnt-the-point", title: "Ralph Isn't the Point. The PRD Is." },
+  { slug: "multi-agent-ai-strategy", title: "How I Use Multiple AI Agents to Stress-Test Strategy" },
+  { slug: "the-three-pound-question", title: "Reactive AI vs Proactive AI: What a £3 Experiment Revealed" },
+]} />

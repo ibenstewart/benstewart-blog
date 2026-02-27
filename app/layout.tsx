@@ -24,7 +24,6 @@ export const metadata: Metadata = {
   description: 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.',
   openGraph: {
     type: 'website',
-    locale: 'en_GB',
     siteName: 'Ben Stewart',
     images: [{
       url: '/images/og-default.png',

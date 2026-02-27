@@ -1,14 +1,14 @@
 export const metadata = {
-  title: "The £3 Question",
+  title: "Reactive AI vs Proactive AI: What a £3 Clawdbot Experiment Revealed",
   date: "2026-01-26",
   subtitle: "What I learned from an expensive conversation with a chatbot",
-  description: "Three pounds for a getting-to-know-you conversation with Clawdbot taught me something about the shape of AI the industry isn't building yet. Reactive AI answers questions. What happens when AI starts asking them?",
+  description: "Most AI tools wait to be asked. Clawdbot messages you first. A weekend experiment exposed the gap between reactive AI (a tool you pick up) and proactive AI (infrastructure that monitors and acts). Here's why that distinction matters for every engineering team.",
   alternates: {
     canonical: 'https://www.benstewart.ai/posts/the-three-pound-question'
   },
   openGraph: {
-    title: "The £3 Question",
-    description: "Three pounds for a getting-to-know-you conversation with Clawdbot taught me something about the shape of AI the industry isn't building yet. Reactive AI answers questions. What happens when AI starts asking them?",
+    title: "Reactive AI vs Proactive AI: What a £3 Clawdbot Experiment Revealed",
+    description: "Most AI tools wait to be asked. Clawdbot messages you first. A weekend experiment exposed the gap between reactive AI (a tool you pick up) and proactive AI (infrastructure that monitors and acts). Here's why that distinction matters for every engineering team.",
     url: "https://www.benstewart.ai/posts/the-three-pound-question",
     images: [{
       url: "/images/posts/the-three-pound-question-0.jpg",
@@ -21,12 +21,27 @@ export const metadata = {
 # The £3 Question
 
 <PostSchema
-  title="The £3 Question"
-  description="Three pounds for a getting-to-know-you conversation with Clawdbot taught me something about the shape of AI the industry isn't building yet. Reactive AI answers questions. What happens when AI starts asking them?"
+  title="Reactive AI vs Proactive AI: What a £3 Clawdbot Experiment Revealed"
+  description="Most AI tools wait to be asked. Clawdbot messages you first. A weekend experiment exposed the gap between reactive AI (a tool you pick up) and proactive AI (infrastructure that monitors and acts). Here's why that distinction matters for every engineering team."
   date="2026-01-26"
   slug="the-three-pound-question"
   image="https://www.benstewart.ai/images/posts/the-three-pound-question-0.jpg"
 />
+
+<FAQJsonLd faqs={[
+  {
+    question: "What is the difference between reactive AI and proactive AI?",
+    answer: "Reactive AI waits for you to ask a question and responds. Proactive AI monitors systems and surfaces problems or information before you ask. Most current AI tools (ChatGPT, Claude, Copilot) are reactive. Proactive AI acts more like infrastructure — it runs whether you're paying attention or not."
+  },
+  {
+    question: "What is Clawdbot?",
+    answer: "Clawdbot is an open-source AI assistant that messages you first rather than waiting to be invoked. It gained around 8,000 GitHub stars quickly. It stores memory as Markdown files (reversible with git revert), can extend its own skills, and delivers morning briefings and alerts via Telegram."
+  },
+  {
+    question: "What would proactive AI look like for an engineering team?",
+    answer: "An agent that understands your deployment pipelines, incident management, and team communication patterns — and messages you when something looks wrong rather than waiting for you to notice. For example: 'The deployment to staging has been stuck for 20 minutes. I've checked the logs — it's waiting on a database migration lock. Want me to investigate?'"
+  }
+]} />
 
 ![Clawdbot, ready to work](/images/posts/the-three-pound-question-0.jpg)
 
@@ -46,7 +61,7 @@ So that killed any idea of using it day-to-day, at least without thinking throug
 
 ---
 
-## What I Actually Saw
+## What proactive AI actually looks like in practice
 
 Forget what Clawdbot does today and look at what it's trying to do, because most AI tools we use are reactive: you ask a question and you get an answer, you write a prompt and you get code, you open the chat and you get help. Clawdbot is different because it messages you first.
 
@@ -64,7 +79,7 @@ None of this is polished: the cost model is broken, the security story is "be ca
 
 ---
 
-## The Question I Can't Stop Thinking About
+## What proactive AI infrastructure could look like at work
 
 There's a lot of talk about AI at work, chatbots for customers, copilots for developers, AI-powered this and that, but all of it is reactive, all of it waiting for someone to ask. What would it look like to have an AI layer that actually knows your systems, that monitors your tooling and surfaces problems before you ask, that can take actions rather than just answer questions?
 
@@ -78,7 +93,7 @@ That's not a chatbot, that's infrastructure that thinks.
 
 ---
 
-## Why No One's Ready (But Should Be Thinking About It)
+## Why most companies aren't ready for proactive AI yet
 
 Most companies aren't ready to build this yet because the cost isn't there (£3 for a conversation is absurd at scale) and the security and compliance questions are genuinely hard when you start thinking about multi-user access, audit trails, and data residency. The stuff that matters when you're building for an organisation rather than tinkering on a weekend.
 
@@ -92,7 +107,7 @@ The industry has been conditioned to think of AI as reactive because that's what
 
 ---
 
-## The Shape of What's Coming
+## Reactive AI vs proactive AI: why the mental model is about to flip
 
 Reactive AI is a tool, but proactive AI is infrastructure, and there's a meaningful difference between the two. Tools are things you pick up when you need them, while infrastructure runs whether you're paying attention or not, monitoring and acting and telling you when something's wrong before you knew to look.
 
@@ -105,3 +120,9 @@ What if your infrastructure could think? Not "here's a metric" but "here's what'
 I spent £3 and a weekend to understand this question better, to see what proactive AI actually feels like even in a janky prototype. Probably worth it.
 
 If you're running a platform team or thinking about internal tooling, start sketching what proactive would look like in your world. Not the polished version, the shape of it. What would your systems tell you if they could talk first?
+
+<RelatedPosts posts={[
+  { slug: "multi-agent-ai-strategy", title: "How I Use Multiple AI Agents to Stress-Test Strategy" },
+  { slug: "sustainable", title: "Sustainable Pace Just Got Faster" },
+  { slug: "ralph-isnt-the-point", title: "Ralph Isn't the Point. The PRD Is." },
+]} />

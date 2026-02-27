@@ -1,15 +1,15 @@
 export const metadata = {
-  title: "I Built a System Where AI Agents Argue About Strategy",
+  title: "How I Use Multiple AI Agents to Stress-Test Strategy",
   date: "2026-02-20",
   subtitle: "How I use AI to stress-test my thinking",
-  description: "How I use AI to stress-test my thinking before it reaches a room full of people who won't push back hard enough.",
+  description: "A practical multi-agent AI system for stress-testing strategy decisions: six AI personas with distinct lenses, a disagreement-first synthesis, and a 'So What?' gate that forces every analysis into a concrete action. Includes a starter Claude prompt.",
   alternates: {
-    canonical: 'https://www.benstewart.ai/posts/thinking-engine'
+    canonical: 'https://www.benstewart.ai/posts/multi-agent-ai-strategy'
   },
   openGraph: {
-    title: "I Built a System Where AI Agents Argue About Strategy",
-    description: "How I use AI to stress-test my thinking before it reaches a room full of people who won't push back hard enough.",
-    url: "https://www.benstewart.ai/posts/thinking-engine",
+    title: "How I Use Multiple AI Agents to Stress-Test Strategy",
+    description: "A practical multi-agent AI system for stress-testing strategy decisions: six AI personas with distinct lenses, a disagreement-first synthesis, and a 'So What?' gate that forces every analysis into a concrete action. Includes a starter Claude prompt.",
+    url: "https://www.benstewart.ai/posts/multi-agent-ai-strategy",
     images: [{
       url: "/images/posts/thinking-engine-0.png",
       width: 1200,
@@ -21,12 +21,31 @@ export const metadata = {
 # I Built a System Where AI Agents Argue About Strategy
 
 <PostSchema
-  title="I Built a System Where AI Agents Argue About Strategy"
-  description="How I use AI to stress-test my thinking before it reaches a room full of people who won't push back hard enough."
+  title="How I Use Multiple AI Agents to Stress-Test Strategy"
+  description="A practical multi-agent AI system for stress-testing strategy decisions: six AI personas with distinct lenses, a disagreement-first synthesis, and a 'So What?' gate that forces every analysis into a concrete action. Includes a starter Claude prompt."
   date="2026-02-20"
-  slug="thinking-engine"
+  slug="multi-agent-ai-strategy"
   image="https://www.benstewart.ai/images/posts/thinking-engine-0.png"
 />
+
+<FAQJsonLd faqs={[
+  {
+    question: "How do you use multiple AI agents to stress-test strategy?",
+    answer: "You assign each AI agent a distinct analytical persona (e.g. platform economist, antifragility analyst, red team agent) and have them analyse the same question independently. A synthesis step then identifies disagreements first, before consensus. This forces the tensions and blind spots into view before you walk into any room."
+  },
+  {
+    question: "What is the So What? gate in AI strategy analysis?",
+    answer: "The So What? gate is a three-question check run after every AI synthesis: (1) What will you do differently because of this analysis — name a specific action. (2) What surprised you? If nothing, the analysis just confirmed existing beliefs. (3) What are you choosing to ignore, and why? Without passing this gate, insights don't get saved to the knowledge base."
+  },
+  {
+    question: "Why use AI agent personas instead of a single prompt for strategic thinking?",
+    answer: "A single prompt asking an AI to consider multiple perspectives produces polite, hedged, balanced answers where nothing is uncomfortable. Separate personas with distinct lenses are forced to commit to a position and cannot hedge toward each other, which surfaces genuine tension rather than consensus."
+  },
+  {
+    question: "What is disagreement-first synthesis in AI analysis?",
+    answer: "Disagreement-first synthesis means the synthesis step starts by identifying where the AI agents contradict each other, before covering where they agree. Leading with consensus produces comfortable confirmation of the majority view. Leading with disagreement surfaces the actual strategic questions that need answering."
+  }
+]} />
 
 *How I use AI to stress-test my thinking before it reaches a room full of people who won't push back hard enough.*
 
@@ -40,7 +59,7 @@ Here's why I built it; most strategic thinking inside companies follows a predic
 
 The result is strategy that **feels rigorous but is actually narrow**. I wanted to fix that for how I prepare for the conversations that matter.
 
-## How it works
+## How the multi-agent AI system works
 
 When I pose a strategic question, the system does four things:
 
@@ -58,7 +77,9 @@ When I pose a strategic question, the system does four things:
 
 4. **Before anything gets saved, I have to answer three questions** that keep the whole thing honest.
 
-## Why personas, not prompts
+(If you want to understand why writing the spec is the hardest part of this process, see [Ralph Isn't the Point. The PRD Is.](/posts/ralph-isnt-the-point).)
+
+## Why AI agent personas outperform a single prompt
 
 You could just ask Claude to think about something from multiple perspectives, yet you'll get a polite, balanced, hedged answer where everything feels reasonable and nothing is uncomfortable.
 
@@ -74,7 +95,7 @@ The behavioural strategist doesn't just "consider psychology." It reframes the e
 
 That reframe changed how I think about the product. It came from a persona file, not a clever prompt.
 
-## The part I got wrong first
+## The evidence layer: why AI opinions without grounding are useless
 
 I need to be honest about something. The first version of this system was rotten.
 
@@ -90,7 +111,7 @@ The fix was two things. First, I added an evidence layer. Agents now have to gro
 
 Second (and this was the bigger change), I built the "So What?" gate.
 
-## The "So What?" gate
+## The So What? gate: turning AI analysis into decisions
 
 This is the part that actually makes the system useful, and it's the part most people skip when they build something similar.
 
@@ -106,7 +127,7 @@ After every synthesis, before anything gets saved to the knowledge base, the sys
 
 If I can't name a concrete action, the system asks whether it should bother saving the insights at all. This keeps the knowledge base honest. It only contains things that **actually changed how I think or act**. Not things that sounded clever.
 
-## Alternative futures, not predictions
+## Alternative futures: testing strategy across multiple scenarios
 
 Strategic questions don't have one future, they have several plausible ones. The system maintains a set of "realities;" alternative futures that your strategy needs to survive.
 
@@ -122,7 +143,7 @@ An insight that only works in one future is a bet. An insight that works across 
 
 That means I walk into conversations knowing which of my recommendations are robust and which are gambles.
 
-## Compounding knowledge
+## How the AI knowledge base compounds over time
 
 The idea of compounding knowledge was heavily inspired by [Compound Engineering from Every](https://every.to/); the principle that writing down what you learn and feeding it back into your process makes each iteration meaningfully better than the last.
 
@@ -132,7 +153,7 @@ The knowledge base is designed to shrink as well as grow. When evidence contradi
 
 After a few months of use, the system has accumulated a body of company-specific strategic knowledge that makes every analysis more grounded and less generic. Generic strategy advice is useless and everyone knows that. The compounding system tilts toward **specificity over time**, which is where the real value lives.
 
-## What I've actually learned
+## What I've learned from running this system
 
 **Disagreement-first synthesis changes everything.** When you lead with "where do agents agree," you get comfortable confirmation of the majority view. When you lead with "where do they disagree," you surface the actual strategic questions that need answering. I've started applying this principle in real meetings too. "Before we align, where do we disagree?" It's a better opening question than most people think.
 
@@ -231,3 +252,9 @@ Start with three agents, one set of alternative futures, and the "So What?" gate
 <TLDR>
 Most strategic thinking inside companies is narrow because nobody pushes back hard enough on the HiPPO's frame. I built a system where multiple AI agents, each with a distinct analytical lens, analyse the same question independently and can't see each other's work. The synthesis leads with **disagreements first, not consensus**. The key feature is a "So What?" gate that forces you to name a concrete action before anything gets saved. Without it, you're just building expensive confirmation bias with better formatting. The system compounds knowledge over time and tests every insight against multiple plausible futures, so you know which recommendations are robust and which are gambles.
 </TLDR>
+
+<RelatedPosts posts={[
+  { slug: "ralph-isnt-the-point", title: "Ralph Isn't the Point. The PRD Is." },
+  { slug: "a-prompt-to-your-leadership-style", title: "A Prompt to Your Leadership Style" },
+  { slug: "sustainable", title: "Sustainable Pace Just Got Faster" },
+]} />

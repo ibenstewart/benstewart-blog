@@ -2,18 +2,19 @@ type ArticleJsonLdProps = {
   title: string;
   description: string;
   date: string;
+  lastModified?: string;
   url: string;
   image?: string;
 };
 
-export function ArticleJsonLd({ title, description, date, url, image }: ArticleJsonLdProps) {
+export function ArticleJsonLd({ title, description, date, lastModified, url, image }: ArticleJsonLdProps) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: title,
     description: description,
     datePublished: date,
-    dateModified: date,
+    dateModified: lastModified ?? date,
     url: url,
     author: {
       '@type': 'Person',
@@ -28,6 +29,27 @@ export function ArticleJsonLd({ title, description, date, url, image }: ArticleJ
     ...(image && { image: image }),
   };
 
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+    />
+  );
+}
+
+type FAQItem = { question: string; answer: string };
+type FAQJsonLdProps = { faqs: FAQItem[] };
+
+export function FAQJsonLd({ faqs }: FAQJsonLdProps) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  };
   return (
     <script
       type="application/ld+json"
