@@ -1,0 +1,76 @@
+import { ReadCostCalculator } from './ReadCostCalculator';
+import { CopyablePrompt } from './CopyablePrompt';
+
+export const metadata = {
+  title: "AI Made Writing Free. That Was Supposed to Be Good News.",
+  date: "2026-03-22",
+  subtitle: "The cost didn't disappear. It moved.",
+  description: "AI eliminated the cost of writing. The problem is the cost didn't disappear — it moved from the writer's time to the reader's brain. Here's how to take responsibility for what you send.",
+  alternates: {
+    canonical: 'https://www.benstewart.ai/posts/ai-made-writing-free'
+  },
+  openGraph: {
+    title: "AI Made Writing Free. That Was Supposed to Be Good News.",
+    description: "AI eliminated the cost of writing. The problem is the cost didn't disappear — it moved from the writer's time to the reader's brain. Here's how to take responsibility for what you send.",
+    url: "https://www.benstewart.ai/posts/ai-made-writing-free",
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630 }],
+  }
+};
+
+# AI Made Writing Free. That Was Supposed to Be Good News.
+
+<PostSchema
+  title="AI Made Writing Free. That Was Supposed to Be Good News."
+  description="AI eliminated the cost of writing. The problem is the cost didn't disappear — it moved from the writer's time to the reader's brain. Here's how to take responsibility for what you send."
+  date="2026-03-22"
+  slug="ai-made-writing-free"
+/>
+
+Before AI, writing cost something. You didn't produce a two-thousand word document unless you really had to, because it took hours. That friction was a filter. Now it's gone. A polished, well-structured doc takes twenty minutes and most of that is prompting.
+
+The problem is the cost didn't disappear. It moved. From the writer's time to the reader's brain.
+
+## The reader's brain hasn't changed
+
+The reader's brain hasn't upgraded to match the writer's new throughput. Research on working memory puts the number of things you can genuinely hold and process at around four. A [2022 study from the Paris Brain Institute](https://www.cell.com/current-biology/fulltext/S0960-9822(22)01111-3) found that hard thinking all day causes a chemical buildup that makes your brain work worse. By 4pm people aren't lazy; they're spent.
+
+So now everyone can produce more, faster, while nobody can consume any more than they could before. That's not a productivity win. That's a tax on attention disguised as efficiency.
+
+<KeyPoint>The cost of writing didn't disappear. It moved from the writer's time to the reader's brain.</KeyPoint>
+
+## Feel it for yourself
+
+There's a simple way to make this concrete. Try the calculator below.
+
+<ReadCostCalculator />
+
+That five-minute doc you sent to forty people? You just called a three-hour meeting that nobody agreed to attend.
+
+## What you actually do about it
+
+"Claude wrote most of this" is not a quality control strategy. Your name is on it. That means you own the reader's time, not just the words.
+
+Here are three prompts I use before I send anything long. They take thirty seconds and they've stopped me from inflicting at least a dozen unnecessary essays on my team.
+
+<CopyablePrompt
+  label="Cut it down"
+  text="Paste your document below. Cut the total word count by 50% without losing any decisions, actions, or information someone needs to act on. Flag anything you removed that you think I should reconsider."
+/>
+
+<CopyablePrompt
+  label="Find the real audience"
+  text="Read this document and tell me: who actually needs to read all of it, who only needs the summary, and who probably doesn't need it at all. Then rewrite the opening so it's clear in the first two sentences who should keep reading."
+/>
+
+<CopyablePrompt
+  label="Convert to the right format"
+  text="Read this document and suggest whether it would be better communicated as a diagram, a short bullet list, a one-paragraph summary, or a decision with context. Then produce whichever format you recommend."
+/>
+
+## The point
+
+AI made writing free. It didn't make reading free. Every document you send is a withdrawal from someone else's finite attention budget, and the fact that it cost you nothing to produce makes it worse, not better.
+
+The discipline now isn't in the writing. It's in the not-sending. Or at least in the editing-before-sending. Use the same tools that made the mess to clean it up.
+
+<TLDR>AI eliminated the friction of writing, so people write more. The reader's brain didn't get faster. Every long doc you send is a meeting you didn't schedule. Before you hit send, use AI to cut it down, find the real audience, and convert it to the right format. You own the reader's time, not just the words.</TLDR>
