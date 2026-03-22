@@ -16,6 +16,10 @@ export function ArticleJsonLd({ title, description, date, lastModified, url, ima
     datePublished: date,
     dateModified: lastModified ?? date,
     url: url,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': url,
+    },
     author: {
       '@type': 'Person',
       name: 'Ben Stewart',
