@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 const posts = [
+  { slug: 'ai-made-writing-free', title: 'AI Made Writing Free. That Was Supposed to Be Good News.' },
   { slug: 'multi-agent-ai-strategy', title: 'How I Use Multiple AI Agents to Stress-Test Strategy' },
   { slug: 'the-three-pound-question', title: 'The £3 Question' },
   { slug: 'ralph-isnt-the-point', title: "Ralph Isn't the Point. The PRD Is." },
