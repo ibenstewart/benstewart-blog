@@ -74,17 +74,17 @@ const heroChild = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: [0.25, 0.4, 0.25, 1] },
+    transition: { duration: 0.8, ease: [0.25, 0.4, 0.25, 1] as const },
   },
-};
+} as const;
 
 const heroMeta = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 1, delay: 1.1, ease: 'easeOut' },
+    transition: { duration: 1, delay: 1.1, ease: 'easeOut' as const },
   },
-};
+} as const;
 
 // ---------------------------------------------------------------------------
 // Helper components
