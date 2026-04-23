@@ -135,12 +135,21 @@ const components = {
     const codeHTML = highlight(children as string);
     return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
   },
-  Table: ({ data }: { data: { headers: string[]; rows: string[][] } }) => (
+  Table: ({
+    data,
+    caption,
+  }: {
+    data: { headers: string[]; rows: string[][] };
+    caption?: string;
+  }) => (
     <table>
+      {caption && <caption>{caption}</caption>}
       <thead>
         <tr>
           {data.headers.map((header, index) => (
-            <th key={index}>{header}</th>
+            <th key={index} scope="col">
+              {header}
+            </th>
           ))}
         </tr>
       </thead>
