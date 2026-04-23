@@ -5,16 +5,59 @@
  * Run: npm run validate-posts
  */
 
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const POSTS_DIR = new URL('../app/posts', import.meta.url).pathname;
+const PUBLIC_DIR = new URL('../public', import.meta.url).pathname;
+const POSTS_LIST_PATH = new URL('../app/posts/page.tsx', import.meta.url).pathname;
+const SITE_ORIGIN = 'https://www.benstewart.ai';
 
 let errors = 0;
 
 function fail(slug, message) {
   console.error(`  FAIL  ${slug}: ${message}`);
   errors++;
+}
+
+async function fileExists(path) {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Resolve a URL or absolute site URL to a path under /public.
+ * Returns null if the URL is external (not on this site).
+ */
+function resolvePublicPath(url) {
+  let pathPart = url;
+  if (pathPart.startsWith(SITE_ORIGIN)) {
+    pathPart = pathPart.slice(SITE_ORIGIN.length);
+  } else if (/^https?:\/\//.test(pathPart)) {
+    return null;
+  }
+  if (!pathPart.startsWith('/')) pathPart = '/' + pathPart;
+  return join(PUBLIC_DIR, pathPart);
+}
+
+/**
+ * Extract all OG image URLs from the images: [...] array in openGraph.
+ */
+function extractOgImageUrls(metaBlock) {
+  const imagesMatch = metaBlock.match(/images\s*:\s*\[([\s\S]*?)\]/);
+  if (!imagesMatch) return [];
+  const inner = imagesMatch[1];
+  const urls = [];
+  const urlRegex = /url\s*:\s*["']([^"']+)["']/g;
+  let m;
+  while ((m = urlRegex.exec(inner)) !== null) {
+    urls.push(m[1]);
+  }
+  return urls;
 }
 
 /**
@@ -95,11 +138,20 @@ for (const slug of postDirs) {
   }
 
   // Check openGraph and its required contents
+  let ogImageUrls = [];
   if (!metaBlock.includes('openGraph')) {
     postErrors.push('missing openGraph');
   } else {
     if (!metaBlock.includes('images')) {
       postErrors.push('missing openGraph.images');
+    } else {
+      ogImageUrls = extractOgImageUrls(metaBlock);
+      for (const url of ogImageUrls) {
+        const publicPath = resolvePublicPath(url);
+        if (publicPath && !(await fileExists(publicPath))) {
+          postErrors.push(`openGraph image file missing on disk: ${url}`);
+        }
+      }
     }
   }
 
@@ -125,6 +177,19 @@ for (const slug of postDirs) {
     if (schemaSlug && schemaSlug !== slug) {
       postErrors.push(`PostSchema slug "${schemaSlug}" does not match directory "${slug}"`);
     }
+
+    // If the post has OG images, require PostSchema to pass an image prop too,
+    // so JSON-LD includes it.
+    const schemaImage = extractPropValue(content, 'image');
+    if (ogImageUrls.length > 0 && !schemaImage) {
+      postErrors.push('missing <PostSchema image="..."> prop (required when openGraph.images is set)');
+    }
+    if (schemaImage) {
+      const publicPath = resolvePublicPath(schemaImage);
+      if (publicPath && !(await fileExists(publicPath))) {
+        postErrors.push(`PostSchema image file missing on disk: ${schemaImage}`);
+      }
+    }
   }
 
   if (postErrors.length > 0) {
@@ -134,6 +199,33 @@ for (const slug of postDirs) {
   } else {
     console.log(`  OK    ${slug}`);
   }
+}
+
+// Cross-check that every post directory appears in app/posts/page.tsx
+// and that every slug listed there has a matching directory.
+try {
+  const listContent = await readFile(POSTS_LIST_PATH, 'utf-8');
+  const slugRegex = /slug\s*:\s*['"]([^'"]+)['"]/g;
+  const listed = new Set();
+  let m;
+  while ((m = slugRegex.exec(listContent)) !== null) {
+    listed.add(m[1]);
+  }
+  const onDisk = new Set(postDirs);
+
+  for (const slug of onDisk) {
+    if (!listed.has(slug)) {
+      fail(slug, 'post directory exists but slug is missing from app/posts/page.tsx');
+    }
+  }
+  for (const slug of listed) {
+    if (!onDisk.has(slug)) {
+      fail(slug, 'slug listed in app/posts/page.tsx has no matching post directory');
+    }
+  }
+} catch (err) {
+  console.error(`  FAIL  unable to read app/posts/page.tsx: ${err.message}`);
+  errors++;
 }
 
 console.log(`\n${postDirs.length} posts checked, ${errors} error(s)`);

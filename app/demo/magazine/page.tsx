@@ -257,6 +257,7 @@ export default function MagazineDemo() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
             >
               <polyline points="6 9 12 15 18 9" />
             </svg>
