@@ -9,7 +9,7 @@ type PostInfo = {
   lastModified: string | null;
 };
 
-async function getPostsWithDates(dir: string): Promise<PostInfo[]> {
+export async function getPostsWithDates(dir: string): Promise<PostInfo[]> {
   const entries = await fs.readdir(dir, {
     recursive: true,
     withFileTypes: true
