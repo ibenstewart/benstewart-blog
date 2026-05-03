@@ -49,6 +49,15 @@ export async function getPostsWithDates(dir: string): Promise<PostInfo[]> {
   return postsWithDates;
 }
 
+type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+
+const ROUTE_HINTS: Record<string, { changeFrequency: ChangeFrequency; priority: number }> = {
+  '': { changeFrequency: 'weekly', priority: 1.0 },
+  '/posts': { changeFrequency: 'weekly', priority: 0.8 },
+  '/bio': { changeFrequency: 'yearly', priority: 0.5 },
+  '/speaking': { changeFrequency: 'monthly', priority: 0.5 },
+};
+
 export default async function sitemap() {
   const postsDirectory = path.join(process.cwd(), 'app', 'posts');
   const postsWithDates = await getPostsWithDates(postsDirectory);
@@ -57,13 +66,17 @@ export default async function sitemap() {
     const freshness = post.lastModified ?? post.date;
     return {
       url: `${SITE_URL}/posts/${post.slug}`,
-      lastModified: freshness ? new Date(freshness).toISOString() : new Date().toISOString()
+      lastModified: freshness ? new Date(freshness).toISOString() : new Date().toISOString(),
+      changeFrequency: 'monthly' as ChangeFrequency,
+      priority: 0.7,
     };
   });
 
-  const routes = ['', '/posts', '/bio', '/speaking'].map((route) => ({
+  const routes = Object.entries(ROUTE_HINTS).map(([route, hints]) => ({
     url: `${SITE_URL}${route}`,
-    lastModified: new Date().toISOString()
+    lastModified: new Date().toISOString(),
+    changeFrequency: hints.changeFrequency,
+    priority: hints.priority,
   }));
 
   return [...routes, ...posts];

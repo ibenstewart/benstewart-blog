@@ -12,19 +12,26 @@ const outfit = Outfit({
   weight: ['400', '500', '600', '700']
 });
 
+const siteDescription = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.benstewart.ai'),
   alternates: {
-    canonical: '/'
+    canonical: '/',
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
   },
   title: {
     default: 'Ben Stewart',
     template: '%s | Ben Stewart'
   },
-  description: 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.',
+  description: siteDescription,
   openGraph: {
     type: 'website',
     siteName: 'Ben Stewart',
+    url: '/',
+    description: siteDescription,
     images: [{
       url: '/images/og-default.png',
       width: 1200,
@@ -33,7 +40,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    creator: '@ibenstewart',
+    creator: '@benstewart__',
+    images: ['/images/og-default.png'],
   },
 };
 
@@ -61,6 +69,9 @@ export default function RootLayout({
 function Footer() {
   const links = [
     { name: 'posts', url: '/posts', external: false },
+    { name: 'rss', url: '/feed.xml', external: false },
+    { name: 'github', url: 'https://github.com/ibenstewart', external: true },
+    { name: 'x', url: 'https://x.com/benstewart__', external: true },
     { name: 'linkedin', url: 'https://www.linkedin.com/in/ben-stewart-90944595/', external: true },
     { name: 'contact', url: 'mailto:ben@benstewart.ai', external: true }
   ];
