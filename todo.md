@@ -25,7 +25,7 @@ Capture mechanism is the highest-leverage missing piece. Without it, every visit
 - **Estimate:** 1.5 hrs setup, plus 30 mins for the welcome email.
 - **Done when:** signup is live in header and footer, welcome email triggers, first 10 sign-ups are in.
 
-## 3. Fix the discoverability hygiene
+## 3. Fix the discoverability hygiene ✅ Done
 
 The unglamorous one. Search engines have indexed almost no body content from the site. If you’ve published “I Built This Blog With Claude Code” and your OG tags are broken, that’s a credibility hole.
 
