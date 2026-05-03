@@ -1,4 +1,19 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+const postsDescription = 'All posts by Ben Stewart on engineering leadership, AI-native engineering, and running large teams.';
+
+export const metadata: Metadata = {
+  title: 'Posts',
+  description: postsDescription,
+  alternates: { canonical: 'https://www.benstewart.ai/posts' },
+  openGraph: {
+    title: 'Posts | Ben Stewart',
+    description: postsDescription,
+    url: 'https://www.benstewart.ai/posts',
+    images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
+  },
+};
 
 const posts = [
   { slug: 'ai-made-writing-free', title: 'AI Made Writing Free. That Was Supposed to Be Good News.' },
