@@ -75,6 +75,8 @@ export function PersonJsonLd() {
     },
     sameAs: [
       'https://www.linkedin.com/in/ben-stewart-90944595/',
+      'https://github.com/ibenstewart',
+      'https://x.com/benstewart__',
     ],
   };
 
