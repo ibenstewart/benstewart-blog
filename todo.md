@@ -4,7 +4,7 @@ Heavier push assumed: one evening plus Sunday morning, roughly 6 to 8 hours a we
 
 -----
 
-## 1. Rewrite the homepage
+## 1. Rewrite the homepage ✅ Done
 
 The current homepage commits to nothing. It’s the single biggest blocker because every other thing in this list funnels through it.
 
