@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 const posts = [
+  { slug: 'the-ai-native-cv', title: 'Your CV Has Two Readers Now' },
   { slug: 'ai-made-writing-free', title: 'AI Made Writing Free. That Was Supposed to Be Good News.' },
   { slug: 'multi-agent-ai-strategy', title: 'How I Use Multiple AI Agents to Stress-Test Strategy' },
   { slug: 'the-three-pound-question', title: 'The £3 Question' },

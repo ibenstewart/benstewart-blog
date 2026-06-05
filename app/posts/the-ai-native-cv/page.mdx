@@ -1,0 +1,83 @@
+export const metadata = {
+  title: "Your CV Has Two Readers Now",
+  date: "2026-06-05",
+  subtitle: "Build the boring PDF for the dumb parser. Save the craft for the page.",
+  description: "An AI-native CV in 2026 isn't one clever file. It's a boring, parser-safe PDF plus an ambitious page where the craft lives, and the real signal isn't the chatbot you build. It's the field report about how you built it.",
+  alternates: {
+    canonical: 'https://www.benstewart.ai/posts/the-ai-native-cv'
+  },
+  openGraph: {
+    title: "Your CV Has Two Readers Now",
+    description: "An AI-native CV in 2026 isn't one clever file. It's a boring, parser-safe PDF plus an ambitious page where the craft lives, and the real signal isn't the chatbot you build. It's the field report about how you built it.",
+    url: "https://www.benstewart.ai/posts/the-ai-native-cv",
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630 }],
+  }
+};
+
+# Your CV Has Two Readers Now
+
+<PostSchema
+  title="Your CV Has Two Readers Now"
+  description="An AI-native CV in 2026 isn't one clever file. It's a boring, parser-safe PDF plus an ambitious page where the craft lives, and the real signal isn't the chatbot you build. It's the field report about how you built it."
+  date="2026-06-05"
+  slug="the-ai-native-cv"
+  image="https://www.benstewart.ai/images/og-default.png"
+/>
+
+Picture the engineer who spent a weekend building a "chat with my CV" bot. Streaming tokens, a nice little input box, retrieval over their whole career. They're proud of it. They paste the link into the application portal, hit submit, and a parser written sometime around the financial crisis reads their two-column PDF top to bottom, scrambles every line into word salad, and bins them in about seven seconds. Nobody ever sees the bot.
+
+That's the trap of the AI-native CV in 2026. People build the clever thing and neglect the boring thing, when the boring thing is the gate.
+
+Here's the reframe that fixes it: your CV now has two completely different readers, and you cannot serve both with one file.
+
+## Two readers, two artifacts
+
+The first reader is a dumb-but-decisive parser. Most applicant tracking systems still rip raw text out of your PDF with a library, run a regex over a flat top-to-bottom stream, and make a keep-or-bin call. They do not read your embedded JSON. They do not read your metadata. They read text, in reading order, and they are easily confused.
+
+The second reader is the smartest agent you can imagine; an LLM screener, a recruiter pasting your page into Claude, or a human who is genuinely curious. This reader rewards depth, structure, and craft.
+
+<KeyPoint>
+Design the PDF for the dumbest parser in the room and the page for the smartest agent. Do not try to make one file serve all masters; you'll compromise both.
+</KeyPoint>
+
+So you ship a pair. A boring PDF and an ambitious page. They do different jobs and they're allowed to look different.
+
+## The PDF: build for the dumbest reader
+
+This is the highest-ROI work, and it's the part everyone wants to skip because it isn't fun. Single column. Standard headings, "Work Experience", not "My Journey". Contact details and a plain-text URL in the body, never stranded in a header or footer where parsers drop them. Quantified bullets. Keywords that mirror the job description's exact words, sitting in a labelled Skills section rather than buried in prose.
+
+The failure modes are well documented and they're all self-inflicted by "design". Two columns get read straight across and scrambled; in one 2026 test that broke seven systems out of eight. Tables shuffle. Skill-bars and rating dots are invisible to a parser, so the keywords inside them simply vanish. A Canva-style PDF where the text is really a picture? The parser sees nothing at all.
+
+<Callout type="tip">
+Validate it the lazy way. Copy the PDF, paste into a plain-text editor, and read it. If it doesn't make sense in that flat stream, no ATS will make sense of it either. Keep a DOCX backup; it often parses more reliably than your PDF.
+</Callout>
+
+Colour and whitespace are safe; they're invisible to the parser. Columns, tables, and graphics are not. The creativity doesn't belong here. It belongs one click away.
+
+## The page: where the craft lives
+
+This is where the AI-native part actually happens, and where most people reach for the wrong thing. They build the chatbot first.
+
+A "chat with my CV" toy reads as try-hard, especially for a senior leader. Recruiters describe being immune to gimmicks, and for a VP or director audience the test is brutally simple; does this demonstrate judgement, or does it just demand attention without promising quality? A novelty widget fails that test. A production-grade career agent passes it, though only if you treat it like production.
+
+The difference is rigour. The credible version of "ask my career" is grounded so it can't confidently lie about the gap years; it abstains when it doesn't know rather than hallucinating. It keeps your core identity facts always in context so a retrieval miss never reads as "no, I've never written anything". It has a regression suite of red-team prompts you re-run every time you change the model or the content, because a chatbot without an eval suite is a chatbot you're changing blind. It scales to zero so it doesn't quietly bill you for a standing node at three in the morning.
+
+<Callout type="insight">
+A toy and a production system can look identical in a screenshot. What separates them is the stuff you can't see; the grounding, the evals, the cost engineering, the failure modes you caught before a stranger did.
+</Callout>
+
+## The signal isn't the widget. It's the write-up.
+
+Here's the part that took me a moment to properly believe.
+
+The thing that proves you can build with AI is not the chatbot on your page. It's the public field report about how you built it. The architecture. The failure you caught. The eval suite. The afternoon you spent attacking your own bot and what leaked. That artifact, the honest "here's what broke and how I found it" write-up, is worth more than the widget to every audience that matters.
+
+For an engineering-leadership role it's legible proof of practical, hands-on AI judgement; not hype, not a tool list, but a leader who actually ships and can tell you why. For the AI-lab go-to-market roles, the forward-deployed and applied-architect jobs, it's almost on the nose, because publishing a generalisable deployment field report is literally the job those teams do. The post is a work sample.
+
+The anti-pattern is the overclaim, the "my digital twin is 95% as good as me and never hallucinates" framing. Nobody who has shipped one of these believes that sentence. The credible move is the opposite; show the seams.
+
+So if you're updating your CV this year, resist building the shiny thing first. Make the boring PDF survive the parser. Build the page so an agent can read it cleanly. Then build the small, rigorous, honest version of the clever thing, and write up what you learned. The write-up is the CV.
+
+<TLDR>
+Your CV has two readers now: a dumb ATS parser and a smart agent (or human). Build a boring, single-column, parser-safe PDF for the first, and an ambitious page for the second; don't make one file serve both. On the page, skip the gimmicky "chat with my CV" toy and build a properly grounded, eval-tested, cost-engineered career agent instead. The real signal that you can build with AI isn't the widget; it's the public field report about how you built it, seams and all. That write-up is the work sample, for both engineering-leadership and AI-lab GTM roles.
+</TLDR>
