@@ -1,60 +1,14 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import { Feed } from 'feed';
+import { getAllPosts } from '@/lib/posts';
 
 const SITE_URL = 'https://www.benstewart.ai';
 const SITE_DESCRIPTION = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';
 const MAX_ITEMS = 50;
 
-type PostFrontmatter = {
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-};
-
-async function readPosts(): Promise<PostFrontmatter[]> {
-  const postsDirectory = path.join(process.cwd(), 'app', 'posts');
-  const entries = await fs.readdir(postsDirectory, {
-    recursive: true,
-    withFileTypes: true,
-  });
-
-  const files = entries
-    .filter((entry) => entry.isFile() && entry.name === 'page.mdx')
-    .map((entry) => ({
-      slug: path.basename(entry.parentPath),
-      filePath: path.join(entry.parentPath, entry.name),
-    }));
-
-  const posts = await Promise.all(
-    files.map(async ({ slug, filePath }) => {
-      const content = await fs.readFile(filePath, 'utf-8');
-      const titleMatch =
-        content.match(/title:\s*"((?:[^"\\]|\\.)*)"/) ||
-        content.match(/title:\s*'((?:[^'\\]|\\.)*)'/);
-      const descriptionMatch =
-        content.match(/description:\s*"((?:[^"\\]|\\.)*)"/) ||
-        content.match(/description:\s*'((?:[^'\\]|\\.)*)'/);
-      const dateMatch = content.match(/date:\s*["'](\d{4}-\d{2}-\d{2})["']/);
-
-      if (!titleMatch || !descriptionMatch || !dateMatch) return null;
-
-      return {
-        slug,
-        title: titleMatch[1],
-        description: descriptionMatch[1],
-        date: dateMatch[1],
-      };
-    })
-  );
-
-  return posts.filter((p): p is PostFrontmatter => p !== null);
-}
-
 export async function GET() {
-  const posts = await readPosts();
-  posts.sort((a, b) => b.date.localeCompare(a.date));
+  const posts = (await getAllPosts()).filter(
+    (post) => post.date !== null && post.description !== null
+  );
 
   const author = {
     name: 'Ben Stewart',
@@ -78,13 +32,13 @@ export async function GET() {
   for (const post of posts.slice(0, MAX_ITEMS)) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
-      title: post.title,
+      title: post.metaTitle,
       id: url,
       link: url,
-      description: post.description,
-      content: post.description,
+      description: post.description!,
+      content: post.description!,
       author: [author],
-      date: new Date(post.date),
+      date: new Date(post.date!),
     });
   }
 

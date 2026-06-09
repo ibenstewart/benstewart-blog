@@ -50,7 +50,11 @@ export const metadata = {
 />
 
 Content goes here...
+
+<PostNav slug="[slug]" related={["other-slug", "another-slug"]} />
 ```
+
+**Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders previous/next links automatically (derived from post dates via `lib/posts.ts`). The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and their display titles are resolved automatically.
 
 **Note:** If the post has a custom OG image, use a relative path for the `images` URL (e.g. `"/images/posts/[slug]-0.png"`) and add the `image` prop to `<PostSchema>` with the **absolute** URL (JSON-LD requires it).
 
@@ -68,23 +72,24 @@ Available components in `mdx-components.tsx`:
 | `<TLDR>` | `<TLDR>Summary</TLDR>` | Article summary box |
 | `<Timeline>` | Wrapper for Event components | Career/timeline container |
 | `<Event>` | `<Event year="2024" title="Role">Description</Event>` | Timeline entry |
+| `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | Prev/next + related links at the end of every post |
 
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`
-2. Create `page.mdx` with metadata export (including canonical, openGraph, images) and `<PostSchema>` component
-3. Add to posts array in `app/posts/page.tsx`
-4. Add to homepage list in `app/page.mdx` (if featuring)
-5. Run `npm run validate-posts` to confirm all required SEO fields are present
-6. Commit and push - Vercel auto-deploys
+2. Create `page.mdx` with metadata export (including canonical, openGraph, images), `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
+3. Add to homepage list in `app/page.mdx` (if featuring)
+4. Run `npm run validate-posts` to confirm all required SEO fields are present
+5. Commit and push - Vercel auto-deploys
 
-**IMPORTANT:** Posts are automatically included in the sitemap. If adding a new top-level page (not a post), add the route to the `routes` array in `app/sitemap.ts`.
+**IMPORTANT:** Posts are automatically included in the sitemap, the `/posts` listing page, and the RSS feed — all derived from the filesystem via `lib/posts.ts`. The listing shows each post's H1 as its title and the `subtitle` metadata as its blurb. If adding a new top-level page (not a post), add the route to the `routes` array in `app/sitemap.ts`.
 
 ## Key Files
 - `app/layout.tsx` - Main layout, font, metadata
 - `app/viewport.ts` - Viewport config (safe area support for iPhone)
 - `app/page.mdx` - Homepage
 - `app/bio/page.mdx` - Bio page with timeline
-- `app/posts/page.tsx` - Posts listing page
+- `app/posts/page.tsx` - Posts listing page (generated from the filesystem)
+- `lib/posts.ts` - Shared post index (powers the listing, RSS feed, and PostNav)
 - `app/speaking/page.tsx` - Speaking page (videos, podcasts, articles)
 - `mdx-components.tsx` - Custom MDX components
 - `app/globals.css` - Global styles (includes safe area CSS)
