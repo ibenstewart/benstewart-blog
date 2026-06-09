@@ -58,13 +58,14 @@ You wrote a post called “I Built This Blog With Claude Code.” There’s no G
 - **Estimate:** 3 hrs.
 - **Done when:** the link in the footer takes a stranger to a repo with actual stuff in it.
 
-## 6. Add embeddings-based related posts and a TLDR per post
+## 6. Add embeddings-based related posts and a TLDR per post — partially done
 
 Now you start demonstrating the thesis instead of just claiming it. Both can be done in an afternoon with off-the-shelf tools if you don’t try to make them pretty.
 
-- Related posts: embed every post once, show three nearest neighbours at the bottom of each post. OpenAI embeddings or Voyage will do.
-- TLDR: 3 to 5 sentences at the top of every post, generated at publish time, clearly labelled as AI-generated.
-- **Estimate:** 3 to 4 hrs together.
+- ✅ Every post now ends with `<PostNav>`: previous/next links derived from post dates, plus hand-picked related posts on seven posts (pass slugs via the `related` prop). The `/posts` listing is also generated from the filesystem with dates and subtitles, so new posts appear automatically.
+- Remaining: upgrade related from hand-picked to embeddings-based nearest neighbours (OpenAI embeddings or Voyage), and extend hand-picked `related` to the other seventeen posts in the meantime.
+- Remaining: TLDR at the **top** of every post, 3 to 5 sentences, generated at publish time, clearly labelled as AI-generated. (Many posts have a TLDR at the bottom already; the top placement is the point.)
+- **Estimate:** 2 to 3 hrs remaining.
 - **Done when:** every post has a TLDR at the top and three related posts at the bottom.
 
 ## 7. Send the first newsletter issue

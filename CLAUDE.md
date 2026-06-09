@@ -95,6 +95,15 @@ Available components in `mdx-components.tsx`:
 - `app/globals.css` - Global styles (includes safe area CSS)
 - `app/sitemap.ts` - Auto-generated sitemap
 
+## Gotchas
+Hard-won knowledge from working in this repo. Read before touching posts or metadata.
+
+- **Two titles per post, on purpose.** The H1 (`# ...`) is the short display title used on `/posts`, the homepage, and PostNav links. The `metadata.title` export is the longer SEO title used in `<title>`, OG tags, and the RSS feed. Several posts differ deliberately (e.g. `sustainable` displays "Sustainable Pace Just Got Faster" but its SEO title is "Sustainable Pace With AI: Why You're Probably Doing It Twice"). Don't "fix" the mismatch; change the H1 if you want a different listing title.
+- **Metadata is parsed by regex, not by evaluating the MDX.** `lib/posts.ts`, `app/sitemap.ts`, and `scripts/validate-posts.mjs` all regex-scan the raw file and take the **first** match. Keep the `export const metadata` block at the top of every post, and avoid literal strings like `date: "YYYY-MM-DD"` or `title: "..."` in body prose or code blocks above it — they'd be picked up as the post's metadata.
+- **Eleven posts share the date 2023-09-18.** That's the Substack import date, not their real publication dates. They sort as one cluster (alphabetical by title within the tie) on `/posts` and in prev/next navigation. Backfilling real dates in each post's `metadata.date` will automatically fix the listing order, prev/next links, RSS feed, and sitemap — no other changes needed.
+- **`npm run validate-posts` is the safety net.** It checks SEO fields, PostSchema/metadata drift, OG images existing on disk, and that every post ends with a `<PostNav>` whose slug matches its directory and whose `related` slugs point at real posts. Run it after any post change.
+- **Tests follow a temp-dir pattern.** `lib/posts.test.ts` and `app/sitemap.test.ts` write throwaway posts into a `mkdtemp` directory rather than mocking `fs`. Follow that pattern for anything else that reads the posts directory.
+
 ## Style Notes
 - Page width: 75ch
 - Base font size: text-lg (18px)
