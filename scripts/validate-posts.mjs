@@ -10,7 +10,6 @@ import { join } from 'node:path';
 
 const POSTS_DIR = new URL('../app/posts', import.meta.url).pathname;
 const PUBLIC_DIR = new URL('../public', import.meta.url).pathname;
-const POSTS_LIST_PATH = new URL('../app/posts/page.tsx', import.meta.url).pathname;
 const SITE_ORIGIN = 'https://www.benstewart.ai';
 
 let errors = 0;
@@ -192,6 +191,30 @@ for (const slug of postDirs) {
     }
   }
 
+  // Check PostNav component exists and points at this post.
+  // The posts listing and prev/next navigation are generated from the
+  // filesystem (lib/posts.ts), so each post only needs its own PostNav.
+  const navSlugMatch = content.match(/<PostNav[^>]*\bslug\s*=\s*"([^"]+)"/);
+  if (!navSlugMatch) {
+    postErrors.push('missing <PostNav> component');
+  } else {
+    if (navSlugMatch[1] !== slug) {
+      postErrors.push(`PostNav slug "${navSlugMatch[1]}" does not match directory "${slug}"`);
+    }
+    const relatedMatch = content.match(/<PostNav[^>]*\brelated\s*=\s*\{\[([^\]]*)\]\}/);
+    if (relatedMatch) {
+      const relatedSlugs = [...relatedMatch[1].matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
+      for (const relatedSlug of relatedSlugs) {
+        if (!postDirs.includes(relatedSlug)) {
+          postErrors.push(`PostNav related slug "${relatedSlug}" has no matching post directory`);
+        }
+        if (relatedSlug === slug) {
+          postErrors.push('PostNav related slugs must not include the post itself');
+        }
+      }
+    }
+  }
+
   if (postErrors.length > 0) {
     for (const err of postErrors) {
       fail(slug, err);
@@ -199,33 +222,6 @@ for (const slug of postDirs) {
   } else {
     console.log(`  OK    ${slug}`);
   }
-}
-
-// Cross-check that every post directory appears in app/posts/page.tsx
-// and that every slug listed there has a matching directory.
-try {
-  const listContent = await readFile(POSTS_LIST_PATH, 'utf-8');
-  const slugRegex = /slug\s*:\s*['"]([^'"]+)['"]/g;
-  const listed = new Set();
-  let m;
-  while ((m = slugRegex.exec(listContent)) !== null) {
-    listed.add(m[1]);
-  }
-  const onDisk = new Set(postDirs);
-
-  for (const slug of onDisk) {
-    if (!listed.has(slug)) {
-      fail(slug, 'post directory exists but slug is missing from app/posts/page.tsx');
-    }
-  }
-  for (const slug of listed) {
-    if (!onDisk.has(slug)) {
-      fail(slug, 'slug listed in app/posts/page.tsx has no matching post directory');
-    }
-  }
-} catch (err) {
-  console.error(`  FAIL  unable to read app/posts/page.tsx: ${err.message}`);
-  errors++;
 }
 
 console.log(`\n${postDirs.length} posts checked, ${errors} error(s)`);

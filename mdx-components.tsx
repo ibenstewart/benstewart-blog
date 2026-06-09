@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { highlight } from 'sugar-high';
 import { ArticleJsonLd, FAQJsonLd, PersonJsonLd } from './app/components/JsonLd';
 import { RelatedPosts } from './app/components/RelatedPosts';
+import { PostNav } from './app/components/PostNav';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -279,6 +280,7 @@ const components = {
   ),
   FAQJsonLd: (props: { faqs: { question: string; answer: string }[] }) => <FAQJsonLd {...props} />,
   RelatedPosts: (props: { posts: { slug: string; title: string }[] }) => <RelatedPosts {...props} />,
+  PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
   PersonSchema: () => <PersonJsonLd />,
 };
 
