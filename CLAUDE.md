@@ -9,7 +9,7 @@ Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing ab
 - **Framework:** Next.js 15 with App Router
 - **Styling:** Tailwind CSS v4
 - **Content:** MDX files in `app/posts/[slug]/page.mdx`
-- **Font:** Outfit (Google Fonts)
+- **Fonts:** Petrona (prose serif) + Outfit (chrome/UI), both via next/font Google Fonts
 - **Deployment:** Vercel (auto-deploys from GitHub)
 - **Repo:** https://github.com/ibenstewart/benstewart-blog
 

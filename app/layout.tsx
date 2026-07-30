@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Outfit, Source_Serif_4 } from 'next/font/google';
+import { Outfit, Petrona } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import Link from 'next/link';
 import { WebsiteJsonLd } from './components/JsonLd';
@@ -13,12 +13,11 @@ const outfit = Outfit({
   variable: '--font-outfit'
 });
 
-const sourceSerif = Source_Serif_4({
+const petrona = Petrona({
   subsets: ['latin'],
   weight: 'variable',
   style: ['normal', 'italic'],
-  axes: ['opsz'],
-  variable: '--font-source-serif'
+  variable: '--font-petrona'
 });
 
 const siteDescription = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';
@@ -60,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${sourceSerif.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${petrona.variable}`}>
       <body className="antialiased tracking-tight text-lg font-sans">
         <a
           href="#main"

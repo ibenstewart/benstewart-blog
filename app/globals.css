@@ -21,7 +21,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --paper: oklch(17.5% .01 260);
     --raise: oklch(22% .01 260);
     --ink: oklch(89% .006 250);
@@ -41,9 +41,33 @@
     --sh-entity: #e0af68;
   }
 
-  img {
+  :root:not([data-theme='light']) img {
     filter: brightness(.88);
   }
+}
+
+:root[data-theme='dark'] {
+  --paper: oklch(17.5% .01 260);
+  --raise: oklch(22% .01 260);
+  --ink: oklch(89% .006 250);
+  --muted: oklch(66% .008 250);
+  --faint: oklch(55% .008 252);
+  --hair: oklch(29% .008 255);
+  --accent: oklch(70% .11 25);
+
+  --sh-identifier: var(--ink);
+  --sh-class: #7aa2f7;
+  --sh-sign: #89ddff;
+  --sh-string: #9ece6a;
+  --sh-keyword: #bb9af7;
+  --sh-comment: #565f89;
+  --sh-jsxliterals: #7aa2f7;
+  --sh-property: #73daca;
+  --sh-entity: #e0af68;
+}
+
+:root[data-theme='dark'] img {
+  filter: brightness(.88);
 }
 
 @theme {
@@ -54,7 +78,7 @@
   --color-faint: var(--faint);
   --color-hair: var(--hair);
   --color-accent: var(--accent);
-  --font-serif: var(--font-source-serif), Georgia, serif;
+  --font-serif: var(--font-petrona), Georgia, serif;
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -145,10 +169,15 @@ pre code span {
 }
 
 @media (prefers-color-scheme: dark) {
-  pre {
+  :root:not([data-theme='light']) pre {
     background-color: oklch(14% .012 260);
     border-color: oklch(26% .01 260);
   }
+}
+
+:root[data-theme='dark'] pre {
+  background-color: oklch(14% .012 260);
+  border-color: oklch(26% .01 260);
 }
 
 hr {
