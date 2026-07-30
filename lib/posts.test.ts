@@ -123,4 +123,126 @@ describe('getAllPosts', () => {
     expect(post.date).toBeNull();
     expect(post.title).toBe('Just a heading');
   });
+
+  it('uses the PostHeader title prop as the display title when present', async () => {
+    await writePost(
+      postsDir,
+      'migrated',
+      [
+        'export const metadata = {',
+        '  title: "Long SEO Title: Why You Should Care",',
+        '  date: "2024-05-12",',
+        '};',
+        '',
+        '<PostHeader title="Short Display Title" slug="migrated" />',
+        '',
+        'Body text.',
+      ].join('\n')
+    );
+
+    const [post] = await getAllPosts(postsDir);
+    expect(post.title).toBe('Short Display Title');
+    expect(post.metaTitle).toBe('Long SEO Title: Why You Should Care');
+  });
+
+  it('prefers the PostHeader title prop over a legacy H1 when both are present', async () => {
+    await writePost(
+      postsDir,
+      'both',
+      [
+        'export const metadata = { title: "Meta Title", date: "2024-01-01" };',
+        '',
+        '# Legacy Heading',
+        '',
+        '<PostHeader title="PostHeader Title" slug="both" />',
+      ].join('\n')
+    );
+
+    const [post] = await getAllPosts(postsDir);
+    expect(post.title).toBe('PostHeader Title');
+  });
+
+  it('unescapes quotes in a PostHeader title prop', async () => {
+    await writePost(
+      postsDir,
+      'apostrophe-header',
+      [
+        'export const metadata = { title: "Meta", date: "2024-01-01" };',
+        '',
+        `<PostHeader title="Ralph Isn\\'t the Point" slug="apostrophe-header" />`,
+      ].join('\n')
+    );
+
+    const [post] = await getAllPosts(postsDir);
+    expect(post.title).toBe("Ralph Isn't the Point");
+  });
+
+  describe('readingMinutes', () => {
+    it('rounds to the nearest minute at 230 words per minute', async () => {
+      const words = new Array(460).fill('word').join(' '); // 460 words -> 2 min
+      await writePost(
+        postsDir,
+        'two-minutes',
+        [
+          'export const metadata = { title: "T", date: "2024-01-01" };',
+          '',
+          `# Title`,
+          '',
+          words,
+        ].join('\n')
+      );
+
+      const [post] = await getAllPosts(postsDir);
+      expect(post.readingMinutes).toBe(2);
+    });
+
+    it('floors reading time at 1 minute for very short posts', async () => {
+      await writePost(
+        postsDir,
+        'short',
+        [
+          'export const metadata = { title: "T", date: "2024-01-01" };',
+          '',
+          '# Title',
+          '',
+          'Just a few words here.',
+        ].join('\n')
+      );
+
+      const [post] = await getAllPosts(postsDir);
+      expect(post.readingMinutes).toBe(1);
+    });
+
+    it('excludes the metadata block, JSX tags, and fenced code blocks from the word count', async () => {
+      const bodyWords = new Array(230).fill('word').join(' '); // exactly 1 min of real body words
+      const codeFillerWords = new Array(1000).fill('codefiller').join(' '); // would alone push well past 1 min if counted
+      const descriptionFillerWords = new Array(100).fill('padding').join(' ');
+      await writePost(
+        postsDir,
+        'stripped',
+        [
+          'export const metadata = {',
+          '  title: "T",',
+          '  date: "2024-01-01",',
+          `  description: "${descriptionFillerWords}",`,
+          '};',
+          '',
+          '<PostHeader title="Title" slug="stripped" />',
+          '',
+          '<PostSchema title="T" description="d" date="2024-01-01" slug="stripped" />',
+          '',
+          '```js',
+          codeFillerWords,
+          '```',
+          '',
+          bodyWords,
+        ].join('\n')
+      );
+
+      const [post] = await getAllPosts(postsDir);
+      // If the metadata block, JSX tags, or fenced code block leaked into the
+      // count, 1000+ extra words would push this well past 1 minute.
+      expect(post.readingMinutes).toBe(1);
+    });
+  });
 });

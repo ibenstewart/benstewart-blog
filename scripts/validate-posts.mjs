@@ -99,6 +99,46 @@ function extractPropValue(content, prop) {
   return match ? match[1] : null;
 }
 
+/**
+ * Extract a prop value from an arbitrary self-closing/opening JSX tag,
+ * e.g. extractTagPropValue(content, 'PostHeader', 'slug').
+ */
+function extractTagPropValue(tagSource, prop) {
+  const pattern = new RegExp(`\\b${prop}\\s*=\\s*"([^"]*)"`);
+  const match = tagSource.match(pattern);
+  return match ? match[1] : null;
+}
+
+/**
+ * Find the index right after the `export const metadata = {...}` block
+ * (including its trailing `;` if present), using the same brace-depth
+ * counting as extractMetadataBlock. Returns -1 if no metadata export is
+ * found, so callers can fall back to treating the whole file as body.
+ *
+ * This replaces a fragile `content.indexOf('};')` lookup, which breaks if
+ * the literal text `};` appears anywhere earlier in the metadata block
+ * (e.g. inside a string value).
+ */
+function findMetadataBlockEnd(content) {
+  const start = content.indexOf('export const metadata');
+  if (start === -1) return -1;
+
+  const braceStart = content.indexOf('{', start);
+  if (braceStart === -1) return -1;
+
+  let depth = 0;
+  for (let i = braceStart; i < content.length; i++) {
+    if (content[i] === '{') depth++;
+    else if (content[i] === '}') depth--;
+    if (depth === 0) {
+      let end = i + 1;
+      if (content[end] === ';') end++;
+      return end;
+    }
+  }
+  return -1;
+}
+
 const entries = await readdir(POSTS_DIR, { withFileTypes: true });
 const postDirs = entries
   .filter((e) => e.isDirectory())
@@ -155,7 +195,36 @@ for (const slug of postDirs) {
   }
 
   // Check PostSchema component exists in the body (after metadata block)
-  const bodyContent = content.slice(content.indexOf('};') + 2);
+  const metaEnd = findMetadataBlockEnd(content);
+  const bodyContent = metaEnd === -1 ? content : content.slice(metaEnd);
+
+  // Post header format: during the migration to <PostHeader>, a post must be
+  // EITHER fully legacy (a "# " H1, no <PostHeader>) OR fully migrated
+  // (<PostHeader>, no "# " H1). It only fails when mixed (both present, or
+  // neither present). This is the permanent rule, not a temporary allowance.
+  const hasH1 = /^#\s+.+$/m.test(bodyContent);
+  const postHeaderTagMatch = bodyContent.match(/<PostHeader\b[^>]*>/);
+  const hasPostHeader = Boolean(postHeaderTagMatch);
+
+  if (hasH1 && hasPostHeader) {
+    postErrors.push('post body has both a legacy "# " H1 and a <PostHeader> component (mixed format not allowed)');
+  } else if (!hasH1 && !hasPostHeader) {
+    postErrors.push('post body has neither a legacy "# " H1 nor a <PostHeader> component');
+  } else if (hasPostHeader) {
+    const headerTag = postHeaderTagMatch[0];
+    const headerTitle = extractTagPropValue(headerTag, 'title');
+    if (!headerTitle || !headerTitle.trim()) {
+      postErrors.push('<PostHeader> is missing a non-empty title prop');
+    }
+
+    const headerSlug = extractTagPropValue(headerTag, 'slug');
+    if (!headerSlug) {
+      postErrors.push('<PostHeader> is missing a slug prop');
+    } else if (headerSlug !== slug) {
+      postErrors.push(`PostHeader slug "${headerSlug}" does not match directory "${slug}"`);
+    }
+  }
+
   if (!bodyContent.includes('<PostSchema')) {
     postErrors.push('missing <PostSchema> component');
   } else {

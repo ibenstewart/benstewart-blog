@@ -3,13 +3,15 @@ import path from 'path';
 
 export type Post = {
   slug: string;
-  /** Display title taken from the post's first `# ` heading. */
+  /** Display title taken from the post's `<PostHeader title="...">` prop, falling back to its legacy `# ` heading. */
   title: string;
   /** SEO title from the metadata export (often longer than the display title). */
   metaTitle: string;
   subtitle: string | null;
   description: string | null;
   date: string | null;
+  /** Estimated reading time in minutes, floored at 1. */
+  readingMinutes: number;
 };
 
 function unescapeQuotes(value: string): string {
@@ -22,6 +24,53 @@ function matchQuoted(content: string, key: string): string | null {
   const single = content.match(new RegExp(`${key}:\\s*'((?:[^'\\\\]|\\\\.)*)'`));
   if (single) return unescapeQuotes(single[1]);
   return null;
+}
+
+/** Extracts a `prop="value"` attribute (double-quoted, with escaped-quote support) from a JSX tag. */
+function matchQuotedProp(content: string, tag: string, prop: string): string | null {
+  const tagMatch = content.match(new RegExp(`<${tag}[^>]*>`));
+  if (!tagMatch) return null;
+  const propMatch = tagMatch[0].match(new RegExp(`\\b${prop}\\s*=\\s*"((?:[^"\\\\]|\\\\.)*)"`));
+  return propMatch ? unescapeQuotes(propMatch[1]) : null;
+}
+
+/**
+ * Extracts the `export const metadata = {...}` block using brace-depth
+ * counting, mirroring scripts/validate-posts.mjs, so the reading-time word
+ * count doesn't include metadata text.
+ */
+function extractMetadataBlock(content: string): string | null {
+  const start = content.indexOf('export const metadata');
+  if (start === -1) return null;
+
+  const braceStart = content.indexOf('{', start);
+  if (braceStart === -1) return null;
+
+  let depth = 0;
+  for (let i = braceStart; i < content.length; i++) {
+    if (content[i] === '{') depth++;
+    else if (content[i] === '}') depth--;
+    if (depth === 0) return content.slice(start, i + 2); // include trailing `;`
+  }
+  return null;
+}
+
+/**
+ * Estimates reading time from the post body: strips the metadata export
+ * block, JSX tags, and fenced code blocks, then counts words at 230 wpm,
+ * rounding to the nearest minute with a floor of 1.
+ */
+function computeReadingMinutes(content: string): number {
+  let body = content;
+  const metaBlock = extractMetadataBlock(content);
+  if (metaBlock) body = body.replace(metaBlock, '');
+
+  body = body
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/<[^>]+>/g, ' ');
+
+  const words = body.split(/\s+/).filter(Boolean);
+  return Math.max(1, Math.round(words.length / 230));
 }
 
 /**
@@ -49,8 +98,9 @@ export async function getAllPosts(
     files.map(async ({ slug, filePath }) => {
       const content = await fs.readFile(filePath, 'utf-8');
       const metaTitle = matchQuoted(content, 'title');
+      const postHeaderTitle = matchQuotedProp(content, 'PostHeader', 'title');
       const headingMatch = content.match(/^#\s+(.+?)\s*$/m);
-      const title = headingMatch ? headingMatch[1] : metaTitle;
+      const title = postHeaderTitle ?? (headingMatch ? headingMatch[1] : metaTitle);
       if (!title) return null;
 
       return {
@@ -60,6 +110,7 @@ export async function getAllPosts(
         subtitle: matchQuoted(content, 'subtitle'),
         description: matchQuoted(content, 'description'),
         date: content.match(/date:\s*["'](\d{4}-\d{2}-\d{2})["']/)?.[1] ?? null,
+        readingMinutes: computeReadingMinutes(content),
       };
     })
   );
