@@ -7,17 +7,19 @@
 
 import { readdir, readFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  extractMetadataBlock,
+  findMetadataBlockEnd,
+  matchQuoted,
+  matchQuotedProp,
+  matchQuotedPropInTag,
+  stripFencedCodeBlocks,
+} from '../lib/mdx-parsing.mjs';
 
 const POSTS_DIR = new URL('../app/posts', import.meta.url).pathname;
 const PUBLIC_DIR = new URL('../public', import.meta.url).pathname;
 const SITE_ORIGIN = 'https://www.benstewart.ai';
-
-let errors = 0;
-
-function fail(slug, message) {
-  console.error(`  FAIL  ${slug}: ${message}`);
-  errors++;
-}
 
 async function fileExists(path) {
   try {
@@ -60,241 +62,194 @@ function extractOgImageUrls(metaBlock) {
 }
 
 /**
- * Extract the metadata block using brace-depth counting.
- * Returns the content between `export const metadata = {` and the matching `};`.
- */
-function extractMetadataBlock(content) {
-  const start = content.indexOf('export const metadata');
-  if (start === -1) return null;
-
-  const braceStart = content.indexOf('{', start);
-  if (braceStart === -1) return null;
-
-  let depth = 0;
-  for (let i = braceStart; i < content.length; i++) {
-    if (content[i] === '{') depth++;
-    else if (content[i] === '}') depth--;
-    if (depth === 0) return content.slice(braceStart, i + 1);
-  }
-  return null;
-}
-
-/**
- * Extract a value from a simple key: "value" or key: 'value' pattern.
- */
-function extractStringValue(block, key) {
-  // Try double quotes first, then single quotes (handles apostrophes in titles)
-  const dq = new RegExp(`\\b${key}\\s*:\\s*"([^"]+)"`);
-  const sq = new RegExp(`\\b${key}\\s*:\\s*'([^']+)'`);
-  const match = block.match(dq) || block.match(sq);
-  return match ? match[1] : null;
-}
-
-/**
- * Extract a prop value from <PostSchema prop="value" />.
- */
-function extractPropValue(content, prop) {
-  const pattern = new RegExp(`<PostSchema[^>]*\\b${prop}\\s*=\\s*"([^"]+)"`);
-  const match = content.match(pattern);
-  return match ? match[1] : null;
-}
-
-/**
- * Extract a prop value from an arbitrary self-closing/opening JSX tag,
- * e.g. extractTagPropValue(content, 'PostHeader', 'slug').
- */
-function extractTagPropValue(tagSource, prop) {
-  const pattern = new RegExp(`\\b${prop}\\s*=\\s*"([^"]*)"`);
-  const match = tagSource.match(pattern);
-  return match ? match[1] : null;
-}
-
-/**
- * Find the index right after the `export const metadata = {...}` block
- * (including its trailing `;` if present), using the same brace-depth
- * counting as extractMetadataBlock. Returns -1 if no metadata export is
- * found, so callers can fall back to treating the whole file as body.
+ * Checks a post body's header format and, for migrated posts, its
+ * <PostHeader> props. During the migration to <PostHeader>, a post must be
+ * EITHER fully legacy (a "# " H1, no <PostHeader>) OR fully migrated
+ * (<PostHeader>, no "# " H1). It only fails when mixed (both present) or
+ * neither is present. This is the permanent rule, not a temporary allowance.
  *
- * This replaces a fragile `content.indexOf('};')` lookup, which breaks if
- * the literal text `};` appears anywhere earlier in the metadata block
- * (e.g. inside a string value).
+ * Fenced code blocks are stripped before the H1 test so a `# ` line inside a
+ * code sample (e.g. a shell comment) isn't mistaken for a real heading.
+ *
+ * Returns an array of error message strings (empty when the post is valid).
  */
-function findMetadataBlockEnd(content) {
-  const start = content.indexOf('export const metadata');
-  if (start === -1) return -1;
+export function checkPostHeaderFormat(bodyContent, slug) {
+  const errors = [];
 
-  const braceStart = content.indexOf('{', start);
-  if (braceStart === -1) return -1;
-
-  let depth = 0;
-  for (let i = braceStart; i < content.length; i++) {
-    if (content[i] === '{') depth++;
-    else if (content[i] === '}') depth--;
-    if (depth === 0) {
-      let end = i + 1;
-      if (content[end] === ';') end++;
-      return end;
-    }
-  }
-  return -1;
-}
-
-const entries = await readdir(POSTS_DIR, { withFileTypes: true });
-const postDirs = entries
-  .filter((e) => e.isDirectory())
-  .filter((e) => !e.name.includes('..') && !e.name.startsWith('.'))
-  .map((e) => e.name)
-  .sort();
-
-for (const slug of postDirs) {
-  const filePath = join(POSTS_DIR, slug, 'page.mdx');
-  let content;
-  try {
-    content = await readFile(filePath, 'utf-8');
-  } catch {
-    fail(slug, 'page.mdx not found');
-    continue;
-  }
-
-  const postErrors = [];
-  const metaBlock = extractMetadataBlock(content);
-
-  if (!metaBlock) {
-    fail(slug, 'no metadata export found');
-    continue;
-  }
-
-  // Check required top-level fields
-  for (const field of ['title', 'date', 'description']) {
-    if (!new RegExp(`\\b${field}\\s*:`).test(metaBlock)) {
-      postErrors.push(`missing metadata.${field}`);
-    }
-  }
-
-  // Check alternates.canonical
-  if (!metaBlock.includes('alternates') || !metaBlock.includes('canonical')) {
-    postErrors.push('missing alternates.canonical');
-  }
-
-  // Check openGraph and its required contents
-  let ogImageUrls = [];
-  if (!metaBlock.includes('openGraph')) {
-    postErrors.push('missing openGraph');
-  } else {
-    if (!metaBlock.includes('images')) {
-      postErrors.push('missing openGraph.images');
-    } else {
-      ogImageUrls = extractOgImageUrls(metaBlock);
-      for (const url of ogImageUrls) {
-        const publicPath = resolvePublicPath(url);
-        if (publicPath && !(await fileExists(publicPath))) {
-          postErrors.push(`openGraph image file missing on disk: ${url}`);
-        }
-      }
-    }
-  }
-
-  // Check PostSchema component exists in the body (after metadata block)
-  const metaEnd = findMetadataBlockEnd(content);
-  const bodyContent = metaEnd === -1 ? content : content.slice(metaEnd);
-
-  // Post header format: during the migration to <PostHeader>, a post must be
-  // EITHER fully legacy (a "# " H1, no <PostHeader>) OR fully migrated
-  // (<PostHeader>, no "# " H1). It only fails when mixed (both present, or
-  // neither present). This is the permanent rule, not a temporary allowance.
-  const hasH1 = /^#\s+.+$/m.test(bodyContent);
+  const hasH1 = /^#\s+.+$/m.test(stripFencedCodeBlocks(bodyContent));
   const postHeaderTagMatch = bodyContent.match(/<PostHeader\b[^>]*>/);
   const hasPostHeader = Boolean(postHeaderTagMatch);
 
   if (hasH1 && hasPostHeader) {
-    postErrors.push('post body has both a legacy "# " H1 and a <PostHeader> component (mixed format not allowed)');
+    errors.push('post body has both a legacy "# " H1 and a <PostHeader> component (mixed format not allowed)');
   } else if (!hasH1 && !hasPostHeader) {
-    postErrors.push('post body has neither a legacy "# " H1 nor a <PostHeader> component');
+    errors.push('post body has neither a legacy "# " H1 nor a <PostHeader> component');
   } else if (hasPostHeader) {
     const headerTag = postHeaderTagMatch[0];
-    const headerTitle = extractTagPropValue(headerTag, 'title');
+    const headerTitle = matchQuotedPropInTag(headerTag, 'title');
     if (!headerTitle || !headerTitle.trim()) {
-      postErrors.push('<PostHeader> is missing a non-empty title prop');
+      errors.push('<PostHeader> is missing a non-empty title prop');
     }
 
-    const headerSlug = extractTagPropValue(headerTag, 'slug');
+    const headerSlug = matchQuotedPropInTag(headerTag, 'slug');
     if (!headerSlug) {
-      postErrors.push('<PostHeader> is missing a slug prop');
+      errors.push('<PostHeader> is missing a slug prop');
     } else if (headerSlug !== slug) {
-      postErrors.push(`PostHeader slug "${headerSlug}" does not match directory "${slug}"`);
+      errors.push(`PostHeader slug "${headerSlug}" does not match directory "${slug}"`);
     }
   }
 
-  if (!bodyContent.includes('<PostSchema')) {
-    postErrors.push('missing <PostSchema> component');
-  } else {
-    // Check PostSchema props match metadata values
-    const metaTitle = extractStringValue(metaBlock, 'title');
-    const schemaTitle = extractPropValue(content, 'title');
-    if (metaTitle && schemaTitle && metaTitle !== schemaTitle) {
-      postErrors.push(`PostSchema title "${schemaTitle}" does not match metadata title "${metaTitle}"`);
+  return errors;
+}
+
+async function main() {
+  let errors = 0;
+
+  function fail(slug, message) {
+    console.error(`  FAIL  ${slug}: ${message}`);
+    errors++;
+  }
+
+  const entries = await readdir(POSTS_DIR, { withFileTypes: true });
+  const postDirs = entries
+    .filter((e) => e.isDirectory())
+    .filter((e) => !e.name.includes('..') && !e.name.startsWith('.'))
+    .map((e) => e.name)
+    .sort();
+
+  for (const slug of postDirs) {
+    const filePath = join(POSTS_DIR, slug, 'page.mdx');
+    let content;
+    try {
+      content = await readFile(filePath, 'utf-8');
+    } catch {
+      fail(slug, 'page.mdx not found');
+      continue;
     }
 
-    const metaDate = extractStringValue(metaBlock, 'date');
-    const schemaDate = extractPropValue(content, 'date');
-    if (metaDate && schemaDate && metaDate !== schemaDate) {
-      postErrors.push(`PostSchema date "${schemaDate}" does not match metadata date "${metaDate}"`);
+    const postErrors = [];
+    const metaBlock = extractMetadataBlock(content, { includeExportPrefix: false });
+
+    if (!metaBlock) {
+      fail(slug, 'no metadata export found');
+      continue;
     }
 
-    const schemaSlug = extractPropValue(content, 'slug');
-    if (schemaSlug && schemaSlug !== slug) {
-      postErrors.push(`PostSchema slug "${schemaSlug}" does not match directory "${slug}"`);
-    }
-
-    // If the post has OG images, require PostSchema to pass an image prop too,
-    // so JSON-LD includes it.
-    const schemaImage = extractPropValue(content, 'image');
-    if (ogImageUrls.length > 0 && !schemaImage) {
-      postErrors.push('missing <PostSchema image="..."> prop (required when openGraph.images is set)');
-    }
-    if (schemaImage) {
-      const publicPath = resolvePublicPath(schemaImage);
-      if (publicPath && !(await fileExists(publicPath))) {
-        postErrors.push(`PostSchema image file missing on disk: ${schemaImage}`);
+    // Check required top-level fields
+    for (const field of ['title', 'date', 'description']) {
+      if (!new RegExp(`\\b${field}\\s*:`).test(metaBlock)) {
+        postErrors.push(`missing metadata.${field}`);
       }
     }
-  }
 
-  // Check PostNav component exists and points at this post.
-  // The posts listing and prev/next navigation are generated from the
-  // filesystem (lib/posts.ts), so each post only needs its own PostNav.
-  const navSlugMatch = content.match(/<PostNav[^>]*\bslug\s*=\s*"([^"]+)"/);
-  if (!navSlugMatch) {
-    postErrors.push('missing <PostNav> component');
-  } else {
-    if (navSlugMatch[1] !== slug) {
-      postErrors.push(`PostNav slug "${navSlugMatch[1]}" does not match directory "${slug}"`);
+    // Check alternates.canonical
+    if (!metaBlock.includes('alternates') || !metaBlock.includes('canonical')) {
+      postErrors.push('missing alternates.canonical');
     }
-    const relatedMatch = content.match(/<PostNav[^>]*\brelated\s*=\s*\{\[([^\]]*)\]\}/);
-    if (relatedMatch) {
-      const relatedSlugs = [...relatedMatch[1].matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
-      for (const relatedSlug of relatedSlugs) {
-        if (!postDirs.includes(relatedSlug)) {
-          postErrors.push(`PostNav related slug "${relatedSlug}" has no matching post directory`);
-        }
-        if (relatedSlug === slug) {
-          postErrors.push('PostNav related slugs must not include the post itself');
+
+    // Check openGraph and its required contents
+    let ogImageUrls = [];
+    if (!metaBlock.includes('openGraph')) {
+      postErrors.push('missing openGraph');
+    } else {
+      if (!metaBlock.includes('images')) {
+        postErrors.push('missing openGraph.images');
+      } else {
+        ogImageUrls = extractOgImageUrls(metaBlock);
+        for (const url of ogImageUrls) {
+          const publicPath = resolvePublicPath(url);
+          if (publicPath && !(await fileExists(publicPath))) {
+            postErrors.push(`openGraph image file missing on disk: ${url}`);
+          }
         }
       }
     }
+
+    // Check PostSchema component exists in the body (after metadata block)
+    const metaEnd = findMetadataBlockEnd(content);
+    const bodyContent = metaEnd === -1 ? content : content.slice(metaEnd);
+
+    postErrors.push(...checkPostHeaderFormat(bodyContent, slug));
+
+    if (!bodyContent.includes('<PostSchema')) {
+      postErrors.push('missing <PostSchema> component');
+    } else {
+      // Check PostSchema props match metadata values
+      const metaTitle = matchQuoted(metaBlock, 'title');
+      const schemaTitle = matchQuotedProp(content, 'PostSchema', 'title');
+      if (metaTitle && schemaTitle && metaTitle !== schemaTitle) {
+        postErrors.push(`PostSchema title "${schemaTitle}" does not match metadata title "${metaTitle}"`);
+      }
+
+      const metaDate = matchQuoted(metaBlock, 'date');
+      const schemaDate = matchQuotedProp(content, 'PostSchema', 'date');
+      if (metaDate && schemaDate && metaDate !== schemaDate) {
+        postErrors.push(`PostSchema date "${schemaDate}" does not match metadata date "${metaDate}"`);
+      }
+
+      const schemaSlug = matchQuotedProp(content, 'PostSchema', 'slug');
+      if (schemaSlug && schemaSlug !== slug) {
+        postErrors.push(`PostSchema slug "${schemaSlug}" does not match directory "${slug}"`);
+      }
+
+      // If the post has OG images, require PostSchema to pass an image prop too,
+      // so JSON-LD includes it.
+      const schemaImage = matchQuotedProp(content, 'PostSchema', 'image');
+      if (ogImageUrls.length > 0 && !schemaImage) {
+        postErrors.push('missing <PostSchema image="..."> prop (required when openGraph.images is set)');
+      }
+      if (schemaImage) {
+        const publicPath = resolvePublicPath(schemaImage);
+        if (publicPath && !(await fileExists(publicPath))) {
+          postErrors.push(`PostSchema image file missing on disk: ${schemaImage}`);
+        }
+      }
+    }
+
+    // Check PostNav component exists and points at this post.
+    // The posts listing and prev/next navigation are generated from the
+    // filesystem (lib/posts.ts), so each post only needs its own PostNav.
+    const navSlugMatch = content.match(/<PostNav[^>]*\bslug\s*=\s*"([^"]+)"/);
+    if (!navSlugMatch) {
+      postErrors.push('missing <PostNav> component');
+    } else {
+      if (navSlugMatch[1] !== slug) {
+        postErrors.push(`PostNav slug "${navSlugMatch[1]}" does not match directory "${slug}"`);
+      }
+      const relatedMatch = content.match(/<PostNav[^>]*\brelated\s*=\s*\{\[([^\]]*)\]\}/);
+      if (relatedMatch) {
+        const relatedSlugs = [...relatedMatch[1].matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
+        for (const relatedSlug of relatedSlugs) {
+          if (!postDirs.includes(relatedSlug)) {
+            postErrors.push(`PostNav related slug "${relatedSlug}" has no matching post directory`);
+          }
+          if (relatedSlug === slug) {
+            postErrors.push('PostNav related slugs must not include the post itself');
+          }
+        }
+      }
+    }
+
+    if (postErrors.length > 0) {
+      for (const err of postErrors) {
+        fail(slug, err);
+      }
+    } else {
+      console.log(`  OK    ${slug}`);
+    }
   }
 
-  if (postErrors.length > 0) {
-    for (const err of postErrors) {
-      fail(slug, err);
-    }
-  } else {
-    console.log(`  OK    ${slug}`);
+  console.log(`\n${postDirs.length} posts checked, ${errors} error(s)`);
+
+  if (errors > 0) {
+    process.exit(1);
   }
 }
 
-console.log(`\n${postDirs.length} posts checked, ${errors} error(s)`);
-
-if (errors > 0) {
-  process.exit(1);
+// Only run the validator when this file is executed directly (e.g. via
+// `npm run validate-posts`), not when it's imported (e.g. by tests that
+// just want checkPostHeaderFormat).
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+if (isMain) {
+  await main();
 }

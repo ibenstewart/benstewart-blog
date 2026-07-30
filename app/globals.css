@@ -171,7 +171,7 @@ table {
   text-align: left;
 }
 
-.lede::first-letter {
+.lede > p::first-letter {
   float: left;
   font-size: 4.3rem;
   line-height: 0.8;

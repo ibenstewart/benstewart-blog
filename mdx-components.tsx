@@ -256,7 +256,7 @@ const components = {
   },
   KeyPoint: ({ children }: KeyPointProps) => (
     <div className="my-8 border-t border-hair pt-5">
-      <p className="font-serif text-[1.0625rem] font-[560] text-ink">{children}</p>
+      <div className="font-serif text-[1.0625rem] font-[560] text-ink">{children}</div>
     </div>
   ),
   Scenario: ({ speaker, children }: ScenarioProps) => (
@@ -298,7 +298,7 @@ const components = {
         <span className="font-serif font-[560] text-ink">{title}</span>
       </div>
       {children && (
-        <p className="mt-1 font-serif text-muted text-base">{children}</p>
+        <div className="mt-1 font-serif text-muted text-base">{children}</div>
       )}
     </div>
   ),
@@ -320,9 +320,7 @@ const components = {
       )}
     </figure>
   ),
-  Lede: ({ children }: LedeProps) => (
-    <p className="lede font-serif text-[1.1875rem] leading-[1.7] text-ink">{children}</p>
-  ),
+  Lede: ({ children }: LedeProps) => <div className="lede">{children}</div>,
   PostSchema: ({ title, description, date, lastModified, slug, image }: PostSchemaProps) => (
     <ArticleJsonLd
       title={title}
