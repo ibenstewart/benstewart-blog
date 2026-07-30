@@ -19,14 +19,14 @@ export function ReadCostCalculator() {
   const workingDays = Math.round((totalMinutes / 480) * 10) / 10;
 
   return (
-    <div className="my-8 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+    <div className="my-8 p-6 bg-raise rounded-lg border border-hair">
       <div className="space-y-6">
         <div>
           <div className="flex justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-ink">
               Reading time
             </label>
-            <span className="text-sm tabular-nums text-gray-500 dark:text-gray-400">
+            <span className="text-sm tabular-nums text-muted">
               {readMinutes} {readMinutes === 1 ? 'minute' : 'minutes'}
             </span>
           </div>
@@ -36,16 +36,16 @@ export function ReadCostCalculator() {
             max={15}
             value={readMinutes}
             onChange={(e) => setReadMinutes(Number(e.target.value))}
-            className="w-full accent-gray-900 dark:accent-gray-100"
+            className="w-full accent-accent"
           />
         </div>
 
         <div>
           <div className="flex justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-ink">
               Recipients
             </label>
-            <span className="text-sm tabular-nums text-gray-500 dark:text-gray-400">
+            <span className="text-sm tabular-nums text-muted">
               {recipients} {recipients === 1 ? 'person' : 'people'}
             </span>
           </div>
@@ -55,32 +55,32 @@ export function ReadCostCalculator() {
             max={150}
             value={recipients}
             onChange={(e) => setRecipients(Number(e.target.value))}
-            className="w-full accent-gray-900 dark:accent-gray-100"
+            className="w-full accent-accent"
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-hair">
           <div>
-            <div className="text-2xl md:text-3xl font-medium text-gray-900 dark:text-gray-100 tabular-nums">
+            <div className="text-2xl md:text-3xl font-medium text-ink tabular-nums">
               {totalMinutes}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">total minutes</div>
+            <div className="text-sm text-muted">total minutes</div>
           </div>
           <div>
-            <div className="text-2xl md:text-3xl font-medium text-gray-900 dark:text-gray-100 tabular-nums">
+            <div className="text-2xl md:text-3xl font-medium text-ink tabular-nums">
               {meetingHours}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">meeting hours</div>
+            <div className="text-sm text-muted">meeting hours</div>
           </div>
           <div>
-            <div className="text-2xl md:text-3xl font-medium text-gray-900 dark:text-gray-100 tabular-nums">
+            <div className="text-2xl md:text-3xl font-medium text-ink tabular-nums">
               {workingDays}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">working days</div>
+            <div className="text-sm text-muted">working days</div>
           </div>
         </div>
 
-        <p className="text-base text-gray-700 dark:text-gray-300 italic">
+        <p className="text-base text-ink italic">
           {getVerdict(totalMinutes, meetingHours)}
         </p>
       </div>
