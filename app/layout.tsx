@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Outfit } from 'next/font/google';
+import { Outfit, Source_Serif_4 } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import Link from 'next/link';
 import { WebsiteJsonLd } from './components/JsonLd';
@@ -9,7 +9,16 @@ export { viewport } from './viewport';
 
 const outfit = Outfit({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700']
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-outfit'
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  weight: 'variable',
+  style: ['normal', 'italic'],
+  axes: ['opsz'],
+  variable: '--font-source-serif'
 });
 
 const siteDescription = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';
@@ -51,11 +60,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.className}`}>
-      <body className="antialiased tracking-tight text-lg">
+    <html lang="en" className={`${outfit.variable} ${sourceSerif.variable}`}>
+      <body className="antialiased tracking-tight text-lg font-sans">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-paper focus:px-4 focus:py-2 focus:text-ink focus:ring-2 focus:ring-accent"
+        >
+          Skip to content
+        </a>
         <WebsiteJsonLd />
-        <div className="min-h-screen flex flex-col justify-between p-8 bg-white dark:bg-black text-gray-900 dark:text-gray-100 safe-top safe-bottom">
-          <main className="max-w-[75ch] mx-auto w-full space-y-6 mt-4 md:mt-16">
+        <div className="min-h-screen flex flex-col justify-between p-8 bg-paper text-ink safe-top safe-bottom">
+          <Masthead />
+          <main id="main" className="max-w-[75ch] mx-auto w-full space-y-6 mt-4 md:mt-16">
             {children}
           </main>
           <Footer />
@@ -63,6 +79,37 @@ export default function RootLayout({
         </div>
       </body>
     </html>
+  );
+}
+
+function Masthead() {
+  const links = [
+    { name: 'posts', url: '/posts' },
+    { name: 'bio', url: '/bio' },
+    { name: 'speaking', url: '/speaking' }
+  ];
+
+  return (
+    <header className="max-w-[75ch] mx-auto w-full flex items-center justify-between gap-3 border-b border-hair pb-4">
+      <Link
+        href="/"
+        className="font-serif text-[17px] text-ink no-underline"
+        style={{ fontWeight: 620 }}
+      >
+        Ben Stewart
+      </Link>
+      <nav className="flex items-center gap-3 sm:gap-5">
+        {links.map((link) => (
+          <Link
+            key={link.name}
+            href={link.url}
+            className="font-sans text-[13px] text-muted hover:text-ink transition-colors duration-200 no-underline"
+          >
+            {link.name}
+          </Link>
+        ))}
+      </nav>
+    </header>
   );
 }
 
@@ -80,7 +127,7 @@ function Footer() {
     <footer className="mt-12 text-center">
       <div className="flex justify-center space-x-4 tracking-tight">
         {links.map((link) => {
-          const linkClasses = "text-gray-500 hover:text-gray-400 dark:text-gray-500 dark:hover:text-gray-600 transition-colors duration-200";
+          const linkClasses = "font-sans text-[13px] text-faint hover:text-muted no-underline transition-colors duration-200";
 
           if (link.external) {
             return (
