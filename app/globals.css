@@ -1,14 +1,15 @@
 @import 'tailwindcss';
 
 :root {
-  --sh-class: #7aa2f7;
-  --sh-sign: #89ddff;
-  --sh-string: #9ece6a;
-  --sh-keyword: #bb9af7;
-  --sh-comment: #565f89;
-  --sh-jsxliterals: #7aa2f7;
-  --sh-property: #73daca;
-  --sh-entity: #e0af68;
+  --sh-identifier: var(--ink);
+  --sh-keyword: oklch(50% .13 300);
+  --sh-string: oklch(48% .11 150);
+  --sh-class: oklch(50% .12 260);
+  --sh-jsxliterals: oklch(50% .12 260);
+  --sh-property: oklch(48% .1 200);
+  --sh-entity: oklch(52% .13 80);
+  --sh-sign: var(--muted);
+  --sh-comment: var(--faint);
 
   --paper: oklch(97.5% .003 250);
   --raise: oklch(99.2% .002 250);
@@ -28,6 +29,16 @@
     --faint: oklch(55% .008 252);
     --hair: oklch(29% .008 255);
     --accent: oklch(70% .11 25);
+
+    --sh-identifier: var(--ink);
+    --sh-class: #7aa2f7;
+    --sh-sign: #89ddff;
+    --sh-string: #9ece6a;
+    --sh-keyword: #bb9af7;
+    --sh-comment: #565f89;
+    --sh-jsxliterals: #7aa2f7;
+    --sh-property: #73daca;
+    --sh-entity: #e0af68;
   }
 
   img {
@@ -93,7 +104,8 @@ h4 {
 }
 
 pre {
-  background-color: #16161e;
+  background-color: var(--color-raise);
+  border: 1px solid var(--color-hair);
   border-radius: 0.5rem;
   overflow-x: auto;
   padding: 1rem;
@@ -115,7 +127,9 @@ code {
   font-size: 14px;
   padding: 0.2em 0.4em;
   border-radius: 0.3em;
-  background-color: var(--color-gray-100);
+  background-color: var(--color-raise);
+  border: 1px solid var(--color-hair);
+  color: var(--color-ink);
 }
 
 pre code {
@@ -126,31 +140,15 @@ pre code {
   line-height: 1.5;
 }
 
-pre code > span .sh__token--identifier {
-  color: white !important;
-}
-
-code:not(pre code) span {
+pre code span {
   font-weight: 500;
-  color: black !important;
 }
 
 @media (prefers-color-scheme: dark) {
-  code {
-    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-    font-size: 14px;
-    padding: 0.2em 0.4em;
-    border-radius: 0.3em;
-    background-color: var(--color-zinc-800);
+  pre {
+    background-color: oklch(14% .012 260);
+    border-color: oklch(26% .01 260);
   }
-
-  code:not(pre code) span {
-    color: var(--color-zinc-100) !important;
-  }
-}
-
-pre code span {
-  font-weight: 500;
 }
 
 hr {
@@ -171,4 +169,12 @@ table {
   overflow-x: auto;
   white-space: nowrap;
   text-align: left;
+}
+
+.lede::first-letter {
+  float: left;
+  font-size: 4.3rem;
+  line-height: 0.8;
+  padding: 0.35rem 0.6rem 0 0;
+  font-weight: 600;
 }

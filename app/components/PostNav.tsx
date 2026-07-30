@@ -8,9 +8,9 @@ type PostNavProps = {
 };
 
 const linkClasses =
-  'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 underline decoration-gray-300 dark:decoration-gray-600 underline-offset-2';
+  'font-serif text-[1.0625rem] text-ink group-hover:text-accent no-underline transition-colors';
 const labelClasses =
-  'block text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1';
+  'block font-sans text-[11px] font-semibold uppercase tracking-[0.09em] text-faint mb-1';
 
 export async function PostNav({ slug, related = [] }: PostNavProps) {
   const posts = await getAllPosts();
@@ -30,7 +30,7 @@ export async function PostNav({ slug, related = [] }: PostNavProps) {
       {(newer || older) && (
         <nav
           aria-label="Post navigation"
-          className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-800 flex justify-between gap-8"
+          className="mt-12 pt-6 border-t border-hair flex justify-between gap-8"
         >
           <div className="max-w-[45%]">
             {newer && (
