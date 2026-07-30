@@ -93,11 +93,13 @@ Available components in `mdx-components.tsx`:
 - `app/page.mdx` - Homepage
 - `app/bio/page.mdx` - Bio page with timeline
 - `app/posts/page.tsx` - Posts listing page (generated from the filesystem)
-- `lib/posts.ts` - Shared post index (powers the listing, RSS feed, and PostNav)
+- `lib/posts.ts` - Shared post index (powers the listing, RSS feed, PostHeader, and PostNav)
+- `lib/mdx-parsing.mjs` - Shared escape-aware MDX parsing helpers (metadata block extraction, JSX prop extraction, fence stripping) used by both `lib/posts.ts` and `scripts/validate-posts.mjs`
 - `app/speaking/page.tsx` - Speaking page (videos, podcasts, articles)
 - `mdx-components.tsx` - Custom MDX components
 - `app/globals.css` - Global styles (includes safe area CSS)
 - `app/sitemap.ts` - Auto-generated sitemap
+- `docs/solutions/` - Documented solutions to past problems (bugs, workflow gotchas, best practices), organised by category with YAML frontmatter (`module`, `tags`, `problem_type`) - relevant when implementing or debugging in a documented area
 
 ## Gotchas
 Hard-won knowledge from working in this repo. Read before touching posts or metadata.
