@@ -9,7 +9,7 @@ Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing ab
 - **Framework:** Next.js 15 with App Router
 - **Styling:** Tailwind CSS v4
 - **Content:** MDX files in `app/posts/[slug]/page.mdx`
-- **Font:** Outfit (Google Fonts)
+- **Fonts:** Petrona (prose serif) + Outfit (chrome/UI), both via next/font Google Fonts
 - **Deployment:** Vercel (auto-deploys from GitHub)
 - **Repo:** https://github.com/ibenstewart/benstewart-blog
 
@@ -40,7 +40,7 @@ export const metadata = {
   }
 };
 
-# Post Title
+<PostHeader title="Post Title" slug="[slug]" />
 
 <PostSchema
   title="Post Title"
@@ -66,17 +66,21 @@ Available components in `mdx-components.tsx`:
 | Component | Usage | Description |
 |-----------|-------|-------------|
 | `<KeyPoint>` | `<KeyPoint>Important text</KeyPoint>` | Highlighted box for key takeaways |
-| `<Callout>` | `<Callout type="insight\|warning\|tip\|story">` | Colored callout boxes |
+| `<Callout>` | `<Callout type="insight\|warning\|tip\|story">` | Hairline-framed box with a small labelled type (Insight/Worth knowing/Try this/Story), not a coloured box |
 | `<PullQuote>` | `<PullQuote author="Name">Quote</PullQuote>` | Large styled quote with attribution |
 | `<Scenario>` | `<Scenario speaker="Name">Dialog</Scenario>` | Conversation/dialog formatting |
 | `<TLDR>` | `<TLDR>Summary</TLDR>` | Article summary box |
 | `<Timeline>` | Wrapper for Event components | Career/timeline container |
 | `<Event>` | `<Event year="2024" title="Role">Description</Event>` | Timeline entry |
 | `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | Prev/next + related links at the end of every post |
+| `<PostHeader>` | `<PostHeader title="Post Title" slug="[slug]" />` | Opens the post body: title, kicker (date + reading time), and subtitle, all resolved from `lib/posts.ts` by slug - replaces the old `# Title` H1 |
+| `<PostList>` | `<PostList slugs={["slug-a", "slug-b"]} />` | Editorial rows (title, subtitle, date, reading time) for a set of posts; omit `slugs` to list every post, newest first |
+| `<Figure>` | `<Figure src="/images/posts/[slug]-0.png" alt="..." caption="..." credit="..." width="420px" />` | Image with optional caption and credit; `width` overrides the default max-width |
+| `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Wraps the opening paragraph with a serif drop-cap first letter |
 
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`
-2. Create `page.mdx` with metadata export (including canonical, openGraph, images), `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
+2. Create `page.mdx` with metadata export (including canonical, openGraph, images), a `<PostHeader title="..." slug="[slug]" />` opening the body, a `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
 3. Add to homepage list in `app/page.mdx` (if featuring)
 4. Run `npm run validate-posts` to confirm all required SEO fields are present
 5. Commit and push - Vercel auto-deploys
@@ -98,18 +102,18 @@ Available components in `mdx-components.tsx`:
 ## Gotchas
 Hard-won knowledge from working in this repo. Read before touching posts or metadata.
 
-- **Two titles per post, on purpose.** The H1 (`# ...`) is the short display title used on `/posts`, the homepage, and PostNav links. The `metadata.title` export is the longer SEO title used in `<title>`, OG tags, and the RSS feed. Several posts differ deliberately (e.g. `sustainable` displays "Sustainable Pace Just Got Faster" but its SEO title is "Sustainable Pace With AI: Why You're Probably Doing It Twice"). Don't "fix" the mismatch; change the H1 if you want a different listing title.
+- **Two titles per post, on purpose.** The display title used on `/posts`, the homepage, and PostNav links comes from `<PostHeader title="...">` (or a legacy `# ...` H1, still supported by the validator for posts that haven't migrated). The `metadata.title` export is the longer SEO title used in `<title>`, OG tags, and the RSS feed. Several posts differ deliberately (e.g. `sustainable` displays "Sustainable Pace Just Got Faster" but its SEO title is "Sustainable Pace With AI: Why You're Probably Doing It Twice"). Don't "fix" the mismatch; change the PostHeader title prop if you want a different listing title.
 - **Metadata is parsed by regex, not by evaluating the MDX.** `lib/posts.ts`, `app/sitemap.ts`, and `scripts/validate-posts.mjs` all regex-scan the raw file and take the **first** match. Keep the `export const metadata` block at the top of every post, and avoid literal strings like `date: "YYYY-MM-DD"` or `title: "..."` in body prose or code blocks above it — they'd be picked up as the post's metadata.
 - **Eleven posts share the date 2023-09-18.** That's the Substack import date, not their real publication dates. They sort as one cluster (alphabetical by title within the tie) on `/posts` and in prev/next navigation. Backfilling real dates in each post's `metadata.date` will automatically fix the listing order, prev/next links, RSS feed, and sitemap — no other changes needed.
-- **`npm run validate-posts` is the safety net.** It checks SEO fields, PostSchema/metadata drift, OG images existing on disk, and that every post ends with a `<PostNav>` whose slug matches its directory and whose `related` slugs point at real posts. Run it after any post change.
+- **`npm run validate-posts` is the safety net.** It checks SEO fields, PostSchema/metadata drift, OG images existing on disk, and that every post ends with a `<PostNav>` whose slug matches its directory and whose `related` slugs point at real posts. It also enforces that every post has **exactly one** of a `<PostHeader>` or a legacy `# ` H1 (both, or neither, fails the check), that a `<PostHeader>` has a non-empty `title` prop and a `slug` prop matching its directory, and that a `<PostSchema>` slug matches too. Fenced code blocks are stripped before the H1 check, so a `# ` inside a code sample isn't mistaken for a real heading. Run it after any post change.
 - **Tests follow a temp-dir pattern.** `lib/posts.test.ts` and `app/sitemap.test.ts` write throwaway posts into a `mkdtemp` directory rather than mocking `fs`. Follow that pattern for anything else that reads the posts directory.
 
 ## Style Notes
 - Page width: 75ch
-- Base font size: text-lg (18px)
-- Headings: text-2xl/3xl for h1, text-xl/2xl for h2
-- Links: neutral underline decoration
-- Dark mode supported
+- Base font size: text-lg (18px); post body copy renders larger, at 19px serif, via the `p` mapping in `mdx-components.tsx` (distinct from the text-lg base)
+- Headings: text-2xl/3xl for h1, text-xl/2xl for h2 (body headings only; post titles render at `PostHeader`'s own display scale, not the h1 mapping)
+- Links: accent underline via `textLinkClass` in `app/components/TextLink.tsx` (ink-coloured text with a low-opacity accent underline, full accent colour on hover)
+- Dark mode supported, driven by the `paper`/`ink`/`muted`/`faint`/`hair`/`accent` design tokens defined in `app/globals.css`'s `@theme` block
 - Safe area padding for iPhone notch/dynamic island
 
 ## Git Workflow

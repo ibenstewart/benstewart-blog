@@ -4,6 +4,9 @@ import { highlight } from 'sugar-high';
 import { ArticleJsonLd, FAQJsonLd, PersonJsonLd } from './app/components/JsonLd';
 import { RelatedPosts } from './app/components/RelatedPosts';
 import { PostNav } from './app/components/PostNav';
+import { PostHeader } from './app/components/PostHeader';
+import { PostList } from './app/components/PostList';
+import { textLinkClass } from './app/components/TextLink';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -11,6 +14,7 @@ type ListProps = ComponentPropsWithoutRef<'ul'>;
 type ListItemProps = ComponentPropsWithoutRef<'li'>;
 type AnchorProps = ComponentPropsWithoutRef<'a'>;
 type BlockquoteProps = ComponentPropsWithoutRef<'blockquote'>;
+type ImgProps = ComponentPropsWithoutRef<'img'>;
 
 // Custom component types
 type CalloutProps = {
@@ -55,6 +59,18 @@ type EventProps = {
   children?: ReactNode;
 };
 
+type FigureProps = {
+  src: string;
+  alt: string;
+  caption?: string;
+  credit?: string;
+  width?: string;
+};
+
+type LedeProps = {
+  children: ReactNode;
+};
+
 type PostSchemaProps = {
   title: string;
   description: string;
@@ -64,48 +80,51 @@ type PostSchemaProps = {
   image?: string;
 };
 
+const calloutLabels: Record<Required<CalloutProps>['type'], string> = {
+  insight: 'Insight',
+  warning: 'Worth knowing',
+  tip: 'Try this',
+  story: 'Story',
+};
+
 const components = {
   h1: (props: HeadingProps) => (
-    <h1 className="text-2xl md:text-3xl font-medium mb-1" {...props} />
+    <h1 className="font-serif text-2xl md:text-3xl font-semibold text-ink" {...props} />
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="text-xl md:text-2xl text-gray-900 dark:text-gray-100 font-medium mt-8 mb-3"
+      className="font-serif text-[1.625rem] font-semibold leading-[1.25] tracking-[-0.008em] mt-12 mb-4 text-ink"
       {...props}
     />
   ),
   h3: (props: HeadingProps) => (
-    <h3
-      className="text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium mt-8 mb-3"
-      {...props}
-    />
+    <h3 className="font-serif text-[1.3rem] font-semibold mt-10 mb-3 text-ink" {...props} />
   ),
-  h4: (props: HeadingProps) => <h4 className="text-base md:text-lg font-medium" {...props} />,
+  h4: (props: HeadingProps) => (
+    <h4 className="font-serif text-lg font-semibold text-ink" {...props} />
+  ),
   p: (props: ParagraphProps) => (
-    <p className="text-gray-900 dark:text-gray-100 leading-snug" {...props} />
+    <p className="font-serif text-[1.1875rem] leading-[1.7] text-ink" {...props} />
   ),
   ol: (props: ListProps) => (
     <ol
-      className="text-gray-900 dark:text-gray-100 list-decimal pl-5 space-y-2"
+      className="font-serif text-[1.1875rem] leading-[1.7] text-ink list-decimal pl-5 space-y-2"
       {...props}
     />
   ),
   ul: (props: ListProps) => (
     <ul
-      className="text-gray-900 dark:text-gray-100 list-disc pl-5 space-y-1"
+      className="font-serif text-[1.1875rem] leading-[1.7] text-ink list-disc pl-5 space-y-2"
       {...props}
     />
   ),
   li: (props: ListItemProps) => <li className="pl-1" {...props} />,
-  em: (props: ComponentPropsWithoutRef<'em'>) => (
-    <em className="font-medium" {...props} />
-  ),
+  em: (props: ComponentPropsWithoutRef<'em'>) => <em className="italic" {...props} />,
   strong: (props: ComponentPropsWithoutRef<'strong'>) => (
-    <strong className="font-medium" {...props} />
+    <strong className="font-[620]" {...props} />
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
-    const className =
-      'underline decoration-neutral-500 underline-offset-[2.5px] hover:decoration-neutral-400 dark:decoration-neutral-500 dark:hover:decoration-neutral-600 transition-colors';
+    const className = textLinkClass;
     if (href?.startsWith('/')) {
       return (
         <Link href={href} className={className} {...props}>
@@ -132,6 +151,18 @@ const components = {
       </a>
     );
   },
+  img: ({ alt, ...props }: ImgProps) => (
+    <span className="block my-10 text-center">
+      <img
+        className="mx-auto border border-hair max-w-[min(100%,640px)] h-auto"
+        alt={alt}
+        {...props}
+      />
+      {alt && (
+        <span className="block mt-3 font-serif italic text-[0.9375rem] text-muted">{alt}</span>
+      )}
+    </span>
+  ),
   code: ({ children, ...props }: ComponentPropsWithoutRef<'code'>) => {
     const codeHTML = highlight(children as string);
     return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
@@ -143,12 +174,16 @@ const components = {
     data: { headers: string[]; rows: string[][] };
     caption?: string;
   }) => (
-    <table>
-      {caption && <caption>{caption}</caption>}
+    <table className="font-sans text-[15px] text-ink border border-hair">
+      {caption && <caption className="text-muted">{caption}</caption>}
       <thead>
         <tr>
           {data.headers.map((header, index) => (
-            <th key={index} scope="col">
+            <th
+              key={index}
+              scope="col"
+              className="border border-hair px-3 py-2 text-left font-semibold"
+            >
               {header}
             </th>
           ))}
@@ -158,7 +193,9 @@ const components = {
         {data.rows.map((row, index) => (
           <tr key={index}>
             {row.map((cell, cellIndex) => (
-              <td key={cellIndex}>{cell}</td>
+              <td key={cellIndex} className="border border-hair px-3 py-2">
+                {cell}
+              </td>
             ))}
           </tr>
         ))}
@@ -167,107 +204,123 @@ const components = {
   ),
   blockquote: (props: BlockquoteProps) => (
     <blockquote
-      className="ml-[0.075em] border-l-3 border-gray-300 pl-4 text-gray-700 dark:border-gray-600 dark:text-gray-300"
+      className="pl-6 italic font-serif text-[1.1875rem] leading-[1.7] text-muted [&>p]:italic [&>p]:font-serif [&>p]:text-[1.1875rem] [&>p]:leading-[1.7] [&>p]:text-muted"
       {...props}
     />
   ),
   hr: () => (
-    <div className="my-10 flex items-center justify-center gap-2">
-      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
-      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
-      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+    <div
+      aria-hidden="true"
+      className="my-12 text-center font-sans text-faint text-[1.2rem] tracking-[0.45em] indent-[0.45em]"
+    >
+      * * *
     </div>
   ),
   // Custom components
-  Callout: ({ children, type = 'insight' }: CalloutProps) => {
-    const styles = {
-      insight: 'bg-blue-50 border-blue-200 dark:bg-blue-950/30 dark:border-blue-800',
-      warning: 'bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800',
-      tip: 'bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-800',
-      story: 'bg-purple-50 border-purple-200 dark:bg-purple-950/30 dark:border-purple-800',
-    };
-    return (
-      <div className={`my-6 rounded-lg border-l-4 p-4 ${styles[type]}`}>
-        {children}
-      </div>
-    );
-  },
+  Callout: ({ children, type = 'insight' }: CalloutProps) => (
+    <div className="my-8 rounded-sm border border-hair bg-raise p-5">
+      <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.09em] text-faint mb-2">
+        {calloutLabels[type]}
+      </p>
+      {children}
+    </div>
+  ),
   PullQuote: ({ children, author }: PullQuoteProps) => (
-    <figure className="my-8 px-4">
-      <blockquote className="text-xl md:text-2xl font-medium text-gray-800 dark:text-gray-200 italic border-l-4 border-gray-800 dark:border-gray-200 pl-4">
+    <figure className="my-12 mx-auto max-w-[34rem] text-center">
+      <div className="w-11 h-px bg-hair mx-auto" />
+      <blockquote className="italic font-serif text-[clamp(1.45rem,3vw,1.8rem)] leading-[1.35] my-6 text-ink">
         {children}
       </blockquote>
+      <div className="w-11 h-px bg-hair mx-auto" />
       {author && (
-        <figcaption className="mt-3 text-sm text-gray-600 dark:text-gray-400 pl-4">
-          — {author}
-        </figcaption>
+        <figcaption className="font-sans text-[13px] text-faint mt-2">{author}</figcaption>
       )}
     </figure>
   ),
   Divider: ({ style = 'dots' }: DividerProps) => {
     if (style === 'space') return <div className="my-12" />;
-    if (style === 'line') return <hr className="my-10 border-gray-200 dark:border-gray-700" />;
-    if (style === 'wave') return (
-      <div className="my-10 flex items-center justify-center text-gray-300 dark:text-gray-600 text-2xl tracking-widest">
-        ~ ~ ~
-      </div>
-    );
+    if (style === 'line') return <hr className="my-10 border-hair" />;
+    if (style === 'wave')
+      return (
+        <div className="my-10 flex items-center justify-center text-faint text-2xl tracking-widest">
+          ~ ~ ~
+        </div>
+      );
     return (
       <div className="my-10 flex items-center justify-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
-        <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
-        <span className="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+        <span className="h-1.5 w-1.5 rounded-full bg-hair" />
+        <span className="h-1.5 w-1.5 rounded-full bg-hair" />
+        <span className="h-1.5 w-1.5 rounded-full bg-hair" />
       </div>
     );
   },
   KeyPoint: ({ children }: KeyPointProps) => (
-    <div className="my-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-      <p className="text-lg font-medium text-gray-900 dark:text-gray-100">{children}</p>
+    <div className="my-8 border-t border-hair pt-5">
+      <div className="font-serif text-[1.0625rem] font-[560] text-ink">{children}</div>
     </div>
   ),
   Scenario: ({ speaker, children }: ScenarioProps) => (
-    <div className="my-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
-      <span className="font-medium text-gray-700 dark:text-gray-300">{speaker}:</span>{' '}
-      <span className="text-gray-600 dark:text-gray-400 italic">{children}</span>
+    <div className="my-6 pl-6">
+      <span className="block mb-1 font-sans text-[13px] font-semibold uppercase tracking-wide text-faint">
+        {speaker}
+      </span>
+      <span className="italic font-serif text-muted">{children}</span>
     </div>
   ),
   TLDR: ({ children }: TLDRProps) => (
-    <div className="my-8 p-5 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-      <div className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">TL;DR</div>
-      <div className="text-gray-800 dark:text-gray-200 font-medium">{children}</div>
+    <div className="border-t border-hair pt-6 mt-12 mb-8">
+      <div className="font-sans text-[11px] font-semibold uppercase tracking-[0.09em] text-accent mb-3">
+        TL;DR
+      </div>
+      <div className="font-serif text-[1.0625rem] leading-[1.62] text-muted">{children}</div>
     </div>
   ),
   Collapsible: ({ title, children }: CollapsibleProps) => (
     <details className="my-6 group">
-      <summary className="cursor-pointer select-none font-medium text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 transition-colors list-none flex items-center gap-2">
-        <span className="text-gray-400 dark:text-gray-500 transition-transform group-open:rotate-90">&#9654;</span>
+      <summary className="cursor-pointer select-none font-serif font-[560] text-ink hover:text-accent transition-colors list-none flex items-center gap-2">
+        <span className="text-faint transition-transform group-open:rotate-90">&#9654;</span>
         {title}
       </summary>
-      <div className="mt-3">
-        {children}
-      </div>
+      <div className="mt-3">{children}</div>
     </details>
   ),
   Timeline: ({ children }: TimelineProps) => (
     <div className="my-8 relative">
-      <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700" />
-      <div className="space-y-6">
-        {children}
-      </div>
+      <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-hair" />
+      <div className="space-y-6">{children}</div>
     </div>
   ),
   Event: ({ year, title, children }: EventProps) => (
     <div className="relative pl-8">
-      <div className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-[3px] border-gray-400 dark:border-gray-500 bg-white dark:bg-black" />
+      <div className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-[3px] border-faint bg-paper" />
       <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
-        <span className="text-sm font-medium text-gray-500 dark:text-gray-400 tabular-nums">{year}</span>
-        <span className="font-medium text-gray-900 dark:text-gray-100">{title}</span>
+        <span className="font-sans text-[13px] text-faint tabular-nums">{year}</span>
+        <span className="font-serif font-[560] text-ink">{title}</span>
       </div>
       {children && (
-        <p className="mt-1 text-gray-600 dark:text-gray-400 text-base">{children}</p>
+        <div className="mt-1 font-serif text-muted text-base">{children}</div>
       )}
     </div>
   ),
+  Figure: ({ src, alt, caption, credit, width }: FigureProps) => (
+    <figure className="my-10 text-center">
+      <img
+        src={src}
+        alt={alt}
+        className={`mx-auto border border-hair h-auto${width ? '' : ' max-w-[min(100%,640px)]'}`}
+        style={width ? { maxWidth: width } : undefined}
+      />
+      {caption && (
+        <figcaption className="mt-3 font-serif italic text-[0.9375rem] text-muted">
+          {caption}
+          {credit && (
+            <span className="not-italic font-sans text-[12px] text-faint"> · {credit}</span>
+          )}
+        </figcaption>
+      )}
+    </figure>
+  ),
+  Lede: ({ children }: LedeProps) => <div className="lede">{children}</div>,
   PostSchema: ({ title, description, date, lastModified, slug, image }: PostSchemaProps) => (
     <ArticleJsonLd
       title={title}
@@ -281,6 +334,8 @@ const components = {
   FAQJsonLd: (props: { faqs: { question: string; answer: string }[] }) => <FAQJsonLd {...props} />,
   RelatedPosts: (props: { posts: { slug: string; title: string }[] }) => <RelatedPosts {...props} />,
   PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
+  PostHeader: (props: { title: string; slug: string }) => <PostHeader {...props} />,
+  PostList: (props: { slugs?: string[] }) => <PostList {...props} />,
   PersonSchema: () => <PersonJsonLd />,
 };
 

@@ -6,16 +6,16 @@ type RelatedPostsProps = { posts: RelatedPost[] };
 export function RelatedPosts({ posts }: RelatedPostsProps) {
   if (!posts.length) return null;
   return (
-    <section className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-800">
-      <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
-        Related
+    <section className="mt-14">
+      <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.09em] text-accent mb-1">
+        Keep reading
       </p>
-      <ul className="space-y-1">
+      <ul>
         {posts.map(({ slug, title }) => (
-          <li key={slug}>
+          <li key={slug} className="border-b border-hair last:border-0">
             <Link
               href={`/posts/${slug}`}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 underline decoration-gray-300 dark:decoration-gray-600 underline-offset-2"
+              className="block py-3 font-serif text-[1.125rem] font-[500] text-ink no-underline hover:text-accent transition-colors"
             >
               {title}
             </Link>
