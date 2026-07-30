@@ -18,6 +18,19 @@ function unescapeQuotes(value: string): string {
   return value.replace(/\\(['"])/g, '$1');
 }
 
+/** Formats an ISO `YYYY-MM-DD` date as a UK-style date, e.g. "9 January 2025". */
+export function formatUkDate(date: string | null): string | null {
+  if (!date) return null;
+  const parsed = new Date(`${date}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
 function matchQuoted(content: string, key: string): string | null {
   const double = content.match(new RegExp(`${key}:\\s*"((?:[^"\\\\]|\\\\.)*)"`));
   if (double) return unescapeQuotes(double[1]);

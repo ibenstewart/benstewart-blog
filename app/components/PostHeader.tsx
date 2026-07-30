@@ -1,22 +1,9 @@
-import { getAllPosts } from '@/lib/posts';
+import { formatUkDate, getAllPosts } from '@/lib/posts';
 
 type PostHeaderProps = {
   title: string;
   slug: string;
 };
-
-/** Formats an ISO `YYYY-MM-DD` date as a UK-style date, e.g. "9 January 2025". */
-function formatUkDate(date: string | null): string | null {
-  if (!date) return null;
-  const parsed = new Date(`${date}T00:00:00Z`);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return parsed.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
-}
 
 /**
  * Renders a post's kicker (date + reading time), display title, and

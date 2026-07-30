@@ -5,6 +5,8 @@ import { ArticleJsonLd, FAQJsonLd, PersonJsonLd } from './app/components/JsonLd'
 import { RelatedPosts } from './app/components/RelatedPosts';
 import { PostNav } from './app/components/PostNav';
 import { PostHeader } from './app/components/PostHeader';
+import { PostList } from './app/components/PostList';
+import { textLinkClass } from './app/components/TextLink';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -78,9 +80,6 @@ type PostSchemaProps = {
   image?: string;
 };
 
-const linkClassName =
-  'text-ink underline decoration-accent/55 underline-offset-[3px] decoration-1 hover:text-accent hover:decoration-accent transition-colors';
-
 const calloutLabels: Record<Required<CalloutProps>['type'], string> = {
   insight: 'Insight',
   warning: 'Worth knowing',
@@ -125,7 +124,7 @@ const components = {
     <strong className="font-[620]" {...props} />
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
-    const className = `underline ${linkClassName}`;
+    const className = textLinkClass;
     if (href?.startsWith('/')) {
       return (
         <Link href={href} className={className} {...props}>
@@ -338,6 +337,7 @@ const components = {
   RelatedPosts: (props: { posts: { slug: string; title: string }[] }) => <RelatedPosts {...props} />,
   PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
   PostHeader: (props: { title: string; slug: string }) => <PostHeader {...props} />,
+  PostList: (props: { slugs?: string[] }) => <PostList {...props} />,
   PersonSchema: () => <PersonJsonLd />,
 };
 
