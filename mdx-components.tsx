@@ -309,12 +309,12 @@ const components = {
   Event: ({ year, title, children }: EventProps) => (
     <div className="relative pl-8">
       <div className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-[3px] border-faint bg-paper" />
-      <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+      <div className="flex flex-row items-baseline gap-3 mob:flex-col mob:items-start mob:gap-1">
         <span className="font-sans text-[13px] text-faint tabular-nums">{year}</span>
-        <span className="font-serif font-[560] text-ink">{title}</span>
+        <span className="font-sans font-medium text-ink">{title}</span>
       </div>
       {children && (
-        <div className="mt-1 font-serif text-muted text-base">{children}</div>
+        <div className="mt-1 font-sans text-muted text-base">{children}</div>
       )}
     </div>
   ),
