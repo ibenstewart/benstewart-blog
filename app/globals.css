@@ -278,6 +278,19 @@
   .page-grid > .prose-h2 + * {
     margin-top: 0.8em;
   }
+  /* The first block after the header, a hero or a script never adds its own top
+     margin: the header and hero already carry the gap (DESIGN.md 4.3). A hero
+     keeps its own top margin. Higher specificity than the block rules above. */
+  .page-grid > :is(script, .post-head, .hero-fig) + :not(.hero-fig, script) {
+    margin-top: 0;
+  }
+  /* A hero that failed to load is hidden; restore the spacing it carried. */
+  .page-grid > .hero-fig:has(.is-empty) + * {
+    margin-top: 1.1em;
+  }
+  .page-grid > :is(.post-head, .post-head + script, .post-head + script + script) + .hero-fig:has(.is-empty) + * {
+    margin-top: clamp(64px, 7vw, 104px);
+  }
   @media (max-width: 760px) {
     .page-grid > .tldr {
       margin-top: 56px;

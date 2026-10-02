@@ -113,7 +113,7 @@ Hard-won knowledge from working in this repo. Read before touching posts or meta
 
 ## Style Notes
 - **Light theme only.** No dark mode, no `prefers-color-scheme` rules, no theme toggle (reversed July's dark-mode support on 2 Oct 2026).
-- **Layout:** `<main>` is a breakout grid (`.page-grid`). Post blocks sit in a 640px `content` column by default; components opt out with `.col-wide` (about 960px) or `.col-full` (the 1312px container). Grid children use `margin-top` only.
+- **Layout:** `<main>` is a breakout grid (`.page-grid`). Post blocks sit in a 640px `content` column by default; components opt out with `.col-wide` (about 960px) or `.col-full` (the 1312px container). Grid children use `margin-top` only; the one exception is `.post-head` and `.hero-fig`, which carry a bottom margin so the first block after them can drop its own (KTD4).
 - **Type:** prose body is 19px Schibsted Grotesk in `muted` grey; headings and `strong` are `ink`. Weights are 400, 500 or 700 only, never arbitrary `font-[...]` weights.
 - **Serif means italic.** Source Serif 4 is loaded italic only, so anything `font-serif` must also be `italic` (standfirsts, excerpts, captions, Scenario dialogue, markdown blockquote). Everything else is `font-sans`.
 - **Breakpoints:** use the inclusive custom variants `tab` (1080px), `cards` (960px), `mob` (760px) and `tight` (380px). Do not use `sm`/`md`/`lg` or `max-[...]`.
