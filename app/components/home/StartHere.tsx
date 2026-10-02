@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { formatUkDate, getAllPosts } from '@/lib/posts';
+import { getAllPosts, pickPosts } from '@/lib/posts';
+import { PostMeta } from '../PostMeta';
 import { ArrowIcon } from '../icons';
 import { sectionHeadingClass } from './sectionHeading';
 
@@ -19,7 +20,7 @@ type StartHereProps = {
  */
 export async function StartHere({ title, description, slugs }: StartHereProps) {
   const all = await getAllPosts();
-  const posts = slugs.flatMap((slug) => all.filter((p) => p.slug === slug));
+  const posts = pickPosts(all, slugs);
 
   return (
     <section
@@ -34,9 +35,7 @@ export async function StartHere({ title, description, slugs }: StartHereProps) {
         <p className="mt-4 max-w-[18em] text-[1.1875rem] leading-[1.45] text-ink">{description}</p>
       </div>
       <ol role="list" className="col-span-7 col-start-6 self-end mob:mt-6">
-        {posts.map((post, i) => {
-          const dateLabel = formatUkDate(post.date);
-          return (
+        {posts.map((post, i) => (
             <li
               key={post.slug}
               className="group relative grid grid-cols-[96px_minmax(0,1fr)] gap-x-2 border-t border-hair pt-8 pb-[34px] last:border-b tab:grid-cols-[64px_minmax(0,1fr)] mob:grid-cols-[52px_minmax(0,1fr)] mob:pt-6 mob:pb-[26px]"
@@ -58,15 +57,14 @@ export async function StartHere({ title, description, slugs }: StartHereProps) {
                     {post.subtitle}
                   </p>
                 )}
-                <p className="mt-3.5 text-[0.9375rem] font-medium tracking-[0.005em] text-faint tabular-nums mob:text-[0.875rem]">
-                  {dateLabel && post.date && <time dateTime={post.date}>{dateLabel}</time>}
-                  {dateLabel && ' · '}
-                  {post.readingMinutes} min read
-                </p>
+                <PostMeta
+                  date={post.date}
+                  readingMinutes={post.readingMinutes}
+                  className="mt-3.5 text-[0.9375rem] font-medium tracking-[0.005em] text-faint tabular-nums mob:text-[0.875rem]"
+                />
               </div>
             </li>
-          );
-        })}
+        ))}
       </ol>
     </section>
   );

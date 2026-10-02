@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { formatUkDate, getAllPosts } from '@/lib/posts';
+import { getAllPosts } from '@/lib/posts';
 import { ArrowIcon } from './icons';
+import { PostMeta } from './PostMeta';
 
 type PostHeaderProps = {
   title: string;
@@ -18,9 +19,6 @@ type PostHeaderProps = {
 export async function PostHeader({ title, slug }: PostHeaderProps) {
   const posts = await getAllPosts();
   const post = posts.find((p) => p.slug === slug);
-
-  const dateLabel = formatUkDate(post?.date ?? null);
-  const readingLabel = post ? `${post.readingMinutes} min read` : null;
 
   return (
     <header className="post-head col-full pt-[clamp(64px,7.5vw,108px)] text-center mob:pt-16">
@@ -41,13 +39,11 @@ export async function PostHeader({ title, slug }: PostHeaderProps) {
           {post.subtitle}
         </p>
       )}
-      {(dateLabel || readingLabel) && (
-        <p className="mt-6 text-base font-medium tracking-[0.005em] text-faint tabular-nums">
-          {dateLabel && post?.date && <time dateTime={post.date}>{dateLabel}</time>}
-          {dateLabel && readingLabel && ' · '}
-          {readingLabel}
-        </p>
-      )}
+      <PostMeta
+        date={post?.date}
+        readingMinutes={post?.readingMinutes}
+        className="mt-6 text-base font-medium tracking-[0.005em] text-faint tabular-nums"
+      />
     </header>
   );
 }

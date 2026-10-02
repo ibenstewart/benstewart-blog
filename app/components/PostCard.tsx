@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { formatUkDate, type Post } from '@/lib/posts';
+import type { Post } from '@/lib/posts';
+import { PostMeta } from './PostMeta';
 
 /** A full `Post`, or the legacy `{ slug, title }` shape with the rest optional. */
 export type PostCardPost = Pick<Post, 'slug' | 'title'> &
@@ -17,10 +18,6 @@ type PostCardProps = { post: PostCardPost };
  * whose subgrid rows line up titles, excerpts and meta across the row.
  */
 export function PostCard({ post }: PostCardProps) {
-  const dateLabel = formatUkDate(post.date ?? null);
-  const readingLabel =
-    post.readingMinutes != null ? `${post.readingMinutes} min read` : null;
-
   return (
     <li className="post-card">
       <h3 className="post-card-title">
@@ -33,15 +30,12 @@ export function PostCard({ post }: PostCardProps) {
       ) : (
         <span aria-hidden="true" />
       )}
-      {dateLabel || readingLabel ? (
-        <p className="post-card-meta">
-          {dateLabel && post.date && <time dateTime={post.date}>{dateLabel}</time>}
-          {dateLabel && readingLabel && ' · '}
-          {readingLabel}
-        </p>
-      ) : (
-        <span aria-hidden="true" />
-      )}
+      <PostMeta
+        date={post.date}
+        readingMinutes={post.readingMinutes}
+        className="post-card-meta"
+        placeholder
+      />
     </li>
   );
 }

@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { getAllPosts, groupPostsByYear, type Post } from './posts';
+import { getAllPosts, groupPostsByYear, pickPosts, type Post } from './posts';
 
 async function setupPostsDir() {
   const root = await mkdtemp(join(tmpdir(), 'posts-test-'));
@@ -289,5 +289,22 @@ describe('groupPostsByYear', () => {
     ]);
     expect(groups.map((g) => g.year)).toEqual(['2015', 'Undated']);
     expect(groups[1].posts.map((p) => p.slug)).toEqual(['undated-1', 'undated-2']);
+  });
+});
+
+describe('pickPosts', () => {
+  const post = (slug: string): Post => ({
+    slug,
+    title: slug,
+    metaTitle: slug,
+    subtitle: null,
+    description: null,
+    date: '2024-01-01',
+    readingMinutes: 1,
+  });
+
+  it('returns posts in slug order and skips unknown slugs', () => {
+    const all = [post('a'), post('b'), post('c')];
+    expect(pickPosts(all, ['c', 'missing', 'a']).map((p) => p.slug)).toEqual(['c', 'a']);
   });
 });

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getAllPosts } from '@/lib/posts';
+import { getAllPosts, pickPosts } from '@/lib/posts';
 import { ArrowIcon } from '../icons';
 import { PostCard } from '../PostCard';
 import { sectionHeadingClass } from './sectionHeading';
@@ -17,7 +17,7 @@ type FavouritesProps = {
  */
 export async function Favourites({ title, slugs }: FavouritesProps) {
   const all = await getAllPosts();
-  const posts = slugs.flatMap((slug) => all.filter((p) => p.slug === slug));
+  const posts = pickPosts(all, slugs);
 
   return (
     <section className="col-full mt-[var(--section)]" aria-labelledby="faves-title">

@@ -24,7 +24,8 @@ const sourceSerif = Source_Serif_4({
 const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   weight: '400',
-  variable: '--font-plex-mono'
+  variable: '--font-plex-mono',
+  preload: false
 });
 
 const siteDescription = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';

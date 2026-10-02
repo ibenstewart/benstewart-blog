@@ -363,11 +363,6 @@
   }
 
   /* hr and Divider: a hair rule across the column. */
-  .prose-hr {
-    border: 0;
-    border-top: 1px solid var(--color-hair);
-  }
-
   /* Code block (KTD9): bleeds 40px at desktop, scrolls inside itself. */
   .code-block {
     position: relative;

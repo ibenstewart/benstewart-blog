@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getAllPosts, groupPostsByYear } from '@/lib/posts';
+import { getAllPosts, groupPostsByYear, UNDATED } from '@/lib/posts';
 import { sectionHeadingClass } from './sectionHeading';
 
 type ArchiveDirectoryProps = {
@@ -35,7 +35,7 @@ export async function ArchiveDirectory({ title, exclude }: ArchiveDirectoryProps
   if (!posts.length) return null;
 
   const groups = groupPostsByYear(posts);
-  const years = groups.map((g) => g.year).filter((y) => y !== 'Undated');
+  const years = groups.map((g) => g.year).filter((y) => y !== UNDATED);
 
   return (
     <section className="col-full mt-[var(--section)]" aria-labelledby="archive-title">

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getAllPosts } from '@/lib/posts';
+import { getAllPosts, pickPosts } from '@/lib/posts';
 import { ArrowIcon } from './icons';
 import { RelatedPosts } from './RelatedPosts';
 
@@ -27,10 +27,7 @@ export async function PostNav({ slug, related = [] }: PostNavProps) {
   const older =
     index !== -1 && index < posts.length - 1 ? posts[index + 1] : null;
 
-  const relatedPosts = related.flatMap((relatedSlug) => {
-    const post = posts.find((p) => p.slug === relatedSlug);
-    return post ? [post] : [];
-  });
+  const relatedPosts = pickPosts(posts, related);
 
   return (
     <>
