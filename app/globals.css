@@ -195,6 +195,13 @@
     margin-top: 1.1em;
   }
 
+  /* The homepage hero already shows the name at full size, so the masthead
+     wordmark steps aside there. visibility keeps the nav pill in place and
+     takes the link out of the tab order and accessibility tree. */
+  body:has(.home-hero) .masthead-wordmark {
+    visibility: hidden;
+  }
+
   .page-grid > .col-wide {
     grid-column: wide;
   }

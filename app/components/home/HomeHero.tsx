@@ -20,7 +20,7 @@ type HomeHeroProps = {
 export function HomeHero({ tagline, place, children }: HomeHeroProps) {
   return (
     <section
-      className="col-full pt-[clamp(88px,14vw,208px)]"
+      className="home-hero col-full pt-[clamp(88px,14vw,208px)]"
       aria-labelledby="name"
     >
       <h1
