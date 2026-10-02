@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { getAllPosts } from './posts';
+import { getAllPosts, groupPostsByYear, pickPosts, type Post } from './posts';
 
 async function setupPostsDir() {
   const root = await mkdtemp(join(tmpdir(), 'posts-test-'));
@@ -244,5 +244,67 @@ describe('getAllPosts', () => {
       // count, 1000+ extra words would push this well past 1 minute.
       expect(post.readingMinutes).toBe(1);
     });
+  });
+});
+
+describe('groupPostsByYear', () => {
+  const post = (slug: string, date: string | null): Post => ({
+    slug,
+    title: slug,
+    metaTitle: slug,
+    subtitle: null,
+    description: null,
+    date,
+    readingMinutes: 1,
+  });
+
+  it('returns an empty array for no posts', () => {
+    expect(groupPostsByYear([])).toEqual([]);
+  });
+
+  it('orders years newest first, whatever the input order', () => {
+    const groups = groupPostsByYear([
+      post('a', '2016-05-01'),
+      post('b', '2024-01-02'),
+      post('c', '2018-07-03'),
+    ]);
+    expect(groups.map((g) => g.year)).toEqual(['2024', '2018', '2016']);
+  });
+
+  it('keeps posts within a year in their input order', () => {
+    const groups = groupPostsByYear([
+      post('first', '2023-01-01'),
+      post('second', '2023-12-31'),
+      post('third', '2023-06-15'),
+    ]);
+    expect(groups).toHaveLength(1);
+    expect(groups[0].posts.map((p) => p.slug)).toEqual(['first', 'second', 'third']);
+  });
+
+  it('puts posts with no date in a final "Undated" group', () => {
+    const groups = groupPostsByYear([
+      post('undated-1', null),
+      post('dated', '2015-03-03'),
+      post('undated-2', null),
+    ]);
+    expect(groups.map((g) => g.year)).toEqual(['2015', 'Undated']);
+    expect(groups[1].posts.map((p) => p.slug)).toEqual(['undated-1', 'undated-2']);
+  });
+});
+
+describe('pickPosts', () => {
+  const post = (slug: string): Post => ({
+    slug,
+    title: slug,
+    metaTitle: slug,
+    subtitle: null,
+    description: null,
+    date: '2024-01-01',
+    readingMinutes: 1,
+  });
+
+  it('returns posts in slug order and skips unknown slugs', () => {
+    const all = [post('a'), post('b'), post('c')];
+    expect(pickPosts(all, ['c', 'missing', 'a']).map((p) => p.slug)).toEqual(['c', 'a']);
   });
 });

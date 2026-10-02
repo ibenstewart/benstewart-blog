@@ -1,25 +1,25 @@
-import Link from 'next/link';
+import { PostCard, type PostCardPost } from './PostCard';
 
-type RelatedPost = { slug: string; title: string };
-type RelatedPostsProps = { posts: RelatedPost[] };
+type RelatedPostsProps = { posts: PostCardPost[] };
 
+/**
+ * "Keep reading" (DESIGN.md 4.3): a full-width section with the hand-picked
+ * related posts as homepage-style cards, three across, stacking at 960px.
+ * Accepts full `Post` objects (from PostNav) or the legacy `{ slug, title }`.
+ */
 export function RelatedPosts({ posts }: RelatedPostsProps) {
   if (!posts.length) return null;
   return (
-    <section className="mt-14">
-      <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.09em] text-accent mb-1">
+    <section className="col-full mt-[var(--section)]" aria-labelledby="keep-title">
+      <h2
+        id="keep-title"
+        className="text-[clamp(2rem,3vw,2.75rem)] leading-none font-bold tracking-[-0.035em] text-ink"
+      >
         Keep reading
-      </p>
-      <ul>
-        {posts.map(({ slug, title }) => (
-          <li key={slug} className="border-b border-hair last:border-0">
-            <Link
-              href={`/posts/${slug}`}
-              className="block py-3 font-serif text-[1.125rem] font-[500] text-ink no-underline hover:text-accent transition-colors"
-            >
-              {title}
-            </Link>
-          </li>
+      </h2>
+      <ul className="cards mt-12 mob:mt-9" role="list">
+        {posts.map((post) => (
+          <PostCard key={post.slug} post={post} />
         ))}
       </ul>
     </section>

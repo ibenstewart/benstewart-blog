@@ -1,23 +1,31 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Outfit, Petrona } from 'next/font/google';
+import { IBM_Plex_Mono, Schibsted_Grotesk, Source_Serif_4 } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import Link from 'next/link';
 import { WebsiteJsonLd } from './components/JsonLd';
 
 export { viewport } from './viewport';
 
-const outfit = Outfit({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-outfit'
-});
-
-const petrona = Petrona({
+const schibsted = Schibsted_Grotesk({
   subsets: ['latin'],
   weight: 'variable',
   style: ['normal', 'italic'],
-  variable: '--font-petrona'
+  variable: '--font-schibsted'
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['italic'],
+  variable: '--font-source-serif'
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-plex-mono',
+  preload: false
 });
 
 const siteDescription = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';
@@ -59,18 +67,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${petrona.variable}`}>
-      <body className="antialiased tracking-tight text-lg font-sans">
+    <html lang="en" className={`${schibsted.variable} ${sourceSerif.variable} ${plexMono.variable}`}>
+      <body className="antialiased font-sans">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-paper focus:px-4 focus:py-2 focus:text-ink focus:ring-2 focus:ring-accent"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-[var(--gutter)] focus:z-50 focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:font-medium focus:text-white focus:no-underline"
         >
           Skip to content
         </a>
         <WebsiteJsonLd />
-        <div className="min-h-screen flex flex-col justify-between p-8 bg-paper text-ink safe-top safe-bottom">
+        <div className="flex min-h-screen flex-col bg-paper text-ink">
           <Masthead />
-          <main id="main" className="max-w-[75ch] mx-auto w-full space-y-6 mt-4 md:mt-16">
+          <main id="main" className="page-grid flex-1 content-start">
             {children}
           </main>
           <Footer />
@@ -81,6 +89,9 @@ export default function RootLayout({
   );
 }
 
+const wordmarkClass =
+  'whitespace-nowrap text-[1.375rem] leading-none font-bold tracking-[-0.03em] text-ink no-underline mob:text-[1.1875rem] tight:text-[1.125rem]';
+
 function Masthead() {
   const links = [
     { name: 'posts', url: '/posts' },
@@ -89,24 +100,23 @@ function Masthead() {
   ];
 
   return (
-    <header className="max-w-[75ch] mx-auto w-full flex items-center justify-between gap-3 border-b border-hair pb-4">
-      <Link
-        href="/"
-        className="font-serif text-[17px] text-ink no-underline"
-        style={{ fontWeight: 620 }}
-      >
+    <header className="site-container flex items-center justify-between gap-6 pt-[calc(32px+env(safe-area-inset-top))] mob:gap-3 mob:pt-[calc(20px+env(safe-area-inset-top))]">
+      <Link href="/" className={wordmarkClass}>
         Ben Stewart
       </Link>
-      <nav className="flex items-center gap-3 sm:gap-5">
-        {links.map((link) => (
-          <Link
-            key={link.name}
-            href={link.url}
-            className="font-sans text-[13px] text-muted hover:text-ink transition-colors duration-200 no-underline"
-          >
-            {link.name}
-          </Link>
-        ))}
+      <nav aria-label="Primary">
+        <ul role="list" className="flex items-center gap-[2px] rounded-full bg-accent p-1.5 mob:p-1">
+          {links.map((link) => (
+            <li key={link.name}>
+              <Link
+                href={link.url}
+                className="inline-flex h-11 items-center rounded-full px-5 text-[1.0625rem] font-medium tracking-[-0.005em] text-white no-underline transition-colors hover:bg-accent-deep hover:underline hover:decoration-[length:1.5px] hover:underline-offset-[5px] focus-visible:outline-2 focus-visible:-outline-offset-6 focus-visible:outline-white mob:h-[38px] mob:px-3 mob:text-base tight:px-2.5 tight:text-[0.9375rem]"
+              >
+                {link.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
     </header>
   );
@@ -122,36 +132,35 @@ function Footer() {
     { name: 'contact', url: 'mailto:ben@benstewart.ai', external: true }
   ];
 
+  const pillClass =
+    'inline-flex h-11 items-center rounded-full border border-hair px-5 text-base font-medium text-ink no-underline transition-colors hover:border-accent hover:text-accent mob:h-10 mob:px-4 mob:text-[0.9375rem]';
+
   return (
-    <footer className="mt-12 text-center">
-      <div className="flex justify-center space-x-4 tracking-tight">
-        {links.map((link) => {
-          const linkClasses = "font-sans text-[13px] text-faint hover:text-muted no-underline transition-colors duration-200";
-
-          if (link.external) {
-            return (
-              <a
-                key={link.name}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkClasses}
-              >
-                {link.name}
-              </a>
-            );
-          }
-
-          return (
-            <Link
-              key={link.name}
-              href={link.url}
-              className={linkClasses}
-            >
-              {link.name}
-            </Link>
-          );
-        })}
+    <footer className="site-container mt-[var(--section)] pb-[calc(64px+env(safe-area-inset-bottom))]">
+      <div className="flex flex-wrap items-end justify-between gap-8 border-t border-hair pt-10 mob:block">
+        <div>
+          <Link href="/" className={`block ${wordmarkClass}`}>
+            Ben Stewart
+          </Link>
+          <p className="mt-2.5 text-[0.9375rem] font-medium tracking-[0.005em] text-red">Glasgow</p>
+        </div>
+        <nav aria-label="Footer">
+          <ul role="list" className="flex flex-wrap gap-2.5 mob:mt-7">
+            {links.map((link) => (
+              <li key={link.name}>
+                {link.external ? (
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className={pillClass}>
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link href={link.url} className={pillClass}>
+                    {link.name}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </footer>
   );

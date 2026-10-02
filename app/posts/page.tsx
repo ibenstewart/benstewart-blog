@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function PostsPage() {
   return (
     <div>
-      <h1 className="font-serif text-2xl md:text-3xl font-semibold text-ink mb-8">Writing</h1>
+      <h1 className="font-sans text-3xl font-bold tracking-[-0.025em] text-ink mob:text-2xl mb-8">Writing</h1>
       <PostList />
     </div>
   );

@@ -2,12 +2,12 @@ import Link from 'next/link';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 /**
- * The editorial in-copy link treatment (underline, accent decoration on
- * hover). Single source of truth for the MDX `a` mapping and any component
+ * The Glasgow Civic in-copy link treatment: ink text with a 2px accent
+ * underline, accent text on hover. Single source of truth for the MDX `a` mapping and any component
  * that needs the same prose-link styling.
  */
 export const textLinkClass =
-  'underline text-ink underline-offset-[3px] decoration-1 decoration-accent/55 hover:text-accent hover:decoration-accent transition-colors';
+  'underline text-ink decoration-accent decoration-2 underline-offset-[0.22em] hover:text-accent transition-colors';
 
 type TextLinkProps = ComponentPropsWithoutRef<typeof Link> & {
   children: ReactNode;

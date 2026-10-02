@@ -61,19 +61,19 @@ export function ReadCostCalculator() {
 
         <div className="grid grid-cols-3 gap-4 pt-4 border-t border-hair">
           <div>
-            <div className="text-2xl md:text-3xl font-medium text-ink tabular-nums">
+            <div className="text-3xl font-medium mob:text-2xl text-ink tabular-nums">
               {totalMinutes}
             </div>
             <div className="text-sm text-muted">total minutes</div>
           </div>
           <div>
-            <div className="text-2xl md:text-3xl font-medium text-ink tabular-nums">
+            <div className="text-3xl font-medium mob:text-2xl text-ink tabular-nums">
               {meetingHours}
             </div>
             <div className="text-sm text-muted">meeting hours</div>
           </div>
           <div>
-            <div className="text-2xl md:text-3xl font-medium text-ink tabular-nums">
+            <div className="text-3xl font-medium mob:text-2xl text-ink tabular-nums">
               {workingDays}
             </div>
             <div className="text-sm text-muted">working days</div>

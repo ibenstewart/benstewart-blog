@@ -1,0 +1,484 @@
+<!doctype html>
+<!--
+  Glasgow Civic: approved design reference (homepage).
+  Visual source of truth for docs/plans/2026-10-02-001-feat-glasgow-civic-redesign-plan.md.
+  Static prototype: plain HTML/CSS, fonts from Google Fonts. Do not ship this file; port its values into the Next.js app.
+-->
+
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ben Stewart</title>
+<meta name="description" content="I run a 250-engineer org at Skyscanner that’s going through the AI transition. I write field reports about what’s working, what’s breaking, and what the data says, in plain English.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&family=Source+Serif+4:ital,wght@1,400&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+:root {
+  --paper: #FDFCFA;      /* bright near-white */
+  --ink: #1C2731;        /* slate ink */
+  --body: #4E5964;       /* slate grey, body */
+  --meta: #5E6873;       /* slate grey, metadata */
+  --rule: #DDD7CC;       /* warm hairline */
+  --saltire: #004A93;    /* Saltire blue, deepened: the one strong accent */
+  --saltire-deep: #003A75;
+  --blond: #EDE3D1;      /* blond sandstone */
+  --red: #9C4A33;        /* red sandstone */
+
+  --grotesk: "Schibsted Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --gutter: clamp(20px, 4.45vw, 64px);
+  --section: clamp(112px, 13vw, 192px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--grotesk);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, p, ol, ul { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+a { color: inherit; }
+.nw { white-space: nowrap; }
+img, svg { display: block; }
+
+.wrap { max-width: calc(1312px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+
+:focus-visible { outline: 3px solid var(--saltire); outline-offset: 3px; border-radius: 4px; }
+
+.skip {
+  position: absolute; left: var(--gutter); top: 12px; z-index: 10;
+  padding: 12px 20px; border-radius: 999px;
+  background: var(--ink); color: #fff; font-weight: 500; text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip:focus { transform: none; }
+
+/* ---------- Header ---------- */
+.site-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding-top: 32px;
+}
+.wordmark {
+  font-weight: 700; font-size: 1.375rem; letter-spacing: -0.03em; line-height: 1;
+  text-decoration: none; color: var(--ink); white-space: nowrap;
+}
+.nav-pill {
+  display: flex; align-items: center; gap: 2px;
+  padding: 6px; border-radius: 999px; background: var(--saltire);
+}
+.nav-pill a {
+  display: inline-flex; align-items: center; height: 44px; padding: 0 20px; border-radius: 999px;
+  color: #fff; font-weight: 500; font-size: 1.0625rem; letter-spacing: -0.005em; text-decoration: none;
+}
+.nav-pill a:hover { background: var(--saltire-deep); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1.5px; }
+.nav-pill a:focus-visible { outline: 2px solid #fff; outline-offset: -6px; border-radius: 999px; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 12px;
+  height: 56px; padding: 0 28px; border-radius: 999px;
+  background: var(--saltire); color: #fff;
+  font-weight: 500; font-size: 1.125rem; letter-spacing: -0.005em; text-decoration: none;
+}
+.pill:hover { background: var(--saltire-deep); }
+.pill:focus-visible { outline-color: var(--ink); border-radius: 999px; }
+.pill svg { width: 20px; height: 20px; }
+
+/* ---------- Hero ---------- */
+.hero { padding-top: clamp(88px, 14vw, 208px); }
+.hero h1 {
+  font-weight: 700;
+  font-size: clamp(5.25rem, 9.5vw, 8.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  margin-left: -0.045em; /* optical alignment of the B stem */
+  color: var(--ink);
+}
+.hero h1 .k { display: inline; letter-spacing: 0; } /* keeps r and t apart */
+.intro {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px;
+  margin-top: clamp(48px, 5.6vw, 80px);
+}
+.caption { grid-column: 1 / span 3; padding-top: 6px; }
+.caption .role { font-weight: 500; font-size: 1.25rem; line-height: 1.3; color: var(--ink); letter-spacing: -0.01em; }
+.caption .place { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-weight: 500; font-size: 1.0625rem; color: var(--red); }
+.caption .place::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--red); flex: none; }
+.intro-body { grid-column: 5 / span 7; max-width: 40rem; }
+.intro-body p {
+  font-size: clamp(1.1875rem, 1.75vw, 1.5rem);
+  line-height: 1.5; color: var(--body); letter-spacing: -0.005em;
+  text-wrap: pretty;
+}
+.intro-body p + p { margin-top: 0.75em; }
+.intro-body a, .inline-link {
+  color: var(--ink);
+  text-decoration: underline; text-decoration-color: var(--saltire);
+  text-decoration-thickness: 2px; text-underline-offset: 0.22em;
+}
+.intro-body a:hover { color: var(--saltire); }
+
+/* ---------- Section headings ---------- */
+h2 {
+  font-weight: 700;
+  font-size: clamp(2.5rem, 4.2vw, 3.75rem);
+  line-height: 0.98; letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.meta {
+  font-weight: 500; font-size: 0.9375rem; color: var(--meta);
+  letter-spacing: 0.005em;
+}
+time, .rt, .num, .year h3 { font-variant-numeric: tabular-nums; }
+.excerpt {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 1.1875rem; line-height: 1.4; color: var(--body);
+  text-wrap: pretty;
+}
+.post-link { text-decoration: none; }
+.post-link::after { content: ""; position: absolute; inset: 0; }
+.post-link:focus-visible { outline: none; }
+.post-link:focus-visible::after { outline: 3px solid var(--saltire); outline-offset: 4px; border-radius: 6px; }
+
+/* ---------- Start here: arch + numbered list ---------- */
+.start {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px;
+  margin-top: var(--section);
+}
+.arch {
+  grid-column: 1 / span 4;
+  background: var(--blond);
+  border-radius: 999px 999px 0 0;
+  min-height: 540px;
+  padding: 40px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.arch .arrow { width: 44px; height: 44px; color: var(--saltire); margin-bottom: 28px; }
+.arch h2 { color: var(--ink); }
+.arch p { margin-top: 16px; font-size: 1.1875rem; line-height: 1.45; color: var(--ink); max-width: 18em; }
+
+.start-list { grid-column: 6 / span 7; counter-reset: n; align-self: end; }
+.start-list li {
+  position: relative;
+  display: grid; grid-template-columns: 96px minmax(0, 1fr); column-gap: 8px;
+  padding: 32px 0 34px;
+  border-top: 1px solid var(--rule);
+}
+.start-list li:last-child { border-bottom: 1px solid var(--rule); }
+.num {
+  font-weight: 700; font-size: 4rem; line-height: 0.8; letter-spacing: -0.04em;
+  color: var(--saltire); font-variant-numeric: tabular-nums;
+}
+.start-list h3 {
+  font-weight: 500; font-size: clamp(1.375rem, 2vw, 1.75rem); line-height: 1.15; letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.start-list .excerpt { margin-top: 8px; }
+.start-list .meta { margin-top: 14px; }
+.start-list li:hover h3 { color: var(--saltire); }
+
+/* ---------- Favourites ---------- */
+.faves { margin-top: var(--section); }
+.cards {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px;
+  margin-top: 64px;
+}
+.cards li {
+  position: relative;
+  display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0;
+  border-top: 2px solid var(--ink);
+  padding-top: 24px;
+}
+.cards .meta { margin-top: 18px; }
+.cards h3 {
+  font-weight: 500; font-size: clamp(1.375rem, 2vw, 1.75rem); line-height: 1.15; letter-spacing: -0.02em;
+  text-wrap: balance;
+  padding-right: 16px;
+}
+.cards .excerpt { margin-top: 12px; padding-right: 24px; }
+.cards li:hover h3 { color: var(--saltire); }
+.faves .all { margin-top: 64px; }
+
+/* ---------- Archive: building directory board ---------- */
+.archive { margin-top: var(--section); }
+.archive-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.archive-head .meta { font-size: 1.0625rem; }
+.directory {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 48px; row-gap: 72px;
+  align-items: start; margin-top: 56px;
+}
+.year.wide { grid-column: span 2; }
+.year h3 {
+  font-weight: 700; font-size: 1.75rem; line-height: 1; letter-spacing: -0.03em; color: var(--ink);
+  padding-bottom: 14px; border-bottom: 2px solid var(--ink);
+}
+.year.wide ul { columns: 2; column-gap: 48px; }
+.year li {
+  position: relative; break-inside: avoid;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 20px;
+  padding: 13px 0 14px; border-bottom: 1px solid var(--rule);
+}
+.year .post-link { font-weight: 500; font-size: 1.0625rem; line-height: 1.35; letter-spacing: -0.005em; text-wrap: pretty; }
+.year li:hover .post-link { color: var(--saltire); }
+.year .rt { flex: none; white-space: nowrap; }
+
+/* ---------- Footer ---------- */
+.site-foot {
+  margin-top: var(--section);
+  padding-bottom: 64px;
+}
+.foot-inner {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap;
+  border-top: 1px solid var(--rule); padding-top: 40px;
+}
+.foot-id .wordmark { display: block; }
+.foot-id .meta { margin-top: 10px; }
+.foot-id .place { color: var(--red); }
+.site-foot ul { display: flex; flex-wrap: wrap; gap: 10px; }
+.site-foot ul a {
+  display: inline-flex; align-items: center; height: 44px; padding: 0 20px;
+  border: 1px solid var(--rule); border-radius: 999px;
+  font-weight: 500; font-size: 1rem; text-decoration: none; color: var(--ink);
+}
+.site-foot ul a:hover { border-color: var(--saltire); color: var(--saltire); }
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1080px) {
+  .caption { grid-column: 1 / span 4; }
+  .intro-body { grid-column: 5 / span 8; }
+  .arch { grid-column: 1 / span 5; }
+  .start-list { grid-column: 6 / span 7; padding-left: 0; }
+  .start-list li { grid-template-columns: 64px minmax(0, 1fr); }
+  .directory { grid-template-columns: minmax(0, 1fr); row-gap: 56px; }
+  .year.wide { grid-column: auto; }
+  .year ul, .year.wide ul { columns: 2; column-gap: 40px; }
+}
+
+@media (max-width: 960px) {
+  .cards { grid-template-columns: 1fr; row-gap: 48px; }
+  .cards li { display: block; grid-row: auto; }
+  .cards h3 { max-width: 30em; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 760px) {
+  body { font-size: 1rem; }
+  .site-head { padding-top: 20px; }
+  .wordmark { font-size: 1.1875rem; }
+  .site-head { gap: 12px; }
+  .nav-pill { padding: 4px; }
+  .nav-pill a { height: 38px; padding: 0 12px; font-size: 1rem; }
+  .pill { height: 44px; padding: 0 18px; font-size: 1rem; }
+
+  .hero h1 { font-size: clamp(3.75rem, 22vw, 6.25rem); }
+  .hero h1 > span { display: block; }
+  .intro { display: block; margin-top: 36px; }
+  .caption { padding-top: 0; }
+  .intro-body { margin-top: 32px; }
+
+  .start { display: block; }
+  .arch { min-height: 0; aspect-ratio: 1 / 1.04; padding: 28px; }
+  .arch .arrow { transform: rotate(90deg); width: 36px; height: 36px; margin-bottom: 20px; }
+  .start-list { padding-left: 0; margin-top: 24px; }
+  .start-list li { grid-template-columns: 52px minmax(0, 1fr); padding: 24px 0 26px; }
+  .num { font-size: 2.75rem; }
+  .excerpt { font-size: 1.0625rem; }
+  .start-list .meta, .cards .meta { font-size: 0.875rem; }
+
+  .cards { grid-template-columns: 1fr; row-gap: 40px; margin-top: 40px; }
+  .cards li { display: block; grid-row: auto; }
+  .faves .all { margin-top: 48px; }
+
+  .archive-head { display: block; }
+  .archive-head .meta { margin-top: 12px; font-size: 1rem; }
+  .directory { margin-top: 40px; row-gap: 44px; }
+  .year ul, .year.wide ul { columns: 1; }
+  .year h3 { font-size: 1.5rem; padding-bottom: 12px; }
+  .year li { padding: 12px 0 13px; gap: 16px; }
+  .year .post-link { font-size: 1rem; }
+  .year .rt { font-size: 0.875rem; }
+
+  .foot-inner { display: block; }
+  .site-foot ul { margin-top: 28px; }
+  .site-foot ul a { height: 40px; padding: 0 16px; font-size: 0.9375rem; }
+}
+
+@media (max-width: 380px) {
+  .wordmark { font-size: 1.125rem; }
+  .nav-pill a { padding: 0 10px; font-size: 0.9375rem; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head wrap">
+  <a class="wordmark" href="https://www.benstewart.ai/">Ben Stewart</a>
+  <nav aria-label="Primary">
+    <ul class="nav-pill">
+      <li><a href="https://www.benstewart.ai/posts">posts</a></li>
+      <li><a href="https://www.benstewart.ai/bio">bio</a></li>
+      <li><a href="https://www.benstewart.ai/speaking">speaking</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero wrap" aria-labelledby="name">
+    <h1 id="name"><span>Ben</span> <span>Stewa<span class="k">r</span>t</span></h1>
+    <div class="intro">
+      <div class="caption">
+        <p class="role">Engineer turned leader.</p>
+        <p class="place">Glasgow</p>
+      </div>
+      <div class="intro-body">
+        <p>I run a 250-engineer org at Skyscanner that’s going through the AI transition. I write field reports about what’s working, what’s breaking, and what the data says, in plain English.</p>
+        <p>I <a href="https://www.benstewart.ai/bio">build things</a> and help teams build better. I’ve spent years leading engineering teams; turning fuzzy strategy into real systems.</p>
+        <p><a href="mailto:ben@benstewart.ai">Reach out</a> if anything interests you or want to talk <a href="https://www.benstewart.ai/speaking">speaking</a> gigs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="start wrap" aria-labelledby="start-title">
+    <div class="arch">
+      <svg class="arrow" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M3 21h31.4L21.7 8.3l4.2-4.2L45.8 24 25.9 43.9l-4.2-4.2L34.4 27H3z" fill="currentColor"/></svg>
+      <h2 id="start-title">Start here</h2>
+      <p>Three posts that introduce what this blog is about.</p>
+    </div>
+    <ol class="start-list">
+      <li>
+        <span class="num" aria-hidden="true">1</span>
+        <div>
+          <h3><a class="post-link" href="https://www.benstewart.ai/posts/sustainable">Sustainable Pace Just Got Faster</a></h3>
+          <p class="excerpt">Speed won. The question now is how you sustain it.</p>
+          <p class="meta"><time datetime="2024-12-29">29 December 2024</time> · 3 min read</p>
+        </div>
+      </li>
+      <li>
+        <span class="num" aria-hidden="true">2</span>
+        <div>
+          <h3><a class="post-link" href="https://www.benstewart.ai/posts/i-built-this-blog-with-claude-code">I Built This Blog With Claude Code</a></h3>
+          <p class="excerpt">And it’s writing this post right now</p>
+          <p class="meta"><time datetime="2024-12-30">30 December 2024</time> · 6 min read</p>
+        </div>
+      </li>
+      <li>
+        <span class="num" aria-hidden="true">3</span>
+        <div>
+          <h3><a class="post-link" href="https://www.benstewart.ai/posts/multi-agent-ai-strategy">I Built a System Where AI Agents Argue About Strategy</a></h3>
+          <p class="excerpt">How I use AI to stress-test my thinking</p>
+          <p class="meta"><time datetime="2026-02-20">20 February 2026</time> · 9 min read</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="faves wrap" aria-labelledby="faves-title">
+    <h2 id="faves-title">Some of my favourite writing</h2>
+    <ul class="cards">
+      <li>
+        <h3><a class="post-link" href="https://www.benstewart.ai/posts/ai-made-writing-free">AI Made Writing Free. That Was Supposed to Be Good News.</a></h3>
+        <p class="excerpt">The cost didn’t disappear. It moved.</p>
+        <p class="meta"><time datetime="2026-03-22">22 March 2026</time> · 2 min read</p>
+      </li>
+      <li>
+        <h3><a class="post-link" href="https://www.benstewart.ai/posts/the-three-pound-question">The £3 Question</a></h3>
+        <p class="excerpt">What I learned from an expensive conversation with a chatbot</p>
+        <p class="meta"><time datetime="2026-01-26">26 January 2026</time> · 5 min read</p>
+      </li>
+      <li>
+        <h3><a class="post-link" href="https://www.benstewart.ai/posts/ralph-isnt-the-point"><span class="nw">Ralph Isn’t the Point.</span> <span class="nw">The PRD Is.</span></a></h3>
+        <p class="excerpt">What AI coding tools actually teach you</p>
+        <p class="meta"><time datetime="2025-01-09">9 January 2025</time> · 3 min read</p>
+      </li>
+    </ul>
+    <a class="pill all" href="https://www.benstewart.ai/posts">View all posts
+      <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M3 21h31.4L21.7 8.3l4.2-4.2L45.8 24 25.9 43.9l-4.2-4.2L34.4 27H3z" fill="currentColor"/></svg>
+    </a>
+  </section>
+
+  <section class="archive wrap" aria-labelledby="archive-title">
+    <div class="archive-head">
+      <h2 id="archive-title">Archive</h2>
+      <p class="meta">18 more posts, 2015 to 2024</p>
+    </div>
+    <div class="directory">
+      <div class="year">
+        <h3>2024</h3>
+        <ul>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/a-prompt-to-your-leadership-style">A prompt to your leadership style</a><span class="meta rt">3 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/the-truth-about-authentic-leadership">The Truth About Authentic Leadership</a><span class="meta rt">4 min</span></li>
+        </ul>
+      </div>
+      <div class="year wide">
+        <h3>2023</h3>
+        <ul>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/the-basic-boss-formula">25% / 50% / 25% - The Basic Boss Formula</a><span class="meta rt">7 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/am-i-technically-dangerous">Am I Technically Dangerous?</a><span class="meta rt">4 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/end-of-year-manager-checklist">End of Year Manager Checklist</a><span class="meta rt">2 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/leaders-dont-lie">Leaders Don’t Lie</a><span class="meta rt">3 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/leadership-as-a-service">Leadership as a Service</a><span class="meta rt">5 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/managing-up-up-down-down-left-right">Managing - Up, Up, Down, Down, Left, Right</a><span class="meta rt">4 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/meeting-rooms-are-now-free">Meeting Rooms Are Now Free</a><span class="meta rt">5 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/reading-list">Reading List</a><span class="meta rt">3 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/the-ideal-senior-engineer">The Ideal Senior Engineer?</a><span class="meta rt">5 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/waist">W.A.I.S.T. Why Am I Still Talking</a><span class="meta rt">3 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/you-cant-hum-while-holding-your-nose">You Can’t Hum While Holding Your Nose</a><span class="meta rt">4 min</span></li>
+        </ul>
+      </div>
+      <div class="year">
+        <h3>2018</h3>
+        <ul>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/practical-postmortems">Practical Postmortems</a><span class="meta rt">3 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/so-i-think-i-burned-out">So I Think I Burned Out...</a><span class="meta rt">2 min</span></li>
+        </ul>
+      </div>
+      <div class="year">
+        <h3>2016</h3>
+        <ul>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/am-i-jealous-of-my-team">Am I Jealous of My Team?</a><span class="meta rt">2 min</span></li>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/shared-documents-are-not-shared-understanding">Shared Documents Are Not Shared Understanding</a><span class="meta rt">2 min</span></li>
+        </ul>
+      </div>
+      <div class="year">
+        <h3>2015</h3>
+        <ul>
+          <li><a class="post-link" href="https://www.benstewart.ai/posts/the-invisible-manager">The Invisible Manager</a><span class="meta rt">3 min</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot wrap">
+  <div class="foot-inner">
+    <div class="foot-id">
+      <a class="wordmark" href="https://www.benstewart.ai/">Ben Stewart</a>
+      <p class="meta place">Glasgow</p>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="https://www.benstewart.ai/posts">posts</a></li>
+        <li><a href="https://www.benstewart.ai/feed.xml">rss</a></li>
+        <li><a href="https://github.com/ibenstewart">github</a></li>
+        <li><a href="https://x.com/benstewart__">x</a></li>
+        <li><a href="https://www.linkedin.com/in/ben-stewart-90944595/">linkedin</a></li>
+        <li><a href="mailto:ben@benstewart.ai">contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

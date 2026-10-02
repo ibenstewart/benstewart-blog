@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="py-16 text-center">
-      <h1 className="font-serif text-3xl text-ink">Nothing here.</h1>
+      <h1 className="font-sans text-3xl font-bold tracking-[-0.025em] text-ink">Nothing here.</h1>
       <p className="mt-3 text-muted">
         The page you are looking for does not exist, or has moved.
       </p>
