@@ -6,6 +6,10 @@ import { RelatedPosts } from './app/components/RelatedPosts';
 import { PostNav } from './app/components/PostNav';
 import { PostHeader } from './app/components/PostHeader';
 import { PostList } from './app/components/PostList';
+import { HomeHero } from './app/components/home/HomeHero';
+import { StartHere } from './app/components/home/StartHere';
+import { Favourites } from './app/components/home/Favourites';
+import { ArchiveDirectory } from './app/components/home/ArchiveDirectory';
 import { textLinkClass } from './app/components/TextLink';
 import { CodeBlock } from './app/components/CodeBlock';
 import { HeroImage } from './app/components/HeroImage';
@@ -364,6 +368,11 @@ const components = {
   PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
   PostHeader: (props: { title: string; slug: string }) => <PostHeader {...props} />,
   PostList: (props: { slugs?: string[] }) => <PostList {...props} />,
+  // Homepage sections (DESIGN.md 4.2, plan KTD5).
+  HomeHero,
+  StartHere,
+  Favourites,
+  ArchiveDirectory,
   PersonSchema: () => <PersonJsonLd />,
 };
 

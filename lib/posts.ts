@@ -99,3 +99,30 @@ export async function getAllPosts(
         a.title.localeCompare(b.title)
     );
 }
+
+/**
+ * Groups posts by publication year for the homepage archive (plan KTD6).
+ * Years run newest first; posts keep their input order within a year; posts
+ * with no date go in a final "Undated" group.
+ */
+export function groupPostsByYear(posts: Post[]): { year: string; posts: Post[] }[] {
+  const byYear = new Map<string, Post[]>();
+  const undated: Post[] = [];
+
+  for (const post of posts) {
+    const year = post.date?.slice(0, 4);
+    if (!year) {
+      undated.push(post);
+      continue;
+    }
+    const group = byYear.get(year);
+    if (group) group.push(post);
+    else byYear.set(year, [post]);
+  }
+
+  const groups = [...byYear.entries()]
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([year, yearPosts]) => ({ year, posts: yearPosts }));
+
+  return undated.length ? [...groups, { year: 'Undated', posts: undated }] : groups;
+}
