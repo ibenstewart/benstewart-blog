@@ -9,7 +9,8 @@ Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing ab
 - **Framework:** Next.js 15 with App Router
 - **Styling:** Tailwind CSS v4
 - **Content:** MDX files in `app/posts/[slug]/page.mdx`
-- **Fonts:** Petrona (prose serif) + Outfit (chrome/UI), both via next/font Google Fonts
+- **Fonts:** Schibsted Grotesk (everything), Source Serif 4 italic only (asides), IBM Plex Mono (code), all via next/font Google Fonts
+- **Design system:** Glasgow Civic, spec in `docs/design/glasgow-civic/DESIGN.md` (wins on any value it states)
 - **Deployment:** Vercel (auto-deploys from GitHub)
 - **Repo:** https://github.com/ibenstewart/benstewart-blog
 
@@ -66,22 +67,22 @@ Available components in `mdx-components.tsx`:
 | Component | Usage | Description |
 |-----------|-------|-------------|
 | `<KeyPoint>` | `<KeyPoint>Important text</KeyPoint>` | Highlighted box for key takeaways |
-| `<Callout>` | `<Callout type="insight\|warning\|tip\|story">` | Hairline-framed box with a small labelled type (Insight/Worth knowing/Try this/Story), not a coloured box |
+| `<Callout>` | `<Callout type="insight\|warning\|tip\|story">` | Quiet outlined panel (1px hair border, 20px radius) with a small uppercase label (Insight/Worth knowing/Try this/Story); blue label for insight and tip, red for warning, grey for story |
 | `<PullQuote>` | `<PullQuote author="Name">Quote</PullQuote>` | Large styled quote with attribution |
 | `<Scenario>` | `<Scenario speaker="Name">Dialog</Scenario>` | Conversation/dialog formatting |
 | `<TLDR>` | `<TLDR>Summary</TLDR>` | Article summary box |
 | `<Timeline>` | Wrapper for Event components | Career/timeline container |
 | `<Event>` | `<Event year="2024" title="Role">Description</Event>` | Timeline entry |
 | `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | Prev/next + related links at the end of every post |
-| `<PostHeader>` | `<PostHeader title="Post Title" slug="[slug]" />` | Opens the post body: title, kicker (date + reading time), and subtitle, all resolved from `lib/posts.ts` by slug - replaces the old `# Title` H1 |
+| `<PostHeader>` | `<PostHeader title="Post Title" slug="[slug]" />` | Opens the post body, centred: breadcrumb pill to /posts, title, serif-italic standfirst (the `subtitle`), and a sentence-case meta line (date + reading time), all resolved from `lib/posts.ts` by slug - replaces the old `# Title` H1 |
 | `<PostList>` | `<PostList slugs={["slug-a", "slug-b"]} />` | Editorial rows (title, subtitle, date, reading time) for a set of posts; omit `slugs` to list every post, newest first |
-| `<Figure>` | `<Figure src="/images/posts/[slug]-0.png" alt="..." caption="..." credit="..." width="420px" />` | Image with optional caption and credit; `width` overrides the default max-width |
-| `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Wraps the opening paragraph with a serif drop-cap first letter |
+| `<Figure>` | `<Figure src="/images/posts/[slug]-0.png" alt="..." caption="..." credit="..." width="420px" />` | Image with optional caption and credit; `width` overrides the default max-width (capped at the column). Add `hero` for a full-width arched hero image (up to 960px, natural ratio, no visible caption, hidden if the image fails to load) |
+| `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Wraps the opening paragraph with a grotesk 700 drop-cap first letter |
 
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`
 2. Create `page.mdx` with metadata export (including canonical, openGraph, images), a `<PostHeader title="..." slug="[slug]" />` opening the body, a `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
-3. Add to homepage list in `app/page.mdx` (if featuring)
+3. To feature it on the homepage, add its slug to the `startHere` or `favourites` export in `app/page.mdx`. Every other post appears in the homepage Archive automatically
 4. Run `npm run validate-posts` to confirm all required SEO fields are present
 5. Commit and push - Vercel auto-deploys
 
@@ -97,7 +98,7 @@ Available components in `mdx-components.tsx`:
 - `lib/mdx-parsing.mjs` - Shared escape-aware MDX parsing helpers (metadata block extraction, JSX prop extraction, fence stripping) used by both `lib/posts.ts` and `scripts/validate-posts.mjs`
 - `app/speaking/page.tsx` - Speaking page (videos, podcasts, articles)
 - `mdx-components.tsx` - Custom MDX components
-- `app/globals.css` - Global styles (includes safe area CSS)
+- `app/globals.css` - Tokens, fonts, the `.page-grid` breakout grid, custom breakpoint variants and component CSS
 - `app/sitemap.ts` - Auto-generated sitemap
 - `docs/solutions/` - Documented solutions to past problems (bugs, workflow gotchas, best practices), organised by category with YAML frontmatter (`module`, `tags`, `problem_type`) - relevant when implementing or debugging in a documented area
 
@@ -111,12 +112,16 @@ Hard-won knowledge from working in this repo. Read before touching posts or meta
 - **Tests follow a temp-dir pattern.** `lib/posts.test.ts` and `app/sitemap.test.ts` write throwaway posts into a `mkdtemp` directory rather than mocking `fs`. Follow that pattern for anything else that reads the posts directory.
 
 ## Style Notes
-- Page width: 75ch
-- Base font size: text-lg (18px); post body copy renders larger, at 19px serif, via the `p` mapping in `mdx-components.tsx` (distinct from the text-lg base)
-- Headings: text-2xl/3xl for h1, text-xl/2xl for h2 (body headings only; post titles render at `PostHeader`'s own display scale, not the h1 mapping)
-- Links: accent underline via `textLinkClass` in `app/components/TextLink.tsx` (ink-coloured text with a low-opacity accent underline, full accent colour on hover)
-- Dark mode supported, driven by the `paper`/`ink`/`muted`/`faint`/`hair`/`accent` design tokens defined in `app/globals.css`'s `@theme` block
-- Safe area padding for iPhone notch/dynamic island
+- **Light theme only.** No dark mode, no `prefers-color-scheme` rules, no theme toggle (reversed July's dark-mode support on 2 Oct 2026).
+- **Layout:** `<main>` is a breakout grid (`.page-grid`). Post blocks sit in a 640px `content` column by default; components opt out with `.col-wide` (about 960px) or `.col-full` (the 1312px container). Grid children use `margin-top` only.
+- **Type:** prose body is 19px Schibsted Grotesk in `muted` grey; headings and `strong` are `ink`. Weights are 400, 500 or 700 only, never arbitrary `font-[...]` weights.
+- **Serif means italic.** Source Serif 4 is loaded italic only, so anything `font-serif` must also be `italic` (standfirsts, excerpts, captions, Scenario dialogue, markdown blockquote). Everything else is `font-sans`.
+- **Breakpoints:** use the inclusive custom variants `tab` (1080px), `cards` (960px), `mob` (760px) and `tight` (380px). Do not use `sm`/`md`/`lg` or `max-[...]`.
+- **CSS layering:** custom CSS that targets elements which also carry utilities goes in `@layer components` or `@layer base`; unlayered CSS beats every Tailwind utility in v4.
+- **Links:** `textLinkClass` in `app/components/TextLink.tsx`: ink text, 2px accent underline at 0.22em offset, accent text on hover.
+- **Colour tokens:** `paper`, `raise`, `ink`, `muted`, `faint`, `hair`, `accent`, `accent-deep`, `blond`, `blond-line`, `red`. Never put `faint` text on `blond`.
+- **Code blocks:** fences with a language are syntax-highlighted; unlabelled fences render as plain ink. Every block gets a Copy button.
+- Safe-area padding for the iPhone notch lives on the masthead, footer and `--gutter`.
 
 ## Git Workflow
 Always commit changes with descriptive messages and push to trigger Vercel deployment.
