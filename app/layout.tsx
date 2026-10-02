@@ -101,7 +101,7 @@ function Masthead() {
 
   return (
     <header className="site-container flex items-center justify-between gap-6 pt-[calc(32px+env(safe-area-inset-top))] mob:gap-3 mob:pt-[calc(20px+env(safe-area-inset-top))]">
-      <Link href="/" className={wordmarkClass}>
+      <Link href="/" className={`masthead-wordmark ${wordmarkClass}`}>
         Ben Stewart
       </Link>
       <nav aria-label="Primary">
