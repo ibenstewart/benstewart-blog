@@ -7,6 +7,8 @@ import { PostNav } from './app/components/PostNav';
 import { PostHeader } from './app/components/PostHeader';
 import { PostList } from './app/components/PostList';
 import { textLinkClass } from './app/components/TextLink';
+import { CodeBlock } from './app/components/CodeBlock';
+import { HeroImage } from './app/components/HeroImage';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -65,6 +67,7 @@ type FigureProps = {
   caption?: string;
   credit?: string;
   width?: string;
+  hero?: boolean;
 };
 
 type LedeProps = {
@@ -87,41 +90,54 @@ const calloutLabels: Record<Required<CalloutProps>['type'], string> = {
   story: 'Story',
 };
 
+// Prose type scale (DESIGN.md 3.3). Containers that set their own body type
+// re-style descendant paragraphs, because the p mapping's classes win over
+// anything inherited (plan KTD13).
+const proseText =
+  'text-[1.1875rem] leading-[1.62] tracking-[-0.003em] text-muted mob:text-[1.125rem] mob:leading-[1.6]';
+
+const calloutLabelColour: Record<Required<CalloutProps>['type'], string> = {
+  insight: 'text-accent',
+  warning: 'text-red',
+  tip: 'text-accent',
+  story: 'text-faint',
+};
+
+type FenceProps = { className?: string; children?: ReactNode };
+
 const components = {
   h1: (props: HeadingProps) => (
-    <h1 className="font-serif text-2xl md:text-3xl font-semibold text-ink" {...props} />
+    <h1
+      className="text-[clamp(2.375rem,5.3vw,4.75rem)] leading-[1.02] font-bold tracking-[-0.035em] text-ink"
+      {...props}
+    />
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="font-serif text-[1.625rem] font-semibold leading-[1.25] tracking-[-0.008em] mt-12 mb-4 text-ink"
+      className="prose-h2 scroll-mt-8 text-[clamp(1.625rem,2.2vw,2rem)] leading-[1.15] font-bold tracking-[-0.025em] text-ink mob:text-[1.5rem]"
       {...props}
     />
   ),
   h3: (props: HeadingProps) => (
-    <h3 className="font-serif text-[1.3rem] font-semibold mt-10 mb-3 text-ink" {...props} />
+    <h3
+      className="prose-h3 scroll-mt-8 text-[1.25rem] leading-[1.3] font-bold tracking-[-0.012em] text-ink"
+      {...props}
+    />
   ),
   h4: (props: HeadingProps) => (
-    <h4 className="font-serif text-lg font-semibold text-ink" {...props} />
+    <h4 className="text-[1.0625rem] leading-[1.4] font-bold text-ink" {...props} />
   ),
-  p: (props: ParagraphProps) => (
-    <p className="font-serif text-[1.1875rem] leading-[1.7] text-ink" {...props} />
-  ),
+  p: (props: ParagraphProps) => <p className={`${proseText} text-pretty`} {...props} />,
   ol: (props: ListProps) => (
-    <ol
-      className="font-serif text-[1.1875rem] leading-[1.7] text-ink list-decimal pl-5 space-y-2"
-      {...props}
-    />
+    <ol role="list" className={`prose-ol ${proseText}`} {...props} />
   ),
   ul: (props: ListProps) => (
-    <ul
-      className="font-serif text-[1.1875rem] leading-[1.7] text-ink list-disc pl-5 space-y-2"
-      {...props}
-    />
+    <ul role="list" className={`prose-ul ${proseText}`} {...props} />
   ),
-  li: (props: ListItemProps) => <li className="pl-1" {...props} />,
+  li: (props: ListItemProps) => <li className="text-pretty" {...props} />,
   em: (props: ComponentPropsWithoutRef<'em'>) => <em className="italic" {...props} />,
   strong: (props: ComponentPropsWithoutRef<'strong'>) => (
-    <strong className="font-[620]" {...props} />
+    <strong className="font-bold text-ink" {...props} />
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
     const className = textLinkClass;
@@ -151,22 +167,34 @@ const components = {
       </a>
     );
   },
+  // Markdown images arrive inside a <p>, so this is a span-based pseudo-figure.
   img: ({ alt, ...props }: ImgProps) => (
-    <span className="block my-10 text-center">
-      <img
-        className="mx-auto border border-hair max-w-[min(100%,640px)] h-auto"
-        alt={alt}
-        {...props}
-      />
+    <span className="block text-center">
+      <img className="mx-auto h-auto max-w-[min(100%,640px)] rounded-2xl" alt={alt} {...props} />
       {alt && (
-        <span className="block mt-3 font-serif italic text-[0.9375rem] text-muted">{alt}</span>
+        <span className="mt-3 block font-serif text-[0.9375rem] leading-[1.45] text-muted italic">
+          {alt}
+        </span>
       )}
     </span>
   ),
-  code: ({ children, ...props }: ComponentPropsWithoutRef<'code'>) => {
-    const codeHTML = highlight(children as string);
-    return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+  // Fenced code: highlight only fences that name a language (plan KTD9).
+  pre: ({ children }: ComponentPropsWithoutRef<'pre'>) => {
+    const fence = React.isValidElement<FenceProps>(children) ? children.props : {};
+    const src = typeof fence.children === 'string' ? fence.children : null;
+    const className = fence.className;
+    let code: ReactNode;
+    if (src !== null && className?.startsWith('language-')) {
+      code = <code className={className} dangerouslySetInnerHTML={{ __html: highlight(src) }} />;
+    } else if (src !== null) {
+      code = <code className={className}>{src}</code>;
+    } else {
+      code = children;
+    }
+    return <CodeBlock>{code}</CodeBlock>;
   },
+  // Inline code only; styled in globals.css, never highlighted.
+  code: (props: ComponentPropsWithoutRef<'code'>) => <code {...props} />,
   Table: ({
     data,
     caption,
@@ -174,16 +202,12 @@ const components = {
     data: { headers: string[]; rows: string[][] };
     caption?: string;
   }) => (
-    <table className="font-sans text-[15px] text-ink border border-hair">
-      {caption && <caption className="text-muted">{caption}</caption>}
+    <table className="text-[0.9375rem] text-ink">
+      {caption && <caption className="pb-2 text-left text-muted">{caption}</caption>}
       <thead>
         <tr>
           {data.headers.map((header, index) => (
-            <th
-              key={index}
-              scope="col"
-              className="border border-hair px-3 py-2 text-left font-semibold"
-            >
+            <th key={index} scope="col" className="border border-hair px-3 py-2 text-left font-bold">
               {header}
             </th>
           ))}
@@ -204,84 +228,76 @@ const components = {
   ),
   blockquote: (props: BlockquoteProps) => (
     <blockquote
-      className="pl-6 italic font-serif text-[1.1875rem] leading-[1.7] text-muted [&>p]:italic [&>p]:font-serif [&>p]:text-[1.1875rem] [&>p]:leading-[1.7] [&>p]:text-muted"
+      className="prose-quote font-serif text-[1.25rem] leading-[1.55] text-muted italic [&_p]:font-serif [&_p]:text-[1.25rem] [&_p]:leading-[1.55] [&_p]:text-muted [&_p]:italic"
       {...props}
     />
   ),
-  hr: () => (
-    <div
-      aria-hidden="true"
-      className="my-12 text-center font-sans text-faint text-[1.2rem] tracking-[0.45em] indent-[0.45em]"
-    >
-      * * *
-    </div>
-  ),
-  // Custom components
+  hr: () => <hr className="prose-hr" />,
+  // Custom components. None may wrap children in a <p> (docs/solutions/ui-bugs/
+  // mdx-component-p-wrapper-invalid-nesting.md).
   Callout: ({ children, type = 'insight' }: CalloutProps) => (
-    <div className="my-8 rounded-sm border border-hair bg-raise p-5">
-      <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.09em] text-faint mb-2">
+    <div className="callout rounded-[20px] border border-hair bg-paper px-8 py-7 mob:px-[22px] mob:py-6">
+      <p
+        className={`text-[0.8125rem] leading-[1.4] font-bold tracking-[0.08em] uppercase ${calloutLabelColour[type]}`}
+      >
         {calloutLabels[type]}
       </p>
-      {children}
+      <div className={`mt-2.5 ${proseText} [&>*+*]:mt-[1.1em]`}>{children}</div>
     </div>
   ),
   PullQuote: ({ children, author }: PullQuoteProps) => (
-    <figure className="my-12 mx-auto max-w-[34rem] text-center">
-      <div className="w-11 h-px bg-hair mx-auto" />
-      <blockquote className="italic font-serif text-[clamp(1.45rem,3vw,1.8rem)] leading-[1.35] my-6 text-ink">
+    <figure className="pull-quote text-[1.1875rem] mob:text-[1.125rem]">
+      <blockquote className="text-[clamp(1.375rem,2vw,1.625rem)] leading-[1.38] font-medium tracking-[-0.015em] text-pretty text-ink mob:text-[1.3125rem] [&_p]:text-[clamp(1.375rem,2vw,1.625rem)] [&_p]:leading-[1.38] [&_p]:font-medium [&_p]:tracking-[-0.015em] [&_p]:text-ink mob:[&_p]:text-[1.3125rem] [&>*+*]:mt-[0.8em]">
         {children}
       </blockquote>
-      <div className="w-11 h-px bg-hair mx-auto" />
       {author && (
-        <figcaption className="font-sans text-[13px] text-faint mt-2">{author}</figcaption>
+        <figcaption className="mt-3 text-[0.9375rem] font-medium tracking-[0.005em] text-faint">
+          {author}
+        </figcaption>
       )}
     </figure>
   ),
   Divider: ({ style = 'dots' }: DividerProps) => {
-    if (style === 'space') return <div className="my-12" />;
-    if (style === 'line') return <hr className="my-10 border-hair" />;
-    if (style === 'wave')
-      return (
-        <div className="my-10 flex items-center justify-center text-faint text-2xl tracking-widest">
-          ~ ~ ~
-        </div>
-      );
-    return (
-      <div className="my-10 flex items-center justify-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-hair" />
-        <span className="h-1.5 w-1.5 rounded-full bg-hair" />
-        <span className="h-1.5 w-1.5 rounded-full bg-hair" />
-      </div>
-    );
+    if (style === 'space') return <div aria-hidden="true" className="h-12" />;
+    return <hr className="prose-hr" />;
   },
   KeyPoint: ({ children }: KeyPointProps) => (
-    <div className="my-8 border-t border-hair pt-5">
-      <div className="font-serif text-[1.0625rem] font-[560] text-ink">{children}</div>
+    <div className="key-point border-t-2 border-ink pt-5 text-[1.3125rem] leading-[1.4] font-medium text-ink [&_p]:text-[1.3125rem] [&_p]:leading-[1.4] [&_p]:font-medium [&_p]:tracking-normal [&_p]:text-ink [&>*+*]:mt-[0.8em]">
+      {children}
     </div>
   ),
   Scenario: ({ speaker, children }: ScenarioProps) => (
-    <div className="my-6 pl-6">
-      <span className="block mb-1 font-sans text-[13px] font-semibold uppercase tracking-wide text-faint">
+    <div className="scenario">
+      <span className="block text-[0.9375rem] font-medium tracking-[0.005em] text-faint">
         {speaker}
       </span>
-      <span className="italic font-serif text-muted">{children}</span>
+      <div className="mt-1 pl-6 font-serif text-[1.25rem] leading-[1.55] text-muted italic [&_p]:font-serif [&_p]:text-[1.25rem] [&_p]:leading-[1.55] [&_p]:text-muted [&_p]:italic [&>*+*]:mt-[0.8em]">
+        {children}
+      </div>
     </div>
   ),
   TLDR: ({ children }: TLDRProps) => (
-    <div className="border-t border-hair pt-6 mt-12 mb-8">
-      <div className="font-sans text-[11px] font-semibold uppercase tracking-[0.09em] text-accent mb-3">
-        TL;DR
+    <section className="tldr col-wide mx-auto w-full max-w-[736px] rounded-[28px] bg-blond px-12 pt-10 pb-11 mob:rounded-[22px] mob:px-[26px] mob:pt-8 mob:pb-[34px]">
+      <h2 className="text-[1.375rem] leading-[1.2] font-bold tracking-[-0.015em] text-ink">TL;DR</h2>
+      <div className="mt-3.5 text-[1.125rem] leading-[1.6] text-ink mob:text-[1.0625rem] [&_li]:text-ink [&_p]:text-[1.125rem] [&_p]:leading-[1.6] [&_p]:text-ink mob:[&_p]:text-[1.0625rem] [&>*+*]:mt-[1em]">
+        {children}
       </div>
-      <div className="font-serif text-[1.0625rem] leading-[1.62] text-muted">{children}</div>
-    </div>
+    </section>
   ),
   Collapsible: ({ title, children }: CollapsibleProps) => (
-    <details className="my-6 group">
-      <summary className="cursor-pointer select-none font-serif font-[560] text-ink hover:text-accent transition-colors list-none flex items-center gap-2">
-        <span className="text-faint transition-transform group-open:rotate-90">&#9654;</span>
+    <details className="collapsible group">
+      <summary className="flex cursor-pointer list-none items-center gap-2.5 text-[1.0625rem] font-medium text-ink transition-colors select-none hover:text-accent [&::-webkit-details-marker]:hidden">
+        <svg
+          viewBox="0 0 16 16"
+          aria-hidden="true"
+          focusable="false"
+          className="h-3.5 w-3.5 shrink-0 text-accent transition-transform group-open:rotate-90"
+        >
+          <path d="M5.5 2.5 11 8l-5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2" />
+        </svg>
         {title}
       </summary>
-      <div className="mt-3">{children}</div>
+      <div className="mt-[1.1em] [&>*+*]:mt-[1.1em]">{children}</div>
     </details>
   ),
   Timeline: ({ children }: TimelineProps) => (
@@ -302,24 +318,36 @@ const components = {
       )}
     </div>
   ),
-  Figure: ({ src, alt, caption, credit, width }: FigureProps) => (
-    <figure className="my-10 text-center">
-      <img
-        src={src}
-        alt={alt}
-        className={`mx-auto border border-hair h-auto${width ? '' : ' max-w-[min(100%,640px)]'}`}
-        style={width ? { maxWidth: width } : undefined}
-      />
-      {caption && (
-        <figcaption className="mt-3 font-serif italic text-[0.9375rem] text-muted">
-          {caption}
-          {credit && (
-            <span className="not-italic font-sans text-[12px] text-faint"> · {credit}</span>
-          )}
-        </figcaption>
-      )}
-    </figure>
-  ),
+  Figure: ({ src, alt, caption, credit, width, hero }: FigureProps) => {
+    if (hero) {
+      return (
+        <figure className="hero-fig col-wide">
+          <HeroImage src={src} alt={alt} />
+        </figure>
+      );
+    }
+    return (
+      <figure className="prose-figure text-center">
+        <img
+          src={src}
+          alt={alt}
+          className="mx-auto h-auto rounded-2xl"
+          style={{ maxWidth: width ? `min(100%, ${width})` : 'min(100%, 640px)' }}
+        />
+        {caption && (
+          <figcaption className="mt-3 font-serif text-[0.9375rem] leading-[1.45] text-muted italic">
+            {caption}
+            {credit && (
+              <span className="font-sans font-medium tracking-[0.005em] text-faint not-italic">
+                {' · '}
+                {credit}
+              </span>
+            )}
+          </figcaption>
+        )}
+      </figure>
+    );
+  },
   Lede: ({ children }: LedeProps) => <div className="lede">{children}</div>,
   PostSchema: ({ title, description, date, lastModified, slug, image }: PostSchemaProps) => (
     <ArticleJsonLd

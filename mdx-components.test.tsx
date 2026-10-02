@@ -67,3 +67,46 @@ describe('mdx-components <a>', () => {
     }
   });
 });
+
+describe('mdx-components <pre> (fenced code)', () => {
+  const Pre = components.pre;
+  const Code = components.code;
+
+  function renderFence(source: string, className?: string) {
+    const { container } = render(
+      <Pre>
+        <Code className={className}>{source}</Code>
+      </Pre>,
+    );
+    const pre = container.querySelector('pre');
+    if (!pre) throw new Error('expected a <pre> to be rendered');
+    return { container, pre };
+  }
+
+  it('renders an unlabelled fence as plain text, not syntax-highlighted', () => {
+    const source = "If you do this, don't worry.\n";
+    const { pre } = renderFence(source);
+
+    expect(pre.querySelector('[class^="sh__"]')).toBeNull();
+    expect(pre.textContent).toBe(source);
+  });
+
+  it('highlights a fence that names a language', () => {
+    const source = 'const answer = 42;\n';
+    const { pre } = renderFence(source, 'language-js');
+
+    expect(pre.querySelector('[class^="sh__"]')).not.toBeNull();
+    expect(pre.textContent).toBe(source);
+  });
+
+  it('labels the block as a focusable region and keeps Copy outside the <pre>', () => {
+    const { container, pre } = renderFence('echo hi\n');
+
+    expect(pre).toHaveAttribute('role', 'region');
+    expect(pre).toHaveAttribute('aria-label', 'Code sample');
+    expect(pre).toHaveAttribute('tabindex', '0');
+    const button = container.querySelector('button.copy');
+    expect(button).not.toBeNull();
+    expect(pre.contains(button)).toBe(false);
+  });
+});
