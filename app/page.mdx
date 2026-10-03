@@ -1,19 +1,22 @@
-# Ben Stewart
+export const startHere = ["sustainable", "i-built-this-blog-with-claude-code", "multi-agent-ai-strategy"];
+export const favourites = ["ai-made-writing-free", "the-three-pound-question", "ralph-isnt-the-point"];
 
-I run a 250-engineer org at Skyscanner that's going through the AI transition. I write field reports about what's working, what's breaking, and what the data says, in plain English.
+<HomeHero
+  tagline="Engineer turned leader of humans and robots."
+  place="Glasgow"
+  photo={{ src: "/images/ben-stewart.jpg", alt: "Ben Stewart on stage, speaking into a microphone" }}
+>
+
+I run engineering teams that are working out AI in real time, with real customers on the other end. I write field reports about what's working, what's breaking, and what the data says, in plain English.
 
 I [build things](/bio) and help teams build better. I've spent years leading engineering teams; turning fuzzy strategy into real systems.
 
 [Reach out](mailto:ben@benstewart.ai) if anything interests you or want to talk [speaking](/speaking) gigs.
 
-## Start here
+</HomeHero>
 
-Three posts that introduce what this blog is about.
+<StartHere title="Start here" description="Three posts that introduce what this blog is about." slugs={startHere} />
 
-<PostList slugs={["sustainable", "i-built-this-blog-with-claude-code", "multi-agent-ai-strategy"]} />
+<Favourites title="Some of my favourite writing" slugs={favourites} />
 
-## Some of my favourite writing
-
-<PostList slugs={["ai-made-writing-free", "the-three-pound-question", "ralph-isnt-the-point"]} />
-
-[View all posts](/posts)
+<ArchiveDirectory title="Archive" exclude={[...startHere, ...favourites]} />

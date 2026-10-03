@@ -143,7 +143,7 @@ describe('PersonJsonLd', () => {
     expect(parsed['@type']).toBe('Person');
     expect(parsed.name).toBe('Ben Stewart');
     expect(parsed.url).toBe('https://www.benstewart.ai');
-    expect(parsed.jobTitle).toBe('Engineering Leader');
+    expect(parsed.jobTitle).toBe('VP of Engineering');
     expect(parsed.worksFor.name).toBe('Skyscanner');
     expect(parsed.sameAs).toContain(
       'https://www.linkedin.com/in/ben-stewart-90944595/',

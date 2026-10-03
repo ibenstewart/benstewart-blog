@@ -1,73 +1,42 @@
 @import 'tailwindcss';
 
+/* Glasgow Civic breakpoints (DESIGN.md 3.4, plan KTD14). Inclusive max-width,
+   largest first so the narrower ones win. Use these, not sm/md/lg or max-[...]. */
+@custom-variant tab (@media (max-width: 1080px));
+@custom-variant cards (@media (max-width: 960px));
+@custom-variant mob (@media (max-width: 760px));
+@custom-variant tight (@media (max-width: 380px));
+
+/* Light theme only (DESIGN.md 2). */
 :root {
+  color-scheme: light;
+
+  --paper: #FDFCFA;
+  --raise: #F6F1E7;
+  --ink: #1C2731;
+  --muted: #4E5964;
+  --faint: #5E6873;
+  --hair: #DDD7CC;
+  --accent: #004A93;
+  --accent-deep: #003A75;
+  --blond: #EDE3D1;
+  --blond-line: #E4D8C2;
+  --red: #9C4A33;
+
   --sh-identifier: var(--ink);
-  --sh-keyword: oklch(50% .13 300);
-  --sh-string: oklch(48% .11 150);
-  --sh-class: oklch(50% .12 260);
-  --sh-jsxliterals: oklch(50% .12 260);
-  --sh-property: oklch(48% .1 200);
-  --sh-entity: oklch(52% .13 80);
-  --sh-sign: var(--muted);
+  --sh-keyword: #004A93;
+  --sh-string: #2E6B39;
+  --sh-class: #8A3F2B;
+  --sh-jsxliterals: #8A3F2B;
+  --sh-property: #1D5E6E;
+  --sh-entity: #7A5200;
+  --sh-sign: var(--faint);
   --sh-comment: var(--faint);
 
-  --paper: oklch(97.5% .003 250);
-  --raise: oklch(99.2% .002 250);
-  --ink: oklch(24% .012 260);
-  --muted: oklch(48% .012 260);
-  --faint: oklch(62% .01 255);
-  --hair: oklch(89.5% .005 250);
-  --accent: oklch(45% .14 20);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --paper: oklch(17.5% .01 260);
-    --raise: oklch(22% .01 260);
-    --ink: oklch(89% .006 250);
-    --muted: oklch(66% .008 250);
-    --faint: oklch(55% .008 252);
-    --hair: oklch(29% .008 255);
-    --accent: oklch(70% .11 25);
-
-    --sh-identifier: var(--ink);
-    --sh-class: #7aa2f7;
-    --sh-sign: #89ddff;
-    --sh-string: #9ece6a;
-    --sh-keyword: #bb9af7;
-    --sh-comment: #565f89;
-    --sh-jsxliterals: #7aa2f7;
-    --sh-property: #73daca;
-    --sh-entity: #e0af68;
-  }
-
-  :root:not([data-theme='light']) img {
-    filter: brightness(.88);
-  }
-}
-
-:root[data-theme='dark'] {
-  --paper: oklch(17.5% .01 260);
-  --raise: oklch(22% .01 260);
-  --ink: oklch(89% .006 250);
-  --muted: oklch(66% .008 250);
-  --faint: oklch(55% .008 252);
-  --hair: oklch(29% .008 255);
-  --accent: oklch(70% .11 25);
-
-  --sh-identifier: var(--ink);
-  --sh-class: #7aa2f7;
-  --sh-sign: #89ddff;
-  --sh-string: #9ece6a;
-  --sh-keyword: #bb9af7;
-  --sh-comment: #565f89;
-  --sh-jsxliterals: #7aa2f7;
-  --sh-property: #73daca;
-  --sh-entity: #e0af68;
-}
-
-:root[data-theme='dark'] img {
-  filter: brightness(.88);
+  --gutter: max(clamp(20px, 4.45vw, 64px), env(safe-area-inset-left), env(safe-area-inset-right));
+  --section: clamp(112px, 13vw, 192px);
+  --measure: 640px;
+  --hang: 24px;
 }
 
 @theme {
@@ -78,132 +47,531 @@
   --color-faint: var(--faint);
   --color-hair: var(--hair);
   --color-accent: var(--accent);
-  --font-serif: var(--font-petrona), Georgia, serif;
-  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --color-accent-deep: var(--accent-deep);
+  --color-blond: var(--blond);
+  --color-blond-line: var(--blond-line);
+  --color-red: var(--red);
+  --font-sans: var(--font-schibsted), 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, 'Times New Roman', serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-html {
-  min-width: 360px;
-  scrollbar-gutter: stable;
-}
-
-body {
-  text-rendering: optimizeLegibility;
-}
-
-/* Safe area support for iPhone notch/dynamic island */
-.safe-top {
-  padding-top: max(1.5rem, env(safe-area-inset-top));
-}
-
-.safe-bottom {
-  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
-}
-
-@supports (padding-top: env(safe-area-inset-top)) {
-  .safe-top {
-    padding-top: calc(1.5rem + env(safe-area-inset-top));
+@layer base {
+  html {
+    min-width: 360px;
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
-  .safe-bottom {
-    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (max-width: 760px) {
+    body {
+      font-size: 1rem;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+
+  /* Radius lives in the base layer so rounded-full utilities on pills win. */
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--color-hair);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.84em;
+    font-weight: 400;
+    padding: 0.08em 0.36em;
+    border-radius: 6px;
+    background-color: var(--color-raise);
+    border: 1px solid var(--color-blond-line);
+    color: var(--color-ink);
+  }
+
+  pre {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.62;
+    color: var(--color-ink);
+    tab-size: 2;
+    overflow-x: auto;
+  }
+
+  pre code {
+    font: inherit;
+    background-color: transparent;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  table {
+    display: block;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+    text-align: left;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+
+  /* Remove Safari input shadow on mobile */
+  input[type='text'],
+  input[type='email'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 }
 
-h1,
-h2,
-h3,
-h4 {
-  text-wrap: balance;
-}
+/* Breakout grid on <main> (plan KTD4). Layered so utilities still win. */
+@layer components {
+  .site-container {
+    width: 100%;
+    max-width: calc(1312px + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
 
-::selection {
-  background-color: var(--color-accent);
-  color: var(--color-paper);
-}
+  .page-grid {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(var(--gutter), 1fr)
+      [wide-start] minmax(0, 160px)
+      [content-start] min(var(--measure), 100% - 2 * var(--gutter))
+      [content-end] minmax(0, 160px)
+      [wide-end] minmax(var(--gutter), 1fr)
+      [full-end];
+  }
 
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
+  .page-grid > * {
+    grid-column: content;
+    min-width: 0;
+  }
 
-pre {
-  background-color: var(--color-raise);
-  border: 1px solid var(--color-hair);
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  padding: 1rem;
-  margin: 1.5rem 0;
-  line-height: 1;
-}
+  /* Inherit-only pages (no full-width header or hero first) still need air below the masthead. */
+  .page-grid:not(:has(> .col-full:first-child)) {
+    padding-top: clamp(48px, 6vw, 96px);
+  }
 
-pre::-webkit-scrollbar {
-  display: none;
-}
+  /* Prose rhythm: skip the first block after scripts, the post header and the hero. Components override. */
+  .page-grid > :where(:not(script, .post-head, .hero-fig) + *) {
+    margin-top: 1.1em;
+  }
 
-pre {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+  /* The homepage hero already shows the name at full size, so the masthead
+     wordmark steps aside there. visibility keeps the nav pill in place and
+     takes the link out of the tab order and accessibility tree. */
+  body:has(.home-hero) .masthead-wordmark {
+    visibility: hidden;
+  }
 
-code {
-  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-  font-size: 14px;
-  padding: 0.2em 0.4em;
-  border-radius: 0.3em;
-  background-color: var(--color-raise);
-  border: 1px solid var(--color-hair);
-  color: var(--color-ink);
-}
+  .page-grid > .col-wide {
+    grid-column: wide;
+  }
 
-pre code {
-  background-color: transparent;
-  padding: 0;
-  border: none;
-  font-size: 14px;
-  line-height: 1.5;
-}
+  .page-grid > .col-full {
+    grid-column: full;
+    width: 100%;
+    max-width: calc(1312px + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
 
-pre code span {
-  font-weight: 500;
-}
+  /* ---------- Post page (DESIGN.md 4.3) ---------- */
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) pre {
-    background-color: oklch(14% .012 260);
-    border-color: oklch(26% .01 260);
+  /* Header and hero spacing (KTD4). The header's bottom margin drops when a hero
+     follows it; PostSchema/FAQJsonLd scripts may sit between them. */
+  .page-grid > .post-head {
+    margin-bottom: clamp(64px, 7vw, 104px);
+  }
+  .page-grid > .post-head:has(+ .hero-fig, + script + .hero-fig, + script + script + .hero-fig) {
+    margin-bottom: 0;
+  }
+  .page-grid > .hero-fig {
+    margin-top: clamp(48px, 4.5vw, 64px);
+    margin-bottom: clamp(64px, 7vw, 104px);
+  }
+
+  /* Hero figure: gentle arch, natural ratio, hidden if the image fails (KTD8). */
+  .hero-fig .frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: clamp(32px, 9vw, 128px) clamp(32px, 9vw, 128px) 0 0;
+  }
+  .hero-fig .frame img {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    color: transparent;
+    font-size: 0;
+  }
+  /* Only renders when the image is broken: hides the icon even without JS. */
+  .hero-fig .frame img::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: var(--color-paper);
+  }
+  .hero-fig:has(.is-empty) {
+    display: none;
+  }
+
+  /* Block rhythm on top of the default 1.1em. Order matters (same specificity):
+     "after a block" rules, then each block's own top margin, then rules and
+     headings, so a heading always gets its own space. */
+  .page-grid > .pull-quote + * {
+    margin-top: 1.5em;
+  }
+  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible) + * {
+    margin-top: 1.6em;
+  }
+  .page-grid > .pull-quote {
+    margin-top: 1.7em;
+  }
+  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible) {
+    margin-top: 1.6em;
+  }
+  .page-grid > .tldr {
+    margin-top: 72px;
+  }
+  .page-grid > .prose-hr,
+  .page-grid > .prose-hr + * {
+    margin-top: 2.6em;
+  }
+  .page-grid > .prose-h2 {
+    margin-top: 2.7em;
+  }
+  .page-grid > .prose-h3 {
+    margin-top: 2em;
+  }
+  .page-grid > .prose-h2 + * {
+    margin-top: 0.8em;
+  }
+  /* The first block after the header, a hero or a script never adds its own top
+     margin: the header and hero already carry the gap (DESIGN.md 4.3). A hero
+     keeps its own top margin. Higher specificity than the block rules above. */
+  .page-grid > :is(script, .post-head, .hero-fig) + :not(.hero-fig, script) {
+    margin-top: 0;
+  }
+  /* A hero that failed to load is hidden; restore the spacing it carried. */
+  .page-grid > .hero-fig:has(.is-empty) + * {
+    margin-top: 1.1em;
+  }
+  .page-grid > :is(.post-head, .post-head + script, .post-head + script + script) + .hero-fig:has(.is-empty) + * {
+    margin-top: clamp(64px, 7vw, 104px);
+  }
+  @media (max-width: 760px) {
+    .page-grid > .tldr {
+      margin-top: 56px;
+    }
+    .page-grid > .prose-h2 {
+      margin-top: 2.4em;
+    }
+    .page-grid > .prose-h2 + * {
+      margin-top: 0.8em;
+    }
+  }
+
+  /* Numbered lists: blue numerals hang in the margin (KTD13: class-scoped). */
+  .prose-ol {
+    counter-reset: step;
+  }
+  .prose-ol > li {
+    position: relative;
+    counter-increment: step;
+  }
+  .prose-ol > li + li {
+    margin-top: 0.85em;
+  }
+  .prose-ol > li::before {
+    content: counter(step) / '';
+    position: absolute;
+    top: 0;
+    right: calc(100% + var(--hang));
+    font-weight: 700;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Bulleted lists: 7px faint dots, 28px text indent. */
+  .prose-ul > li {
+    position: relative;
+    padding-left: 28px;
+  }
+  .prose-ul > li + li {
+    margin-top: 0.35em;
+  }
+  .prose-ul > li::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 0.66em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-faint);
+  }
+  li > .prose-ul,
+  li > .prose-ol {
+    margin-top: 0.6em;
+  }
+  li > p + p {
+    margin-top: 1.1em;
+  }
+
+  /* Pull quote: 4px blue bar with rounded ends, hanging in the margin. */
+  .pull-quote > blockquote {
+    position: relative;
+  }
+  .pull-quote > blockquote::before,
+  .prose-quote::before {
+    content: '';
+    position: absolute;
+    top: 0.3rem;
+    bottom: 0.3rem;
+    right: calc(100% + var(--hang) - 2px);
+    width: 4px;
+    border-radius: 2px;
+    background: var(--color-accent);
+  }
+  /* Markdown blockquote: the quieter cousin, 3px hair bar. */
+  .prose-quote {
+    position: relative;
+  }
+  .prose-quote::before {
+    width: 3px;
+    border-radius: 1.5px;
+    background: var(--color-hair);
+  }
+
+  /* hr and Divider: a hair rule across the column. */
+  /* Code block (KTD9): bleeds 40px at desktop, scrolls inside itself. */
+  .code-block {
+    position: relative;
+    margin-inline: -40px;
+    background: var(--color-raise);
+    border: 1px solid var(--color-blond-line);
+    border-radius: 18px;
+  }
+  .code-block pre {
+    padding: 32px 36px 36px;
+    border-radius: 18px;
+  }
+  .code-block pre:focus-visible {
+    outline-offset: -3px;
+  }
+  .code-block .copy {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 16px;
+    border: 1px solid var(--color-blond-line);
+    border-radius: 999px;
+    background: var(--color-paper);
+    font: 500 0.875rem/1 var(--font-sans);
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .code-block .copy:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .code-block .copy[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 960px) {
+    .prose-ol > li {
+      padding-left: 32px;
+    }
+    .prose-ol > li::before {
+      right: auto;
+      left: 0;
+    }
+    .pull-quote > blockquote,
+    .prose-quote {
+      padding-left: 24px;
+    }
+    .pull-quote > blockquote::before,
+    .prose-quote::before {
+      right: auto;
+      left: 0;
+    }
+    .code-block {
+      margin-inline: 0;
+    }
+    .code-block pre {
+      padding-inline: 30px;
+    }
+    .code-block.has-copy pre {
+      padding-top: 60px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .code-block,
+    .code-block pre {
+      border-radius: 14px;
+    }
+    .code-block pre {
+      padding: 24px 22px 26px;
+      font-size: 0.8125rem;
+    }
+    .code-block.has-copy pre {
+      padding-top: 60px;
+    }
+    .code-block .copy {
+      top: 12px;
+      right: 12px;
+    }
   }
 }
 
-:root[data-theme='dark'] pre {
-  background-color: oklch(14% .012 260);
-  border-color: oklch(26% .01 260);
+/* Post cards (DESIGN.md 4.2 favourites, 4.3 Keep reading; plan KTD10). Shared by
+   PostCard on the homepage and at the end of posts. Spacing above the list is set
+   by the caller. */
+@layer components {
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+
+  .post-card {
+    position: relative;
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    border-top: 2px solid var(--color-ink);
+    padding-top: 24px;
+  }
+
+  .post-card-title {
+    font-weight: 500;
+    font-size: clamp(1.375rem, 2vw, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    text-wrap: balance;
+    padding-right: 16px;
+    transition: color 150ms;
+  }
+
+  .post-card:hover .post-card-title {
+    color: var(--color-accent);
+  }
+
+  .post-card-excerpt {
+    margin-top: 12px;
+    padding-right: 24px;
+    font-weight: 400;
+    font-size: 1.1875rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+
+  .post-card-meta {
+    margin-top: 18px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    letter-spacing: 0.005em;
+    color: var(--color-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Whole-card (or whole-row) link: the overlay takes the click and the focus ring. */
+  .post-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .post-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .post-link:focus-visible {
+    outline: none;
+  }
+  .post-link:focus-visible::after {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 960px) {
+    .cards {
+      grid-template-columns: 1fr;
+      row-gap: 48px;
+    }
+    .post-card {
+      display: block;
+      grid-row: auto;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      row-gap: 40px;
+    }
+    .post-card-excerpt {
+      font-size: 1.0625rem;
+    }
+    .post-card-meta {
+      font-size: 0.875rem;
+    }
+  }
 }
 
-hr {
-  color: var(--color-gray-200);
-}
-
-/* Remove Safari input shadow on mobile */
-input[type='text'],
-input[type='email'] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
-  text-align: left;
-}
-
+/* Unlayered on purpose: no utility can reach ::first-letter (plan KTD15). */
 .lede > p::first-letter {
   float: left;
   font-size: 4.3rem;
   line-height: 0.8;
   padding: 0.35rem 0.6rem 0 0;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-ink);
 }

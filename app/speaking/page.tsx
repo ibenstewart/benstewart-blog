@@ -94,14 +94,14 @@ const articles: { title: string; publication: string; url: string; date: string 
 export default function SpeakingPage() {
   return (
     <div>
-      <h1 className="font-serif text-2xl md:text-3xl font-semibold text-ink mb-4">Speaking</h1>
-      <p className="font-serif text-[1.1875rem] leading-[1.7] text-muted mb-12">
+      <h1 className="font-sans text-3xl font-bold tracking-[-0.025em] text-ink mb-4 mob:text-2xl">Speaking</h1>
+      <p className="font-sans text-[1.1875rem] leading-[1.62] text-muted mb-12">
         Conference talks, podcast appearances, and articles about engineering leadership.
       </p>
 
       {videos.length > 0 && (
         <section>
-          <h2 className="font-serif text-[1.625rem] font-semibold text-ink mt-12 mb-5">Videos</h2>
+          <h2 className="font-sans text-[1.625rem] font-bold tracking-[-0.025em] text-ink mt-12 mb-5">Videos</h2>
           <div className="grid gap-8">
             {videos.map((video, i) => (
               <VideoItem key={i} {...video} />
@@ -112,7 +112,7 @@ export default function SpeakingPage() {
 
       {podcasts.length > 0 && (
         <section>
-          <h2 className="font-serif text-[1.625rem] font-semibold text-ink mt-12 mb-5">Podcasts</h2>
+          <h2 className="font-sans text-[1.625rem] font-bold tracking-[-0.025em] text-ink mt-12 mb-5">Podcasts</h2>
           <div>
             {podcasts.map((podcast, i) => (
               <PodcastItem key={i} {...podcast} />
@@ -123,7 +123,7 @@ export default function SpeakingPage() {
 
       {articles.length > 0 && (
         <section>
-          <h2 className="font-serif text-[1.625rem] font-semibold text-ink mt-12 mb-5">Articles</h2>
+          <h2 className="font-sans text-[1.625rem] font-bold tracking-[-0.025em] text-ink mt-12 mb-5">Articles</h2>
           <div>
             {articles.map((article, i) => (
               <ArticleItem key={i} {...article} />
@@ -133,7 +133,7 @@ export default function SpeakingPage() {
       )}
 
       {videos.length === 0 && podcasts.length === 0 && articles.length === 0 && (
-        <p className="font-serif italic text-muted">Content coming soon...</p>
+        <p className="font-sans text-muted">Content coming soon...</p>
       )}
     </div>
   );
