@@ -28,6 +28,8 @@ type ImgProps = ComponentPropsWithoutRef<'img'>;
 type CalloutProps = {
   children: ReactNode;
   type?: 'insight' | 'warning' | 'tip' | 'story';
+  /** Overrides the type's default label, e.g. "Try it on Monday". */
+  label?: string;
 };
 
 type PullQuoteProps = {
@@ -241,12 +243,12 @@ const components = {
   hr: () => <hr className="prose-hr" />,
   // Custom components. None may wrap children in a <p> (docs/solutions/ui-bugs/
   // mdx-component-p-wrapper-invalid-nesting.md).
-  Callout: ({ children, type = 'insight' }: CalloutProps) => (
+  Callout: ({ children, type = 'insight', label }: CalloutProps) => (
     <div className="callout rounded-[20px] border border-hair bg-paper px-8 py-7 mob:px-[22px] mob:py-6">
       <p
         className={`text-[0.8125rem] leading-[1.4] font-bold tracking-[0.08em] uppercase ${calloutLabelColour[type]}`}
       >
-        {calloutLabels[type]}
+        {label ?? calloutLabels[type]}
       </p>
       <div className={`mt-2.5 ${proseText} [&>*+*]:mt-[1.1em]`}>{children}</div>
     </div>

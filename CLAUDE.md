@@ -67,7 +67,9 @@ Available components in `mdx-components.tsx`:
 | Component | Usage | Description |
 |-----------|-------|-------------|
 | `<KeyPoint>` | `<KeyPoint>Important text</KeyPoint>` | Highlighted box for key takeaways |
-| `<Callout>` | `<Callout type="insight\|warning\|tip\|story">` | Quiet outlined panel (1px hair border, 20px radius) with a small uppercase label (Insight/Worth knowing/Try this/Story); blue label for insight and tip, red for warning, grey for story |
+| `<Callout>` | `<Callout type="insight\|warning\|tip\|story" label="Optional">` | Quiet outlined panel (1px hair border, 20px radius) with a small uppercase label (Insight/Worth knowing/Try this/Story, or `label` to override); blue label for insight and tip, red for warning, grey for story |
+| `<Quadrant>` | `<Quadrant x={["Easy", "Hard"]} y={["Expensive", "Cheap"]} cells={[...4]} />` | 2x2 grid with axis labels; each cell has `level`, `title`, `example` and optional `off` (dashed, struck-through). Cells stack on mobile and name their own row and column |
+| `<Stats>` | `<Stats items={[{ value: "24", label: "sessions" }]} />` | Row of big accent numerals with labels under a 2px ink rule; 4 across, 2 on mobile |
 | `<PullQuote>` | `<PullQuote author="Name">Quote</PullQuote>` | Large styled quote with attribution |
 | `<Scenario>` | `<Scenario speaker="Name">Dialog</Scenario>` | Conversation/dialog formatting |
 | `<TLDR>` | `<TLDR>Summary</TLDR>` | Article summary box |
