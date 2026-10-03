@@ -13,6 +13,8 @@ import { ArchiveDirectory } from './app/components/home/ArchiveDirectory';
 import { textLinkClass } from './app/components/TextLink';
 import { CodeBlock } from './app/components/CodeBlock';
 import { HeroImage } from './app/components/HeroImage';
+import { Quadrant } from './app/components/Quadrant';
+import { Stats } from './app/components/Stats';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -368,6 +370,8 @@ const components = {
   PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
   PostHeader: (props: { title: string; slug: string }) => <PostHeader {...props} />,
   PostList: (props: { slugs?: string[] }) => <PostList {...props} />,
+  Quadrant,
+  Stats,
   // Homepage sections (DESIGN.md 4.2, plan KTD5).
   HomeHero,
   StartHere,

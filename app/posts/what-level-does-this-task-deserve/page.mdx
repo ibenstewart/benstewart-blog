@@ -28,6 +28,8 @@ export const metadata = {
   image="https://www.benstewart.ai/images/posts/what-level-does-this-task-deserve-0.png"
 />
 
+<Figure hero src="/images/posts/what-level-does-this-task-deserve-0.png" alt="A single trading card reading Level 5, range 3 to 7, beside a hand of five task cards: thinking work at Level 3, finishing a pattern at 4, anything an exec reads at 5, mechanical fan-out at 7, and a face-down Level 6 card marked switched off." />
+
 <Lede>
 Somebody printed their AI level on a trading card and I haven't stopped thinking about it. Jaatster's card says LEVEL 8 ORCHESTRATOR in big pixel type, and it's a great piece of work. It's also where this post came from, so credit first; [here's the tweet](#tweet-link-todo).
 </Lede>
@@ -37,6 +39,13 @@ The bit I keep coming back to is the footer. In much smaller type it says "Workf
 The cards come from [Every's Eight Levels of AI Adoption](https://every.to/guides/the-eight-levels-of-ai-adoption), a prompt that asks you five questions and hands you a level. I took it with one change. I didn't answer the questions; I told the AI to go and read a month of my own session transcripts and grade me on what I'd actually done.
 
 That was 24 sessions, seven of them substantial. The biggest had 22 prompts from me, 388 tool calls and 37 subagents. It came back with Level 5, a range of 3 to 7, confidence medium-high.
+
+<Stats items={[
+  { value: "24", label: "sessions in a month" },
+  { value: "388", label: "tool calls in one session" },
+  { value: "37", label: "subagents in one go" },
+  { value: "5", label: "my level (3 to 7)" },
+]} />
 
 I'd have scored myself higher. Everyone would. You answer five questions thinking about your best day and call it your level.
 
@@ -58,13 +67,16 @@ Before I hand a task to AI now, I ask two things.
 
 Put those on two axes and you get a grid.
 
-<Table data={{
-  headers: ["", "Easy to check", "Hard to check"],
-  rows: [
-    ["Expensive if wrong", "Let it work, then check everything", "Stay close"],
-    ["Cheap if wrong", "Let go, check a sample", "Ask whether it should run at all"],
-  ],
-}} />
+<Quadrant
+  x={["Easy to check", "Hard to check"]}
+  y={["Expensive if wrong", "Cheap if wrong"]}
+  cells={[
+    { level: "5", title: "Let it work, then check everything", example: "Anything an exec is going to read" },
+    { level: "3", title: "Stay close", example: "Thinking work" },
+    { level: "4 / 7", title: "Let go, check a sample", example: "Finishing a pattern, mechanical fan-out" },
+    { level: "6", title: "Ask whether it should run at all", example: "The weekly research sweep, switched off in July", off: true },
+  ]}
+/>
 
 My month fits on it more neatly than I'd like to admit.
 
@@ -76,12 +88,16 @@ Bottom left is where I let go. Once I've done the first few of something and kno
 
 Bottom right is cheap and hard to check. I used to run a weekly automated research sweep, and nothing it found was worth reading without me asking for it first. I switched it off in July. There are no scheduled AI jobs on my machine now, so Level 6 on my card is a zero, and I'm fine with that.
 
-Every ladder I've seen only goes up. The best line I read on this all month was from [u/Fyren-1131 on r/ExperiencedDevs](https://reddit.com/r/ExperiencedDevs/comments/1wo4d8p/comment/pbjxud9/): "I am trying to find the level of AI use that makes sense for me." Somebody with a Level 8 card and somebody switching things off can both be doing that well.
+Every ladder I've seen only goes up. The best line I read on this all month was from [u/Fyren-1131 on r/ExperiencedDevs](https://reddit.com/r/ExperiencedDevs/comments/1wo4d8p/comment/pbjxud9/).
 
-<Figure src="/images/posts/what-level-does-this-task-deserve-0.png" alt="A single trading card reading Level 5, range 3 to 7, beside a hand of five task cards: thinking work at Level 3, finishing a pattern at 4, anything an exec reads at 5, mechanical fan-out at 7, and a face-down Level 6 card marked switched off." caption="If I print a card, it's a hand. One level per task, and one card face down on purpose." credit="Framework: Every's Eight Levels of AI Adoption. Inspiration: Jaatster." />
+<PullQuote author="u/Fyren-1131, r/ExperiencedDevs">I am trying to find the level of AI use that makes sense for me.</PullQuote>
+
+Somebody with a Level 8 card and somebody switching things off can both be doing that well.
+
 
 ## Try it on Monday
 
+<Callout type="tip">
 Write down five or six things you handed to AI last week and put each one in a box. You're looking for two kinds of mismatch.
 
 Something expensive and hard to check that you left to run on its own is the one that burns you, usually weeks later and in front of someone.
@@ -89,8 +105,13 @@ Something expensive and hard to check that you left to run on its own is the one
 Something cheap and checkable that you're still reading line by line is where your week went. You've built a very fast intern and then stood behind it all day.
 
 Then look at the bottom right box. If something's running there, ask what you'd lose by switching it off. For me it was nothing.
+</Callout>
 
 As a senior leader I'm constantly thinking about what this means for how people work today and in the future. If I could change one thing about level frameworks, [Every's](https://every.to/) included, I'd score the task and leave the person out of it. A person's level is just the mix of tasks on their desk this week. Mine moved between 3 and 7 inside a month and I didn't get any better or worse at this in between.
+
+<TLDR>
+I asked AI to grade my AI level from a month of my own session transcripts. It came back as Level 5 with a range of 3 to 7, and where I landed each time depended on the task in front of me. So I've stopped asking what level I am and ask two questions of every task instead. What does it cost if the output is wrong, and can I check what comes back? Score the task and leave the person out of it.
+</TLDR>
 
 ---
 
