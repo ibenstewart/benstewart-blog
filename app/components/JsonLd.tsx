@@ -68,7 +68,7 @@ export function PersonJsonLd() {
     '@type': 'Person',
     name: 'Ben Stewart',
     url: 'https://www.benstewart.ai',
-    jobTitle: 'Engineering Leader',
+    jobTitle: 'VP of Engineering',
     worksFor: {
       '@type': 'Organization',
       name: 'Skyscanner',
