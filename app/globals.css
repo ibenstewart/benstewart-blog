@@ -260,13 +260,13 @@
   .page-grid > .pull-quote + * {
     margin-top: 1.5em;
   }
-  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible) + * {
+  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible, .quadrant, .stats) + * {
     margin-top: 1.6em;
   }
   .page-grid > .pull-quote {
     margin-top: 1.7em;
   }
-  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible) {
+  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible, .quadrant, .stats) {
     margin-top: 1.6em;
   }
   .page-grid > .tldr {

@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import {
   extractMetadataBlock,
+  isDraft,
   matchQuoted,
   matchQuotedProp,
   stripFencedCodeBlocks,
@@ -18,6 +19,8 @@ export type Post = {
   date: string | null;
   /** Estimated reading time in minutes, floored at 1. */
   readingMinutes: number;
+  /** `draft: true` in the metadata export: built, but hidden from every listing. */
+  draft: boolean;
 };
 
 /** Formats an ISO `YYYY-MM-DD` date as a UK-style date, e.g. "9 January 2025". */
@@ -53,9 +56,12 @@ function computeReadingMinutes(content: string): number {
  * Reads every post's page.mdx and returns the parsed frontmatter-style
  * metadata, sorted newest first (ties broken by title). This is the single
  * source of truth for the posts listing, the RSS feed, and post navigation.
+ * Drafts are left out unless `includeDrafts` is set (PostHeader needs them to
+ * render a draft's own header).
  */
 export async function getAllPosts(
-  dir: string = path.join(process.cwd(), 'app', 'posts')
+  dir: string = path.join(process.cwd(), 'app', 'posts'),
+  { includeDrafts = false }: { includeDrafts?: boolean } = {}
 ): Promise<Post[]> {
   const entries = await fs.readdir(dir, {
     recursive: true,
@@ -87,12 +93,14 @@ export async function getAllPosts(
         description: matchQuoted(content, 'description'),
         date: content.match(/date:\s*["'](\d{4}-\d{2}-\d{2})["']/)?.[1] ?? null,
         readingMinutes: computeReadingMinutes(content),
+        draft: isDraft(content),
       };
     })
   );
 
   return posts
     .filter((post): post is Post => post !== null)
+    .filter((post) => includeDrafts || !post.draft)
     .sort(
       (a, b) =>
         (b.date ?? '').localeCompare(a.date ?? '') ||

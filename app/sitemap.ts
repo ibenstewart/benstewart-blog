@@ -1,10 +1,12 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { isDraft } from '../lib/mdx-parsing.mjs';
 
 const SITE_URL = 'https://www.benstewart.ai';
 
 type PostInfo = {
   slug: string;
+  draft: boolean;
   date: string | null;
   lastModified: string | null;
 };
@@ -37,11 +39,12 @@ export async function getPostsWithDates(dir: string): Promise<PostInfo[]> {
         const lastModifiedMatch = content.match(/lastModified:\s*["'](\d{4}-\d{2}-\d{2})["']/);
         return {
           slug: post.slug,
+          draft: isDraft(content),
           date: dateMatch ? dateMatch[1] : null,
           lastModified: lastModifiedMatch ? lastModifiedMatch[1] : null
         };
       } catch {
-        return { slug: post.slug, date: null, lastModified: null };
+        return { slug: post.slug, draft: false, date: null, lastModified: null };
       }
     })
   );
@@ -62,7 +65,7 @@ export default async function sitemap() {
   const postsDirectory = path.join(process.cwd(), 'app', 'posts');
   const postsWithDates = await getPostsWithDates(postsDirectory);
 
-  const posts = postsWithDates.map((post) => {
+  const posts = postsWithDates.filter((post) => !post.draft).map((post) => {
     const freshness = post.lastModified ?? post.date;
     return {
       url: `${SITE_URL}/posts/${post.slug}`,

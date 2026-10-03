@@ -13,6 +13,8 @@ import { ArchiveDirectory } from './app/components/home/ArchiveDirectory';
 import { textLinkClass } from './app/components/TextLink';
 import { CodeBlock } from './app/components/CodeBlock';
 import { HeroImage } from './app/components/HeroImage';
+import { Quadrant } from './app/components/Quadrant';
+import { Stats } from './app/components/Stats';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -26,6 +28,8 @@ type ImgProps = ComponentPropsWithoutRef<'img'>;
 type CalloutProps = {
   children: ReactNode;
   type?: 'insight' | 'warning' | 'tip' | 'story';
+  /** Overrides the type's default label, e.g. "Try it on Monday". */
+  label?: string;
 };
 
 type PullQuoteProps = {
@@ -239,12 +243,12 @@ const components = {
   hr: () => <hr className="prose-hr" />,
   // Custom components. None may wrap children in a <p> (docs/solutions/ui-bugs/
   // mdx-component-p-wrapper-invalid-nesting.md).
-  Callout: ({ children, type = 'insight' }: CalloutProps) => (
+  Callout: ({ children, type = 'insight', label }: CalloutProps) => (
     <div className="callout rounded-[20px] border border-hair bg-paper px-8 py-7 mob:px-[22px] mob:py-6">
       <p
         className={`text-[0.8125rem] leading-[1.4] font-bold tracking-[0.08em] uppercase ${calloutLabelColour[type]}`}
       >
-        {calloutLabels[type]}
+        {label ?? calloutLabels[type]}
       </p>
       <div className={`mt-2.5 ${proseText} [&>*+*]:mt-[1.1em]`}>{children}</div>
     </div>
@@ -368,6 +372,8 @@ const components = {
   PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
   PostHeader: (props: { title: string; slug: string }) => <PostHeader {...props} />,
   PostList: (props: { slugs?: string[] }) => <PostList {...props} />,
+  Quadrant,
+  Stats,
   // Homepage sections (DESIGN.md 4.2, plan KTD5).
   HomeHero,
   StartHere,

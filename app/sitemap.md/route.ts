@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { isDraft } from '../../lib/mdx-parsing.mjs';
 
 const SITE_URL = 'https://www.benstewart.ai';
 
@@ -29,10 +30,11 @@ async function getPostsMetadata(dir: string): Promise<PostMeta[]> {
     })
     .filter((post) => post.slug !== '.');
 
-  const postsWithMeta: PostMeta[] = await Promise.all(
+  const postsWithMeta: (PostMeta | null)[] = await Promise.all(
     posts.map(async (post) => {
       try {
         const content = await fs.readFile(post.filePath, 'utf-8');
+        if (isDraft(content)) return null;
         const titleMatch = content.match(/title:\s*["'](.+?)["']/);
         const descMatch = content.match(/description:\s*["'](.+?)["']/);
         return {
@@ -46,7 +48,7 @@ async function getPostsMetadata(dir: string): Promise<PostMeta[]> {
     })
   );
 
-  return postsWithMeta;
+  return postsWithMeta.filter((post): post is PostMeta => post !== null);
 }
 
 export async function GET() {
