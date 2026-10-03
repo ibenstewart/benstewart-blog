@@ -204,3 +204,27 @@ describe('sitemap default export', () => {
     expect(Number.isNaN(new Date(entry!.lastModified as string).getTime())).toBe(false);
   });
 });
+
+describe('sitemap drafts', () => {
+  let postsDir: string;
+  let root: string;
+
+  beforeEach(async () => {
+    ({ root, postsDir } = await setupPostsDir());
+    vi.spyOn(process, 'cwd').mockReturnValue(root);
+  });
+
+  afterEach(async () => {
+    vi.restoreAllMocks();
+    await rm(root, { recursive: true, force: true });
+  });
+
+  it('leaves draft posts out of the sitemap', async () => {
+    await writePost(postsDir, 'live', `export const metadata = { date: "2024-01-01" };`);
+    await writePost(postsDir, 'wip', `export const metadata = { date: "2024-02-02", draft: true };`);
+
+    const urls = (await sitemap()).map((entry) => entry.url);
+    expect(urls).toContain(`${SITE_URL}/posts/live`);
+    expect(urls).not.toContain(`${SITE_URL}/posts/wip`);
+  });
+});

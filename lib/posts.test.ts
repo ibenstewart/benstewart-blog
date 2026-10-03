@@ -29,6 +29,26 @@ describe('getAllPosts', () => {
     await rm(root, { recursive: true, force: true });
   });
 
+  it('leaves drafts out unless includeDrafts is set', async () => {
+    await writePost(postsDir, 'live', `export const metadata = { title: "Live", date: "2024-01-01" };`);
+    await writePost(postsDir, 'wip', `export const metadata = { title: "Wip", date: "2024-02-02", draft: true };`);
+
+    expect((await getAllPosts(postsDir)).map((p) => p.slug)).toEqual(['live']);
+
+    const all = await getAllPosts(postsDir, { includeDrafts: true });
+    expect(all.map((p) => [p.slug, p.draft])).toEqual([['wip', true], ['live', false]]);
+  });
+
+  it('ignores the word draft outside the metadata block', async () => {
+    await writePost(
+      postsDir,
+      'mentions',
+      `export const metadata = { title: "M", date: "2024-01-01" };\n\nSet draft: true to hide a post.`,
+    );
+
+    expect((await getAllPosts(postsDir)).map((p) => p.slug)).toEqual(['mentions']);
+  });
+
   it('discovers every post directory containing a page.mdx', async () => {
     await writePost(postsDir, 'alpha', `export const metadata = { title: "A", date: "2024-01-01" };`);
     await writePost(postsDir, 'beta', `export const metadata = { title: "B", date: "2024-02-02" };`);
@@ -256,6 +276,7 @@ describe('groupPostsByYear', () => {
     description: null,
     date,
     readingMinutes: 1,
+    draft: false,
   });
 
   it('returns an empty array for no posts', () => {
@@ -301,6 +322,7 @@ describe('pickPosts', () => {
     description: null,
     date: '2024-01-01',
     readingMinutes: 1,
+    draft: false,
   });
 
   it('returns posts in slug order and skips unknown slugs', () => {

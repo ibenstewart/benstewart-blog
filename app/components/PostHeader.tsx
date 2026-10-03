@@ -17,7 +17,7 @@ type PostHeaderProps = {
  * export.
  */
 export async function PostHeader({ title, slug }: PostHeaderProps) {
-  const posts = await getAllPosts();
+  const posts = await getAllPosts(undefined, { includeDrafts: true });
   const post = posts.find((p) => p.slug === slug);
 
   return (
