@@ -210,9 +210,10 @@ The sections run top to bottom: hero, Start here, Some of my favourite writing, 
   - **Kerning fix (required):** wrap the "r" of "Stewart" as `Stewa<span class="k">r</span>t` with `letter-spacing: 0` on `.k`. Otherwise the r and t collide at -0.04em.
   - Mobile: wrap the words as `<span>Ben</span> <span>Stewa…</span>` and set `display: block` on the direct-child spans only (`h1 > span`), so they stack.
 - **Intro row:** a 12-column grid, `margin-top: clamp(48px, 5.6vw, 80px)`.
-  - Columns 1 to 3 (1 to 4 at tablet): the **caption**. "Engineer turned leader." in 500 `1.25rem` ink, then "Glasgow" in `red` with a 9px red dot before it.
+  - Columns 1 to 3 (1 to 4 at tablet): the **caption**. "Engineer turned leader of humans and robots." in 500 `1.25rem` ink, then "Glasgow" in `red` with a 9px red dot before it.
+  - **Portrait** (added after the prototype): a 4:5 head-and-shoulders photo above the caption, 184px wide, 20px radius, 28px below it. Mobile: 104px wide, 14px radius, beside the caption with their bottoms aligned and an 18px gap.
   - Columns 5 to 11 (5 to 12 at tablet), max 40rem: the three existing intro paragraphs at intro scale in `muted`. Their links are ink with a **2px `accent` underline**, `text-underline-offset: 0.22em`, and turn `accent` on hover.
-  - Mobile: the caption stacks above the paragraphs.
+  - Mobile: the caption (with the portrait) stacks above the paragraphs.
 
 **Start here** (`.start, .arch, .start-list, .num`)
 
