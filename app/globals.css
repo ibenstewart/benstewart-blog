@@ -260,13 +260,13 @@
   .page-grid > .pull-quote + * {
     margin-top: 1.5em;
   }
-  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible, .quadrant, .stats) + * {
+  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible, .quadrant, .stats, .tweet-embed) + * {
     margin-top: 1.6em;
   }
   .page-grid > .pull-quote {
     margin-top: 1.7em;
   }
-  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible, .quadrant, .stats) {
+  .page-grid > :is(.code-block, .callout, .key-point, .prose-figure, .collapsible, .quadrant, .stats, .tweet-embed) {
     margin-top: 1.6em;
   }
   .page-grid > .tldr {
@@ -574,4 +574,20 @@
   padding: 0.35rem 0.6rem 0 0;
   font-weight: 700;
   color: var(--color-ink);
+}
+
+/* Tweet embeds (react-tweet). Unlayered on purpose: react-tweet's own CSS is
+   unlayered, so overrides inside a layer would lose to it. Swaps X's palette
+   and type for the site tokens. */
+.tweet-embed .react-tweet-theme {
+  --tweet-container-margin: 0;
+  --tweet-font-family: var(--font-sans);
+  --tweet-border: 1px solid var(--hair);
+  --tweet-font-color: var(--ink);
+  --tweet-font-color-secondary: var(--muted);
+  --tweet-bg-color: var(--paper);
+  --tweet-bg-color-hover: var(--raise);
+  --tweet-color-blue-secondary: var(--accent);
+  --tweet-color-blue-secondary-hover: rgb(0 74 147 / 0.08);
+  border-radius: 20px;
 }

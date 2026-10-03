@@ -15,6 +15,7 @@ import { CodeBlock } from './app/components/CodeBlock';
 import { HeroImage } from './app/components/HeroImage';
 import { Quadrant } from './app/components/Quadrant';
 import { Stats } from './app/components/Stats';
+import { TweetEmbed } from './app/components/TweetEmbed';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -374,6 +375,7 @@ const components = {
   PostList: (props: { slugs?: string[] }) => <PostList {...props} />,
   Quadrant,
   Stats,
+  TweetEmbed,
   // Homepage sections (DESIGN.md 4.2, plan KTD5).
   HomeHero,
   StartHere,
