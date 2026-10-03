@@ -15,5 +15,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: ['**/*.test.{ts,tsx}'],
     exclude: ['node_modules', '.next'],
+    // react-tweet imports CSS modules; let Vite process it instead of Node.
+    server: { deps: { inline: ['react-tweet'] } },
   },
 });
