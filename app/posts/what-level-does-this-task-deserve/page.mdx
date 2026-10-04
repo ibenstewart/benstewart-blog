@@ -28,10 +28,8 @@ export const metadata = {
   image="https://www.benstewart.ai/images/posts/what-level-does-this-task-deserve-0.png"
 />
 
-<Figure hero src="/images/posts/what-level-does-this-task-deserve-0.png" alt="A single trading card reading Level 5, range 3 to 7, beside a hand of five task cards: thinking work at Level 3, finishing a pattern at 4, anything an exec reads at 5, mechanical fan-out at 7, and a face-down Level 6 card marked switched off." />
-
 <Lede>
-Somebody printed their AI level on a trading card and I haven't stopped thinking about it. Jaatster's card says LEVEL 8 ORCHESTRATOR in big pixel type, and it's a great piece of work. It's also where this post came from, so credit first; [here's the tweet](https://x.com/jaatster/status/2105037516139344375).
+I'm a massive fan of AI Twitter. I don't use Twitter for anything else; it's how I keep up. The other day a post from Jaatster turned up in my feed with their AI level printed on a trading card, LEVEL 8 ORCHESTRATOR in big pixel type. It linked through to [Every](https://every.to/), a publication I read a lot, and I haven't stopped thinking about it since. It's where this post came from, so credit first; [here's the tweet](https://x.com/jaatster/status/2105037516139344375).
 </Lede>
 
 <TweetEmbed id="2105037516139344375" url="https://x.com/jaatster/status/2105037516139344375" label="Jaatster's card on X" />
@@ -55,7 +53,9 @@ The range was the interesting bit, though. When I looked at where the 3s and the
 
 ## Why everyone wants a level
 
-I get the appeal. A level turns "am I behind?" into "I'm a 4", which is a much nicer thing to carry around. The prompt ends in a subscription link, so there's always a next rung for sale. A number also fits on a slide, and anything that fits on a slide gets counted, and anything that gets counted eventually becomes a target.
+It doesn't matter who I talk to, they're worried they're behind on AI. I spoke to someone this week who meant it. They'd been watching what their colleagues were doing, and what some other teams were doing, and they'd decided they were miles off the pace. Once we talked through how they actually work, I didn't reckon they were that far behind at all.
+
+That's where the appeal of a level comes from. Hardly anyone can show the ROI on any of this yet, so there's no real way to show how far ahead you are. A number is the next best thing. It turns "am I behind?" into "I'm a 4" and you can wear it like a badge. (The prompt ends in a subscription link, so there's always a next rung for sale.) A number also fits on a slide, and anything that fits on a slide gets counted, and anything that gets counted eventually becomes a target.
 
 The idea is borrowed from self-driving cars, where levels describe a machine. Point it at a person and it sounds rigorous and isn't. Every framework I've read says higher isn't better, then lists the signs you're ready for the next level, which tells you which way they expect you to go.
 
@@ -65,7 +65,9 @@ I don't want to be sour about this, because the levels gave me something. I can 
 
 Before I hand a task to AI now, I ask two things.
 
-<KeyPoint>What does it cost if the output is wrong? Can I check what comes back?</KeyPoint>
+<KeyPoint>What does it cost if the output is wrong? How can I check what comes back?</KeyPoint>
+
+Checking doesn't have to mean reading every line myself. It can mean getting another model to verify it, or being able to trace each claim back to where it came from. If I can't do any of those, I can't check it.
 
 Put those on two axes and you get a grid.
 
@@ -73,7 +75,7 @@ Put those on two axes and you get a grid.
   x={["Easy to check", "Hard to check"]}
   y={["Expensive if wrong", "Cheap if wrong"]}
   cells={[
-    { level: "5", title: "Let it work, then check everything", example: "Anything an exec is going to read" },
+    { level: "5", title: "Let it work, then check everything", example: "Anything senior leadership will read" },
     { level: "3", title: "Stay close", example: "Thinking work" },
     { level: "4 / 7", title: "Let go, check a sample", example: "Finishing a pattern, mechanical fan-out" },
     { level: "6", title: "Ask whether it should run at all", example: "The weekly research sweep, switched off in July", off: true },
@@ -84,7 +86,7 @@ My month fits on it more neatly than I'd like to admit.
 
 Thinking work sits top right. Working out what I actually believe about something is expensive to get wrong, because I end up holding a weaker idea and presenting it as mine, and there's no answer key. My instruction there is nearly always some version of "just tell me what you would do, don't do it". That's the 3 on my card, on purpose. Some of it shouldn't go near the tool at all yet, and no ladder has a rung for that.
 
-Anything an exec is going to read is expensive too, though you can check it, because numbers trace back to sources. So the AI does a lot of the work and I say "I need every single number and claim checked" before any of it goes in front of senior people. That's where the 5 came from. The AI does more here than on the thinking work and I trust it less, which still feels slightly backwards to me.
+Anything going to senior leadership, peers or stakeholders is expensive too, though you can check it, because numbers trace back to sources. So the AI does a lot of the work and I say "I need every single number and claim checked" before any of it goes in front of senior people. That's where the 5 came from. The AI does more here than on the thinking work and I trust it less, which still feels slightly backwards to me.
 
 Bottom left is where I let go. Once I've done the first few of something and know what good looks like, I say "do everything that's left" and stop watching. That's a 4. The 37 subagents live here too, a manager model handing a pile of repetitive linking work out to cheaper models in one session. I didn't read 37 outputs. The highest number on my card, the 7, came from the most boring work I did all month.
 
@@ -108,6 +110,8 @@ Then look at the bottom right box. If something's running there, ask what you'd 
 </Callout>
 
 As a senior leader I'm constantly thinking about what this means for how people work today and in the future. If I could change one thing about level frameworks, [Every's](https://every.to/) included, I'd score the task and leave the person out of it. A person's level is just the mix of tasks on their desk this week. Mine moved between 3 and 7 inside a month and I didn't get any better or worse at this in between.
+
+<Figure hero src="/images/posts/what-level-does-this-task-deserve-0.png" alt="A single trading card reading Level 5, range 3 to 7, beside a hand of five task cards: thinking work at Level 3, finishing a pattern at 4, anything leaders read at 5, mechanical fan-out at 7, and a face-down Level 6 card marked switched off." />
 
 <TLDR>
 I asked AI to grade my AI level from a month of my own session transcripts. It came back as Level 5 with a range of 3 to 7, and where I landed each time depended on the task in front of me. So I've stopped asking what level I am and ask two questions of every task instead. What does it cost if the output is wrong, and can I check what comes back? Score the task and leave the person out of it.
