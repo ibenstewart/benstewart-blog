@@ -84,9 +84,16 @@ Available components in `mdx-components.tsx`:
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`
 2. Create `page.mdx` with metadata export (including canonical, openGraph, images), a `<PostHeader title="..." slug="[slug]" />` opening the body, a `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
-3. To feature it on the homepage, add its slug to the `startHere` or `favourites` export in `app/page.mdx`. Every other post appears in the homepage Archive automatically
-4. Run `npm run validate-posts` to confirm all required SEO fields are present
-5. Commit and push - Vercel auto-deploys
+3. Make the 1200x630 share card from `docs/og-card/template.html` and point `openGraph.images` and the `<PostSchema>` `image` prop at it (`/images/posts/[slug]-og.png`, absolute URL in the schema). The template takes the display title in the query string; `--virtual-time-budget` gives Google Fonts time to load:
+   ```bash
+   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu --hide-scrollbars \
+     --window-size=1200,630 --virtual-time-budget=5000 --screenshot=public/images/posts/[slug]-og.png \
+     "file://$PWD/docs/og-card/template.html?t=Post%20Display%20Title"
+   ```
+   Check it with `file` (1200 x 630) and open it. The card is light on purpose, so a dark-mode Mac renders it the same. For a post whose own image is the share image, use `?img=<url-encoded file:// path>` to letterbox it on the paper background (save as `-og.jpg`, under 300 KB)
+4. To feature it on the homepage, add its slug to the `startHere` or `favourites` export in `app/page.mdx`. Every other post appears in the homepage Archive automatically
+5. Run `npm run validate-posts` to confirm all required SEO fields are present
+6. Commit and push - Vercel auto-deploys
 
 **IMPORTANT:** Posts are automatically included in the sitemap, the `/posts` listing page, and the RSS feed — all derived from the filesystem via `lib/posts.ts`. The listing shows each post's H1 as its title and the `subtitle` metadata as its blurb. If adding a new top-level page (not a post), add the route to the `routes` array in `app/sitemap.ts`.
 
