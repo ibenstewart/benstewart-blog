@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Schibsted_Grotesk, Source_Serif_4 } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import Link from 'next/link';
-import { WebsiteJsonLd } from './components/JsonLd';
+import { PersonJsonLd, WebsiteJsonLd } from './components/JsonLd';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/lib/site';
 
 export { viewport } from './viewport';
 
@@ -28,8 +29,6 @@ const plexMono = IBM_Plex_Mono({
   preload: false
 });
 
-const siteDescription = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';
-
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.benstewart.ai'),
   alternates: {
@@ -39,15 +38,15 @@ export const metadata: Metadata = {
     },
   },
   title: {
-    default: 'Ben Stewart',
+    default: SITE_TITLE,
     template: '%s | Ben Stewart'
   },
-  description: siteDescription,
+  description: SITE_DESCRIPTION,
   openGraph: {
     type: 'website',
     siteName: 'Ben Stewart',
     url: '/',
-    description: siteDescription,
+    description: SITE_DESCRIPTION,
     images: [{
       url: '/images/og-default.png',
       width: 1200,
@@ -57,7 +56,6 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     creator: '@benstewart__',
-    images: ['/images/og-default.png'],
   },
 };
 
@@ -76,6 +74,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <WebsiteJsonLd />
+        <PersonJsonLd />
         <div className="flex min-h-screen flex-col bg-paper text-ink">
           <Masthead />
           <main id="main" className="page-grid flex-1 content-start">
