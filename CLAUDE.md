@@ -90,7 +90,7 @@ Available components in `mdx-components.tsx`:
      --window-size=1200,630 --virtual-time-budget=5000 --screenshot=public/images/posts/[slug]-og.png \
      "file://$PWD/docs/og-card/template.html?t=Post%20Display%20Title"
    ```
-   Check it with `file` (1200 x 630) and open it. The card is light on purpose, so a dark-mode Mac renders it the same. For a post whose own image is the share image, use `?img=<url-encoded file:// path>` to letterbox it on the paper background (save as `-og.jpg`, under 300 KB)
+   Check it with `file` (1200 x 630) and open it. The card is light on purpose, so a dark-mode Mac renders it the same. For a post whose own image is the share image, use `?img=<url-encoded file:// path>` to letterbox it on the paper background, then convert with `sips -s format jpeg -s formatOptions 85 card.png --out public/images/posts/[slug]-og.jpg` (under 300 KB)
 4. To feature it on the homepage, add its slug to the `startHere` or `favourites` export in `app/page.mdx`. Every other post appears in the homepage Archive automatically
 5. Run `npm run validate-posts` to confirm all required SEO fields are present
 6. Commit and push - Vercel auto-deploys
