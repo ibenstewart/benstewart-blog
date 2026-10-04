@@ -1,0 +1,27 @@
+# Ben Stewart
+
+> I run engineering teams working out AI in real time. Field reports on what's working, what's breaking and what the data says, in plain English.
+
+Ben Stewart is VP of Engineering at Skyscanner, based in Glasgow. He writes field reports about leading engineering teams through AI: what is working, what is breaking and what the data says.
+
+## Start here
+
+- [What Level Does This Task Deserve?](https://www.benstewart.ai/posts/what-level-does-this-task-deserve): Two questions I ask before I hand anything to AI. What it costs if the output is wrong, and whether I can check it.
+- [The £3 Question](https://www.benstewart.ai/posts/the-three-pound-question): Most AI tools wait to be asked. Clawdbot messages you first, which exposed the gap between reactive AI you pick up and proactive AI that acts.
+- [Sustainable Pace Just Got Faster](https://www.benstewart.ai/posts/sustainable): Speed won. AI compressed the cycle so hard that last year's fast is slow and teams are burning out. Substitute work, don't add it.
+- [AI Made Writing Free. That Was Supposed to Be Good News.](https://www.benstewart.ai/posts/ai-made-writing-free): AI made writing free, so the cost moved from the writer's time to the reader's brain. Here's how to take responsibility for what you send.
+- [Ralph Isn't the Point. The PRD Is.](https://www.benstewart.ai/posts/ralph-isnt-the-point): Ralph runs AI coding tools in a loop against a PRD. It works, though the PRD is the real work. Specifying clearly is the skill that lasts.
+- [I Built a System Where AI Agents Argue About Strategy](https://www.benstewart.ai/posts/multi-agent-ai-strategy): Six AI personas argue about a strategy, then a 'So What?' gate forces an action. The system I use to stress-test my thinking, prompt included.
+
+## Pages
+
+- [Bio](https://www.benstewart.ai/bio): Career timeline and background
+- [Speaking](https://www.benstewart.ai/speaking): Conference talks, podcasts and articles
+- [Posts](https://www.benstewart.ai/posts): Every post, newest first
+- [RSS feed](https://www.benstewart.ai/feed.xml): Full feed of posts
+- [Sitemap](https://www.benstewart.ai/sitemap.md): Every page and post with descriptions, in Markdown
+
+## Contact
+
+- Email: ben@benstewart.ai
+- LinkedIn: https://www.linkedin.com/in/ben-stewart-90944595/
