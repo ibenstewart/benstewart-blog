@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Share card template</title>
+<!--
+  1200x630 share card. Light colours are set explicitly on purpose: no
+  prefers-color-scheme rules, so a dark-mode Mac renders the same card.
+
+  Title card:  template.html?t=<url-encoded title>
+  Image card:  template.html?img=<url-encoded file:// path>   (image letterboxed on paper, no crop)
+
+  Render (see CLAUDE.md, Adding a New Post):
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+    --hide-scrollbars --window-size=1200,630 --virtual-time-budget=5000 \
+    --screenshot=out.png "file:///ABSOLUTE/PATH/docs/og-card/template.html?t=Post%20title"
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #FDFCFA; color: #1C2731; }
+  body { position: relative; font-family: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif; }
+  .rule { position: absolute; top: 0; left: 0; width: 1200px; height: 6px; background: #004A93; }
+  .title {
+    position: absolute; left: 80px; top: 96px; width: 1040px; height: 380px;
+    display: flex; align-items: center;
+    font-weight: 700; font-size: 72px; line-height: 1.12; letter-spacing: -0.02em; color: #1C2731;
+  }
+  .byline {
+    position: absolute; left: 80px; bottom: 56px;
+    display: flex; align-items: baseline; gap: 20px;
+    font-size: 28px; line-height: 1; font-weight: 500; color: #1C2731;
+  }
+  .byline .name { font-weight: 700; }
+  .byline .site { color: #004A93; }
+  .pic { position: absolute; left: 0; top: 6px; width: 1200px; height: 624px; padding: 24px; display: none; align-items: center; justify-content: center; background: #FDFCFA; }
+  .pic img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  body.image .title, body.image .byline { display: none; }
+  body.image .pic { display: flex; }
+</style>
+</head>
+<body>
+<div class="rule"></div>
+<div class="title" id="title">Leading engineering teams through AI</div>
+<div class="byline"><span class="name">Ben Stewart</span><span class="site">benstewart.ai</span></div>
+<div class="pic"><img id="pic" alt=""></div>
+<script>
+  var q = new URLSearchParams(location.search);
+  var t = q.get('t');
+  var img = q.get('img');
+  var title = document.getElementById('title');
+  if (t) title.textContent = t;
+  if (img) {
+    document.body.className = 'image';
+    document.getElementById('pic').src = img;
+  } else {
+    // shrink long titles until they fit the box
+    var size = 72;
+    while (title.scrollHeight > title.clientHeight + 1 && size > 44) {
+      size -= 2;
+      title.style.fontSize = size + 'px';
+    }
+  }
+</script>
+</body>
+</html>

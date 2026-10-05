@@ -1,3 +1,13 @@
+import { SITE_DESCRIPTION } from '@/lib/site';
+
+export const PERSON_ID = 'https://www.benstewart.ai/#person';
+
+const SAME_AS = [
+  'https://www.linkedin.com/in/ben-stewart-90944595/',
+  'https://github.com/ibenstewart',
+  'https://x.com/benstewart__',
+];
+
 type ArticleJsonLdProps = {
   title: string;
   description: string;
@@ -22,8 +32,10 @@ export function ArticleJsonLd({ title, description, date, lastModified, url, ima
     },
     author: {
       '@type': 'Person',
+      '@id': PERSON_ID,
       name: 'Ben Stewart',
       url: 'https://www.benstewart.ai/bio',
+      sameAs: SAME_AS,
     },
     publisher: {
       '@type': 'Person',
@@ -66,18 +78,17 @@ export function PersonJsonLd() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
+    '@id': PERSON_ID,
     name: 'Ben Stewart',
     url: 'https://www.benstewart.ai',
+    description: 'Engineering leader in Glasgow. Writes field reports on leading engineering teams through AI.',
+    knowsAbout: ['Engineering leadership', 'AI adoption in engineering teams', 'Software delivery'],
     jobTitle: 'VP of Engineering',
     worksFor: {
       '@type': 'Organization',
       name: 'Skyscanner',
     },
-    sameAs: [
-      'https://www.linkedin.com/in/ben-stewart-90944595/',
-      'https://github.com/ibenstewart',
-      'https://x.com/benstewart__',
-    ],
+    sameAs: SAME_AS,
   };
 
   return (
@@ -94,9 +105,10 @@ export function WebsiteJsonLd() {
     '@type': 'WebSite',
     name: 'Ben Stewart',
     url: 'https://www.benstewart.ai',
-    description: 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.',
+    description: SITE_DESCRIPTION,
     author: {
       '@type': 'Person',
+      '@id': PERSON_ID,
       name: 'Ben Stewart',
     },
   };

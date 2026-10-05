@@ -1,8 +1,7 @@
 import { Feed } from 'feed';
 import { getAllPosts } from '@/lib/posts';
+import { SITE_DESCRIPTION, SITE_URL } from '@/lib/site';
 
-const SITE_URL = 'https://www.benstewart.ai';
-const SITE_DESCRIPTION = 'Engineer turned leader. Currently at Skyscanner. Writing about software and leadership since 2006.';
 const MAX_ITEMS = 50;
 
 export async function GET() {
