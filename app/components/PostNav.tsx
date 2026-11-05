@@ -69,7 +69,7 @@ export async function PostNav({ slug, related = [] }: PostNavProps) {
           {newer && (
             <Link href={`/posts/${newer.slug}`} className={`${halfClasses} col-start-1`}>
               <span className={dirClasses}>
-                <ArrowIcon className="h-[18px] w-[18px] shrink-0 -scale-x-100" />
+                <ArrowIcon className="nudge nudge-back h-[18px] w-[18px] shrink-0 -scale-x-100" />
                 Newer
               </span>
               <span className={titleClasses}>{newer.title}</span>
@@ -84,7 +84,7 @@ export async function PostNav({ slug, related = [] }: PostNavProps) {
             >
               <span className={`${dirClasses} justify-end mob:justify-start`}>
                 Older
-                <ArrowIcon className="h-[18px] w-[18px] shrink-0" />
+                <ArrowIcon className="nudge h-[18px] w-[18px] shrink-0" />
               </span>
               <span className={titleClasses}>{older.title}</span>
             </Link>
