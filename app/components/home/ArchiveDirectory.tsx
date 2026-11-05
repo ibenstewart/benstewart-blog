@@ -62,7 +62,7 @@ export async function ArchiveDirectory({ title, exclude }: ArchiveDirectoryProps
                 {yearPosts.map((post) => (
                   <li
                     key={post.slug}
-                    className="group relative flex break-inside-avoid items-baseline justify-between gap-5 border-b border-hair pt-[13px] pb-[14px] mob:gap-4 mob:pt-3 mob:pb-[13px]"
+                    className="archive-row group relative flex break-inside-avoid items-baseline justify-between gap-5 border-b border-hair pt-[13px] pb-[14px] mob:gap-4 mob:pt-3 mob:pb-[13px]"
                   >
                     <Link
                       href={`/posts/${post.slug}`}

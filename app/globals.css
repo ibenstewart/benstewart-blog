@@ -37,6 +37,12 @@
   --section: clamp(112px, 13vw, 192px);
   --measure: 640px;
   --hang: 24px;
+
+  /* Motion (DESIGN.md 3.5). One ease-out curve; feedback is fast, state changes
+     a little slower, and the arch is the only sequence that runs near a second. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 150ms;
+  --t-state: 320ms;
 }
 
 @theme {
@@ -142,12 +148,16 @@
     color: var(--color-ink);
   }
 
+  /* Reduced motion (DESIGN.md 3.5): nothing moves, but colour and opacity
+     feedback stays. Transitions keep their timing for colour and opacity only,
+     so a transform or width change happens instantly. Animations that exist
+     have their own reduced variants next to them. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
-      transition: none !important;
-      animation: none !important;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity !important;
+      scroll-behavior: auto !important;
     }
   }
 
@@ -231,9 +241,10 @@
 
   /* Hero figure: gentle arch, natural ratio, hidden if the image fails (KTD8). */
   .hero-fig .frame {
+    --arch: clamp(32px, 9vw, 128px);
     position: relative;
     overflow: hidden;
-    border-radius: clamp(32px, 9vw, 128px) clamp(32px, 9vw, 128px) 0 0;
+    border-radius: var(--arch) var(--arch) 0 0;
   }
   .hero-fig .frame img {
     position: relative;
@@ -563,6 +574,241 @@
     .post-card-meta {
       font-size: 0.875rem;
     }
+  }
+}
+
+/* Motion (DESIGN.md 3.6). Blue means go, so the blue things move: arrows nudge,
+   rules fill with blue, the nav marks where you are, and the arch rises once.
+   The reading column never moves. Every rule that moves something either sits
+   behind prefers-reduced-motion: no-preference or has a reduced variant beside it. */
+@keyframes arch-rise {
+  from {
+    clip-path: inset(100% 0 0 0 round var(--arch) var(--arch) 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round var(--arch) var(--arch) 0 0);
+  }
+}
+@keyframes rise-in-x {
+  from {
+    translate: -28px 0;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+@keyframes rise-in-y {
+  from {
+    translate: 0 -20px;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+@keyframes rule-draw {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+@keyframes num-rise {
+  from {
+    translate: 0 105%;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+@keyframes settle {
+  from {
+    scale: 1.08;
+  }
+  to {
+    scale: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  /* Arrows nudge toward where they lead. Put `nudge` on an arrow inside a link
+     or button, plus `nudge-back` when it points left. */
+  @media (prefers-reduced-motion: no-preference) {
+    .nudge {
+      transition: translate var(--t-fast) var(--ease-out);
+    }
+    :is(a, button):focus-visible .nudge {
+      translate: 4px 0;
+    }
+    :is(a, button):focus-visible .nudge-back {
+      translate: -4px 0;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) {
+    :is(a, button):hover .nudge {
+      translate: 4px 0;
+    }
+    :is(a, button):hover .nudge-back {
+      translate: -4px 0;
+    }
+  }
+
+  /* Rules turn blue: cards (favourites, Keep reading) and archive rows draw a
+     blue rule from the left on hover or focus; it leaves to the right. */
+  .post-card::before,
+  .archive-row::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 220ms var(--ease-out), opacity var(--t-fast) linear;
+    pointer-events: none;
+  }
+  .post-card::before {
+    top: -2px;
+  }
+  .archive-row::after {
+    bottom: -1px;
+  }
+  .post-card:is(:hover, :focus-within)::before,
+  .archive-row:is(:hover, :focus-within)::after {
+    transform: scaleX(1);
+    transform-origin: left;
+    transition-duration: 460ms, var(--t-fast);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .post-card::before,
+    .archive-row::after {
+      transform: none;
+      opacity: 0;
+    }
+    .post-card:is(:hover, :focus-within)::before,
+    .archive-row:is(:hover, :focus-within)::after {
+      opacity: 1;
+    }
+  }
+
+  /* You are here: one deep-blue segment marks the current section in the nav
+     pill and glides to whichever link is hovered or focused (SiteNav). Without
+     script, the current link and hovered links carry the fill themselves. */
+  .site-nav a[aria-current],
+  .site-nav:not([data-ready]) a:hover {
+    background-color: var(--color-accent-deep);
+  }
+  .site-nav[data-ready] a[aria-current] {
+    background-color: transparent;
+  }
+  .nav-seg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-radius: 999px;
+    background: var(--color-accent-deep);
+    opacity: 0;
+    pointer-events: none;
+    transition: translate 380ms var(--ease-out), width 380ms var(--ease-out), opacity var(--t-fast) linear;
+  }
+  .site-nav[data-ready] .nav-seg[data-on] {
+    opacity: 1;
+  }
+  .site-nav[data-instant] .nav-seg {
+    transition: none;
+  }
+
+  /* Start here: the rows draw their own rules so the arch sequence can draw
+     them in; the arrow turns to point at the hovered row (StartHereMotion). */
+  .start-row::before,
+  .start-row:last-child::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-hair);
+    transform-origin: left;
+  }
+  .start-row::before {
+    top: 0;
+  }
+  .start-row:last-child::after {
+    bottom: 0;
+  }
+  .start-num > span {
+    display: block;
+  }
+  .start-arch {
+    --arch: 999px;
+  }
+  .start-arrow {
+    rotate: var(--point, 0deg);
+  }
+
+  /* The arch rises: plays once. `data-rise="armed"` holds the first frame while
+     the section is still below the fold; "play" runs it. */
+  @media (prefers-reduced-motion: no-preference) {
+    .start-arrow {
+      transition: rotate 420ms var(--ease-out);
+    }
+    .rise[data-rise] .start-arch {
+      animation: arch-rise 900ms var(--ease-out) both;
+    }
+    .rise[data-rise] .start-arrow {
+      animation: rise-in-x 520ms var(--ease-out) 440ms both;
+    }
+    .rise[data-rise] .start-row::before {
+      animation: rule-draw 600ms var(--ease-out) calc(200ms + var(--i, 0) * 90ms) both;
+    }
+    .rise[data-rise] .start-row:last-child::after {
+      animation: rule-draw 600ms var(--ease-out) calc(290ms + var(--i, 0) * 90ms) both;
+    }
+    .rise[data-rise] .start-num {
+      clip-path: inset(-50% -20% 0 -20%);
+    }
+    .rise[data-rise] .start-num > span {
+      animation: num-rise 640ms var(--ease-out) calc(280ms + var(--i, 0) * 90ms) both;
+    }
+    .hero-fig .frame[data-rise] {
+      animation: arch-rise 1000ms var(--ease-out) both;
+    }
+    .hero-fig .frame[data-rise] img {
+      animation: settle 1400ms var(--ease-out) both;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) and (max-width: 760px) {
+    .rise[data-rise] .start-arrow {
+      animation-name: rise-in-y;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rise[data-rise] .start-arch,
+    .hero-fig .frame[data-rise] {
+      animation: fade-in 300ms linear both;
+    }
+  }
+  .rise[data-rise='armed'] :is(.start-arch, .start-arrow, .start-num > span),
+  .rise[data-rise='armed'] .start-row::before,
+  .rise[data-rise='armed'] .start-row:last-child::after,
+  .hero-fig .frame[data-rise='armed'],
+  .hero-fig .frame[data-rise='armed'] img {
+    animation-play-state: paused;
   }
 }
 

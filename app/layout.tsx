@@ -4,6 +4,7 @@ import { IBM_Plex_Mono, Schibsted_Grotesk, Source_Serif_4 } from 'next/font/goog
 import { Analytics } from '@vercel/analytics/next';
 import Link from 'next/link';
 import { PersonJsonLd, WebsiteJsonLd } from './components/JsonLd';
+import { SiteNav } from './components/SiteNav';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/lib/site';
 
 export { viewport } from './viewport';
@@ -103,20 +104,7 @@ function Masthead() {
       <Link href="/" className={`masthead-wordmark ${wordmarkClass}`}>
         Ben Stewart
       </Link>
-      <nav aria-label="Primary">
-        <ul role="list" className="flex items-center gap-[2px] rounded-full bg-accent p-1.5 mob:p-1">
-          {links.map((link) => (
-            <li key={link.name}>
-              <Link
-                href={link.url}
-                className="inline-flex h-11 items-center rounded-full px-5 text-[1.0625rem] font-medium tracking-[-0.005em] text-white no-underline transition-colors hover:bg-accent-deep hover:underline hover:decoration-[length:1.5px] hover:underline-offset-[5px] focus-visible:outline-2 focus-visible:-outline-offset-6 focus-visible:outline-white mob:h-[38px] mob:px-3 mob:text-base tight:px-2.5 tight:text-[0.9375rem]"
-              >
-                {link.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <SiteNav links={links} />
     </header>
   );
 }

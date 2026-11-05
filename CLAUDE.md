@@ -107,6 +107,8 @@ Available components in `mdx-components.tsx`:
 - `lib/mdx-parsing.mjs` - Shared escape-aware MDX parsing helpers (metadata block extraction, JSX prop extraction, fence stripping) used by both `lib/posts.ts` and `scripts/validate-posts.mjs`
 - `app/speaking/page.tsx` - Speaking page (videos, podcasts, articles)
 - `mdx-components.tsx` - Custom MDX components
+- `app/components/SiteNav.tsx` - The blue nav pill and its "you are here" segment (client component)
+- `app/components/home/StartHereMotion.tsx` - The Start here section's arch rise and pointing arrow (client component)
 - `app/globals.css` - Tokens, fonts, the `.page-grid` breakout grid, custom breakpoint variants and component CSS
 - `app/sitemap.ts` - Auto-generated sitemap
 - `docs/solutions/` - Documented solutions to past problems (bugs, workflow gotchas, best practices), organised by category with YAML frontmatter (`module`, `tags`, `problem_type`) - relevant when implementing or debugging in a documented area
@@ -128,6 +130,7 @@ Hard-won knowledge from working in this repo. Read before touching posts or meta
 - **Serif means italic.** Source Serif 4 is loaded italic only, so anything `font-serif` must also be `italic` (standfirsts, excerpts, captions, Scenario dialogue, markdown blockquote). Everything else is `font-sans`.
 - **Breakpoints:** use the inclusive custom variants `tab` (1080px), `cards` (960px), `mob` (760px) and `tight` (380px). Do not use `sm`/`md`/`lg` or `max-[...]`.
 - **CSS layering:** custom CSS that targets elements which also carry utilities goes in `@layer components` or `@layer base`; unlayered CSS beats every Tailwind utility in v4.
+- **Motion:** blue means go, so the blue things move: arrows nudge, card and archive rules draw blue, the nav segment glides, and the arch rises once. The reading column never moves. Tokens, the full list and the reduced-motion behaviour are in DESIGN.md 3.6. Any new animation needs a `prefers-reduced-motion` variant and must never hide content while waiting for script. Give any new arrow inside a link the `nudge` class (plus `nudge-back` when it points left).
 - **Links:** `textLinkClass` in `app/components/TextLink.tsx`: ink text, 2px accent underline at 0.22em offset, accent text on hover.
 - **Colour tokens:** `paper`, `raise`, `ink`, `muted`, `faint`, `hair`, `accent`, `accent-deep`, `blond`, `blond-line`, `red`. Never put `faint` text on `blond`.
 - **Code blocks:** fences with a language are syntax-highlighted; unlabelled fences render as plain ink. Every block gets a Copy button.

@@ -157,7 +157,38 @@ Numerals in dates, reading times, step numbers and years always use `font-varian
   - Inside the blue nav pill: `outline: 2px solid #fff; outline-offset: -6px`.
   - Whole-card links: put the ring on a `::after` overlay with `outline-offset: 4px; border-radius: 6px`.
 - **Selection:** `background: var(--accent); color: #fff`.
-- **Motion:** none beyond colour transitions. Respect `prefers-reduced-motion`.
+- **Motion:** see 3.6.
+
+### 3.6 Motion
+
+Added 5 November 2026, when Ben picked ideas 1 to 4 of the motion proposal. It replaces the old "none beyond colour transitions" rule.
+
+**Blue means go, so the blue things move.** Arrows, blue rules and the nav pill respond to the reader, and the sandstone arch gets the one authored sequence. **The reading column never moves:** no fade-ups on prose or sections as you scroll, no parallax, no animated letters in the name, no reading-progress bars, and nothing that makes a reader wait for text.
+
+**Tokens** (in `app/globals.css`):
+
+| Token | Value | Use |
+|---|---|---|
+| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Every motion. No bounce or elastic curves. |
+| `--t-fast` | `150ms` | Feedback: colour changes, arrow nudges, fades. |
+| `--t-state` | `320ms` | State changes. |
+
+Animate `translate`, `rotate`, `scale`, `transform`, `opacity` and `clip-path` only. The nav segment's `width` is the one exception, on a 44px element.
+
+**What moves**
+
+| Name | Where | What happens | Reduced motion |
+|---|---|---|---|
+| The arch rises | Start here (`StartHereMotion`) | Plays once. If the section is below the fold at load, it is held on its first frame and plays when 25% of it is visible: the arch rises from its baseline through a dome-shaped `clip-path` (900ms), the rows draw their hair rules from the left and the numerals rise into place (staggered 90ms), and the arrow arrives last (440ms delay). A section already on screen never animates. | The arch fades in (300ms). Rules and numerals are static. |
+| | Post hero (`HeroImage`) | If the image is still loading when the page hydrates, it rises through the arched frame when it arrives (1000ms) while the image settles from 108% scale (1400ms). An image that is already showing is never hidden again. | Fades in (300ms). |
+| Arrows point the way | Arrows inside links and buttons: View all posts, the breadcrumb, the pager | Nudge 4px toward where they lead on hover or keyboard focus (`--t-fast`). Give the arrow `nudge`, plus `nudge-back` when it points left. | Stay still. |
+| | Start here arrow | Turns to point at the numeral of the hovered or focused row (420ms). Pointer devices above 760px only; on mobile it points down. | Stays still. |
+| Rules turn blue | `.post-card` (favourites, Keep reading) and `.archive-row` | A 2px `accent` rule draws over the card's ink rule, or under the row's hairline, from the left on hover or focus (460ms), and leaves to the right (220ms). | Fades in place (`--t-fast`). |
+| You are here | Nav pill (`SiteNav`) | One `accent-deep` segment marks the current section (`aria-current="page"`, or `"true"` inside a section, such as on a post) and glides to the hovered or focused link (380ms), then back. On the homepage it shows only while a link is hovered. Without script the current link carries the fill. | Jumps instead of gliding. |
+
+**Reduced motion is less movement, not no feedback.** The global rule in `globals.css` limits every transition to colour and opacity, so anything else changes instantly; each animation above has its own reduced variant beside it.
+
+**Never hide content waiting for script.** Anything held on a first frame is held by script, and only while it is off screen or still loading.
 
 ---
 
@@ -173,7 +204,7 @@ Selectors in brackets point at the prototype CSS for exact values.
 - **Nav:** on the right, one **blue nav pill** holding `posts`, `bio`, `speaking` in that order, lowercase.
   - Container: 6px padding, `accent` background, radius 999px, 2px gap between links.
   - Links: 44px tall, `0 20px` padding, white, weight 500, `1.0625rem`.
-  - Hover: `accent-deep` fill plus an underline.
+  - Hover: `accent-deep` fill plus an underline. The current section keeps the `accent-deep` fill (the "you are here" segment, 3.6).
   - Mobile: 4px container padding, 38px links, `0 12px` padding.
   - 380px and below: `0 10px` padding, `0.9375rem` text.
   - It must stay on one row at 360px.

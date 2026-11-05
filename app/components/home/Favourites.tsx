@@ -34,7 +34,7 @@ export async function Favourites({ title, slugs }: FavouritesProps) {
         className="mt-16 inline-flex h-14 items-center gap-3 rounded-full bg-accent px-7 text-[1.125rem] font-medium tracking-[-0.005em] text-white transition-colors hover:bg-accent-deep focus-visible:outline-ink mob:mt-12 mob:h-11 mob:px-[18px] mob:text-base"
       >
         View all posts
-        <ArrowIcon className="size-5" />
+        <ArrowIcon className="nudge size-5" />
       </Link>
     </section>
   );
