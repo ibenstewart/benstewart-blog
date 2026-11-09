@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { parseThemes } from './manual-data.mjs';
 import {
   extractMetadataBlock,
   isDraft,
@@ -21,7 +22,18 @@ export type Post = {
   readingMinutes: number;
   /** `draft: true` in the metadata export: built, but hidden from every listing. */
   draft: boolean;
+  /** Body word count (metadata, JSX and code blocks left out). */
+  words: number;
+  /** Field manual themes from the metadata export, first one is the chapter. */
+  themes: string[];
+  /** One pull line from the post, from the metadata export's `quote`. */
+  quote: string | null;
+  /** True for the eleven posts stamped with the Substack import date rather than their real one. */
+  importDate: boolean;
 };
+
+/** The date every post imported from Substack was stamped with. */
+export const SUBSTACK_IMPORT_DATE = '2023-09-18';
 
 /** Formats an ISO `YYYY-MM-DD` date as a UK-style date, e.g. "9 January 2025". */
 export function formatUkDate(date: string | null): string | null {
@@ -37,19 +49,22 @@ export function formatUkDate(date: string | null): string | null {
 }
 
 /**
- * Estimates reading time from the post body: strips the metadata export
- * block, JSX tags, and fenced code blocks, then counts words at 230 wpm,
- * rounding to the nearest minute with a floor of 1.
+ * Counts the words in the post body: strips the metadata export block, JSX
+ * tags, and fenced code blocks first.
  */
-function computeReadingMinutes(content: string): number {
+function countWords(content: string): number {
   let body = content;
   const metaBlock = extractMetadataBlock(content);
   if (metaBlock) body = body.replace(metaBlock, '');
 
   body = stripFencedCodeBlocks(body).replace(/<[^>]+>/g, ' ');
 
-  const words = body.split(/\s+/).filter(Boolean);
-  return Math.max(1, Math.round(words.length / 230));
+  return body.split(/\s+/).filter(Boolean).length;
+}
+
+/** Reading time at 230 wpm, rounded to the nearest minute with a floor of 1. */
+function readingMinutesFor(words: number): number {
+  return Math.max(1, Math.round(words / 230));
 }
 
 /**
@@ -84,6 +99,9 @@ export async function getAllPosts(
       const headingMatch = content.match(/^#\s+(.+?)\s*$/m);
       const title = postHeaderTitle ?? (headingMatch ? headingMatch[1] : metaTitle);
       if (!title) return null;
+      const metaBlock = extractMetadataBlock(content) ?? '';
+      const words = countWords(content);
+      const date = content.match(/date:\s*["'](\d{4}-\d{2}-\d{2})["']/)?.[1] ?? null;
 
       return {
         slug,
@@ -91,9 +109,13 @@ export async function getAllPosts(
         metaTitle: metaTitle ?? title,
         subtitle: matchQuoted(content, 'subtitle'),
         description: matchQuoted(content, 'description'),
-        date: content.match(/date:\s*["'](\d{4}-\d{2}-\d{2})["']/)?.[1] ?? null,
-        readingMinutes: computeReadingMinutes(content),
+        date,
+        readingMinutes: readingMinutesFor(words),
         draft: isDraft(content),
+        words,
+        themes: parseThemes(metaBlock) ?? [],
+        quote: matchQuoted(metaBlock, 'quote'),
+        importDate: date === SUBSTACK_IMPORT_DATE,
       };
     })
   );

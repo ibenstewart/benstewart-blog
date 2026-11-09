@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`entry numbers on the real posts > match the snapshot 1`] = `
+{
+  "a-prompt-to-your-leadership-style": "4.1",
+  "ai-made-writing-free": "4.7",
+  "am-i-jealous-of-my-team": "5.1",
+  "am-i-technically-dangerous": "5.3",
+  "end-of-year-manager-checklist": "5.4",
+  "i-built-this-blog-with-claude-code": "4.3",
+  "leaders-dont-lie": "2.2",
+  "leadership-as-a-service": "1.3",
+  "managing-up-up-down-down-left-right": "2.3",
+  "meeting-rooms-are-now-free": "2.4",
+  "multi-agent-ai-strategy": "4.6",
+  "practical-postmortems": "3.1",
+  "ralph-isnt-the-point": "4.4",
+  "reading-list": "5.5",
+  "shared-documents-are-not-shared-understanding": "2.1",
+  "so-i-think-i-burned-out": "5.2",
+  "sustainable": "4.2",
+  "the-basic-boss-formula": "1.2",
+  "the-ideal-senior-engineer": "1.4",
+  "the-invisible-manager": "1.1",
+  "the-three-pound-question": "4.5",
+  "the-truth-about-authentic-leadership": "1.5",
+  "waist": "2.5",
+  "what-level-does-this-task-deserve": "4.8",
+  "you-cant-hum-while-holding-your-nose": "3.2",
+}
+`;

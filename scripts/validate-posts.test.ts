@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkPostHeaderFormat } from './validate-posts.mjs';
+import { checkManualMetadata, checkManualRefs, checkPostHeaderFormat } from './validate-posts.mjs';
 
 describe('checkPostHeaderFormat', () => {
   it('fails when the body has both a legacy H1 and a <PostHeader> (mixed format)', () => {
@@ -68,5 +68,41 @@ describe('checkPostHeaderFormat', () => {
     const body = ['# My Legacy Post', '', 'Body text.'].join('\n');
 
     expect(checkPostHeaderFormat(body, 'my-post')).toEqual([]);
+  });
+});
+
+describe('checkManualMetadata', () => {
+  const meta = (extra: string) => `{ title: "T", date: "2024-01-01", ${extra} }`;
+
+  it('passes with known themes and a quote', () => {
+    expect(checkManualMetadata(meta('themes: ["ai", "words"], quote: "A line."'))).toEqual([]);
+  });
+
+  it('fails when themes are missing, empty, unknown, repeated or too many', () => {
+    expect(checkManualMetadata(meta('quote: "A line."'))[0]).toMatch(/missing metadata.themes/);
+    expect(checkManualMetadata(meta('themes: [], quote: "A line."'))[0]).toMatch(/is empty/);
+    expect(checkManualMetadata(meta('themes: ["robots"], quote: "A line."'))[0]).toMatch(/unknown theme "robots"/);
+    expect(checkManualMetadata(meta('themes: ["ai", "ai"], quote: "A line."'))[0]).toMatch(/repeats a theme/);
+    expect(
+      checkManualMetadata(meta('themes: ["ai", "words", "self", "people", "breaks", "ai"], quote: "A line."')).join(' ')
+    ).toMatch(/the most is 5/);
+  });
+
+  it('fails when the quote is missing or empty', () => {
+    expect(checkManualMetadata(meta('themes: ["ai"]'))).toEqual(['missing metadata.quote (one pull line from the post)']);
+    expect(checkManualMetadata(meta('themes: ["ai"], quote: "  "'))).toEqual(['metadata.quote is empty']);
+  });
+});
+
+describe('checkManualRefs', () => {
+  it('passes against the real posts and fails for a missing or draft post', async () => {
+    const { manualSlugRefs } = await import('../lib/manual-data.mjs');
+    const slugs = [...new Set(manualSlugRefs().map((r: { slug: string }) => r.slug))] as string[];
+    expect(checkManualRefs(slugs, new Set(slugs))).toEqual([]);
+
+    const [gone, drafted, ...rest] = slugs;
+    const errors = checkManualRefs([drafted, ...rest], new Set(rest));
+    expect(errors.some((e: string) => e.includes(`"${gone}", which has no post directory`))).toBe(true);
+    expect(errors.some((e: string) => e.includes(`"${drafted}", which is a draft`))).toBe(true);
   });
 });
