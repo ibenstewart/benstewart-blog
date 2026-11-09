@@ -388,8 +388,9 @@ export function AtlasView({ posts, themes }: { posts: ConceptPost[]; themes: The
 
       {/* Footer: the edge of the map */}
       <SceneFooter
-        src="/images/footer/mesas.jpg"
+        src="/images/footer/glen.jpg"
         sky="#003593"
+        focus="30% 100%"
         overlay={{
           backgroundImage:
             'linear-gradient(rgba(243,241,234,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(243,241,234,.07) 1px, transparent 1px)',

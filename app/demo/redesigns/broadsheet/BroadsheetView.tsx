@@ -258,7 +258,7 @@ export function BroadsheetView({ posts, themes, today }: { posts: ConceptPost[];
       </section>
 
       {/* Footer: the back page, set as a reversed engraving */}
-      <SceneFooter src="/images/footer/mesas-ink.jpg" sky={INK}>
+      <SceneFooter src="/images/footer/glen-ink.jpg" sky={INK} focus="30% 100%">
         <div className="mx-auto max-w-[1280px] px-6 pt-16 text-center" style={{ color: PAPER }}>
           <p className="text-[clamp(44px,7vw,96px)] font-[800] leading-[0.85] tracking-[-0.045em]" style={{ ...display, fontVariationSettings: '"opsz" 144' }}>
             Ben Stewart

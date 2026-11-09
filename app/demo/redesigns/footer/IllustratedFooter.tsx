@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
  * `focus` keeps the subject in frame when a narrow screen crops the sides.
  */
 const SCENES = [
+  { id: 'glen', name: 'Glen (original)', src: '/images/footer/glen.jpg', sky: '#003593', focus: '30% 100%', w: 2400, h: 1350 },
   { id: 'mesas', name: 'Mesas', src: '/images/footer/mesas.jpg', sky: '#003593', focus: '22% 100%', w: 2400, h: 1351 },
   { id: 'gates', name: 'Gates', src: '/images/footer/gates.jpg', sky: '#033A97', focus: '70% 100%', w: 2400, h: 1340 },
   { id: 'chess', name: 'Chess', src: '/images/footer/chess.jpg', sky: '#0D3E9B', focus: '24% 100%', w: 2400, h: 1340 },
@@ -30,7 +31,7 @@ const pill =
   'inline-flex h-11 items-center rounded-full border border-white/40 px-5 text-base font-medium text-paper no-underline transition-colors hover:border-paper hover:bg-paper hover:text-accent mob:h-10 mob:px-4 mob:text-[0.9375rem]';
 
 export function IllustratedFooter() {
-  const [id, setId] = useState<(typeof SCENES)[number]['id']>('mesas');
+  const [id, setId] = useState<(typeof SCENES)[number]['id']>('glen');
   const scene = SCENES.find((s) => s.id === id)!;
 
   useEffect(() => {

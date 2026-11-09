@@ -27,7 +27,7 @@ export function ManualTopBar({ current }: { current?: string }) {
 /** The Mesas footer in the Field manual's own type. */
 export function ManualFooter({ status }: { status: string }) {
   return (
-    <SceneFooter src="/images/footer/mesas.jpg" sky="#003593" className="border-t-2" style={{ borderColor: INK }}>
+    <SceneFooter src="/images/footer/glen.jpg" sky="#003593" focus="30% 100%" className="border-t-2" style={{ borderColor: INK }}>
       <div className="px-10 pt-16 mob:px-6" style={{ color: '#fff' }}>
         <div className="flex flex-wrap items-start justify-between gap-8">
           <div>
