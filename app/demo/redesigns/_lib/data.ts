@@ -45,6 +45,7 @@ const TAGS: Record<string, ThemeId[]> = {
   'multi-agent-ai-strategy': ['ai'],
   'ai-made-writing-free': ['ai', 'words'],
   'what-level-does-this-task-deserve': ['ai'],
+  'the-demo-is-the-cheap-part': ['ai', 'words'],
 };
 
 /** One line per post, lifted from the post itself (KeyPoint, PullQuote or subtitle). */
@@ -63,6 +64,7 @@ export const QUOTES: Record<string, string> = {
   'multi-agent-ai-strategy': "That's not strategy. That's expensive confirmation bias with better formatting.",
   'ai-made-writing-free': "The cost of writing didn't disappear. It moved from the writer's time to the reader's brain.",
   'what-level-does-this-task-deserve': 'What does it cost if the output is wrong? How can I verify what comes back?',
+  'the-demo-is-the-cheap-part': 'A design that needs explaining has already failed.',
   'ralph-isnt-the-point': 'What AI coding tools actually teach you.',
   'the-three-pound-question': 'What I learned from an expensive conversation with a chatbot.',
   'the-basic-boss-formula': '25% you are the boss. 50% you are the peer. 25% you work for them.',
@@ -110,8 +112,9 @@ function extractLede(body: string): string[] {
     );
 }
 
-export async function getConceptPosts(): Promise<ConceptPost[]> {
-  const posts = await getAllPosts();
+/** Every published post, plus drafts when asked (the Field manual shows its own draft entry). */
+export async function getConceptPosts({ includeDrafts = false }: { includeDrafts?: boolean } = {}): Promise<ConceptPost[]> {
+  const posts = await getAllPosts(undefined, { includeDrafts });
   return Promise.all(
     posts.map(async (post) => {
       const body = await readBody(post.slug);

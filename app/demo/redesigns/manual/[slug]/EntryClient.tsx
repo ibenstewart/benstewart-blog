@@ -65,7 +65,7 @@ export function Contents({ entry }: { entry: string }) {
           <li key={it.id}>
             <a href={`#${it.id}`} className="block rounded-r-lg py-1.5 pl-4 pr-2 text-[15px] font-medium leading-[1.3] no-underline transition-colors"
               style={{ color: i === active ? INK : GREY, background: i === active ? HI : 'transparent' }}>
-              <span className="mr-2 text-[11px]" style={{ ...mono, color: i === active ? INK : BLUE }}>§{entry}.{i + 1}</span>{it.text}
+              <span className="mr-2 text-[11px]" style={{ ...mono, color: i === active ? INK : BLUE }}>{entry}.{i + 1}</span>{it.text}
             </a>
           </li>
         ))}

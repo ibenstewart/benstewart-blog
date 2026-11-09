@@ -107,7 +107,7 @@ export type Theme = { id: ThemeId; name: string; colour: string };
 
 /**
  * Chapters in manual order. A post lives in the chapter of its first theme and
- * is numbered by date within it, so new posts append (§2.6 stays §2.6).
+ * is numbered by date within it, so new posts append (2.6 stays 2.6).
  */
 export function chapters(posts: ConceptPost[], themes: Theme[]) {
   return themes.map((theme, ci) => {

@@ -25,6 +25,7 @@ export const LOADERS: Record<string, () => Promise<MdxModule>> = {
   'shared-documents-are-not-shared-understanding': () => import('@/app/posts/shared-documents-are-not-shared-understanding/page.mdx'),
   'so-i-think-i-burned-out': () => import('@/app/posts/so-i-think-i-burned-out/page.mdx'),
   'sustainable': () => import('@/app/posts/sustainable/page.mdx'),
+  'the-demo-is-the-cheap-part': () => import('@/app/posts/the-demo-is-the-cheap-part/page.mdx'),
   'the-basic-boss-formula': () => import('@/app/posts/the-basic-boss-formula/page.mdx'),
   'the-ideal-senior-engineer': () => import('@/app/posts/the-ideal-senior-engineer/page.mdx'),
   'the-invisible-manager': () => import('@/app/posts/the-invisible-manager/page.mdx'),

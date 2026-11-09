@@ -14,13 +14,13 @@ type Params = { params: Promise<{ slug: string }> };
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts();
+  const posts = await getAllPosts(undefined, { includeDrafts: true });
   return posts.filter((p) => LOADERS[p.slug]).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params;
-  const post = (await getAllPosts()).find((p) => p.slug === slug);
+  const post = (await getAllPosts(undefined, { includeDrafts: true })).find((p) => p.slug === slug);
   return { title: post ? `${post.title} · Field manual` : 'Field manual' };
 }
 
@@ -34,7 +34,7 @@ const fmtDate = (d: string | null) =>
  */
 export default async function EntryPage({ params }: Params) {
   const { slug } = await params;
-  const posts = await getConceptPosts();
+  const posts = await getConceptPosts({ includeDrafts: true });
   const post = posts.find((p) => p.slug === slug);
   const load = LOADERS[slug];
   if (!post || !load) notFound();
@@ -64,13 +64,13 @@ export default async function EntryPage({ params }: Params) {
       <header className="border-b-2 px-10 pb-12 pt-12 mob:px-6 mob:pb-9 mob:pt-8" style={{ borderColor: INK }}>
         <div className="mx-auto max-w-[1180px]">
           <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: GREY }}>
-            <Link href="/demo/redesigns/manual#chapters" className="no-underline hover:underline" style={{ color: GREY }}>§3 CHAPTERS</Link>
+            <Link href="/demo/redesigns/manual#chapters" className="no-underline hover:underline" style={{ color: GREY }}>ALL CHAPTERS</Link>
             {' / '}
             <span style={{ color: ch.theme.colour }}>CHAPTER {ch.number} · {ch.theme.name.toUpperCase()}</span>
           </p>
           <div className="mt-6 flex items-start gap-6 mob:block">
             <span className="shrink-0 rounded-2xl px-4 py-3 text-[clamp(28px,3.4vw,44px)] font-bold leading-none tracking-[-0.03em] mob:mb-4 mob:inline-block"
-              style={{ ...mono, background: INK, color: HI }}>§{entry.number}</span>
+              style={{ ...mono, background: INK, color: HI }}><span className="sr-only">Entry </span>{entry.number}</span>
             <div className="min-w-0">
               <h1 className="text-[clamp(40px,6.4vw,92px)] font-bold leading-[0.95] tracking-[-0.045em]">{post.title}</h1>
               {post.subtitle && (
@@ -81,6 +81,7 @@ export default async function EntryPage({ params }: Params) {
             </div>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-[13px] tracking-[0.08em]" style={{ ...mono, color: GREY }}>
+            {post.draft && <span className="rounded px-2 py-1" style={{ background: HI, color: INK }}>DRAFT · NOT PUBLISHED</span>}
             <span>{post.readingMinutes} MIN READ</span>
             <span>{post.importDate ? 'FROM THE SUBSTACK ARCHIVE' : `FILED ${fmtDate(post.date)}`}</span>
             <span>{post.words.toLocaleString('en-GB')} WORDS</span>
@@ -146,7 +147,7 @@ export default async function EntryPage({ params }: Params) {
                           <span style={{ color: state === 'here' || state === 'next' ? HI : BLUE }}>
                             {state === 'here' ? "YOU'RE HERE" : state === 'next' ? 'NEXT' : state === 'done' ? 'BEFORE THIS' : 'AFTER THAT'}
                           </span>
-                          <span className="opacity-70">§{numberOf(s)} · {p.readingMinutes} MIN</span>
+                          <span className="opacity-70">ENTRY {numberOf(s)} · {p.readingMinutes} MIN</span>
                         </span>
                         <span className="mt-4 text-[clamp(22px,2.2vw,28px)] font-bold leading-[1.08] tracking-[-0.02em] group-hover:underline">{p.title}</span>
                         <span className="mt-2 text-[16px] opacity-80">{why}</span>
@@ -169,7 +170,7 @@ export default async function EntryPage({ params }: Params) {
             <>
               <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>NEXT IN CHAPTER {ch.number} · {ch.theme.name.toUpperCase()}</p>
               <Link href={entryHref(nextInChapter.post.slug)} className="group mt-6 grid max-w-[720px] grid-cols-[auto_1fr] items-center gap-6 rounded-3xl p-7 no-underline transition-transform hover:-translate-y-1" style={{ background: BLUE, color: '#fff' }}>
-                <span className="text-[34px] font-bold" style={{ ...mono, color: HI }}>§{nextInChapter.number}</span>
+                <span className="text-[34px] font-bold" style={{ ...mono, color: HI }}>{nextInChapter.number}</span>
                 <span>
                   <span className="block text-[clamp(24px,2.6vw,32px)] font-bold leading-[1.05] tracking-[-0.02em] group-hover:underline">{nextInChapter.post.title}</span>
                   {nextInChapter.post.subtitle && <span className="mt-2 block text-[16px] opacity-80">{nextInChapter.post.subtitle}</span>}
@@ -180,7 +181,7 @@ export default async function EntryPage({ params }: Params) {
         </div>
       </section>
 
-      <ManualFooter status={`GLASGOW · REVISION ${posts.length} · YOU'RE READING §${entry.number}`} />
+      <ManualFooter status={`GLASGOW · REVISION ${posts.length} · YOU'RE READING ENTRY ${entry.number}`} />
     </div>
   );
 }

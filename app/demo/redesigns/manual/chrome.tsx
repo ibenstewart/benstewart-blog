@@ -5,9 +5,9 @@ import { BG, FOOTER_LINKS, GREY, HI, INK, mono } from './content';
 /** The Field manual top bar, shared by the home page and every entry. */
 export function ManualTopBar({ current }: { current?: string }) {
   const nav: [string, string][] = [
-    ['§1 situations', '/demo/redesigns/manual#situations'],
-    ['§2 toolkit', '/demo/redesigns/manual#toolkit'],
-    ['§3 chapters', '/demo/redesigns/manual#chapters'],
+    ['situations', '/demo/redesigns/manual#situations'],
+    ['toolkit', '/demo/redesigns/manual#toolkit'],
+    ['chapters', '/demo/redesigns/manual#chapters'],
   ];
   return (
     <header className="flex items-center justify-between gap-4 border-b-2 px-6 py-4" style={{ borderColor: INK, background: BG }}>

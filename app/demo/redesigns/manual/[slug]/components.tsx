@@ -69,7 +69,7 @@ export const ENTRY_CSS = (c: { INK: string; BLUE: string; HI: string; GREY: stri
   .fm-prose a:not(.fm-note) { color: ${c.INK}; text-decoration: underline; text-decoration-color: ${c.BLUE}; text-decoration-thickness: 2px; text-underline-offset: .2em; }
   .fm-prose a:not(.fm-note):hover { background: ${c.HI}; }
   .fm-h2 { counter-increment: fm-sec; margin-top: 2.4em !important; scroll-margin-top: 24px; font-size: clamp(28px, 3vw, 38px); line-height: 1.05; font-weight: 700; letter-spacing: -0.03em; color: ${c.INK}; text-wrap: balance; }
-  .fm-h2::before { content: "§" var(--fm-entry) "." counter(fm-sec); display: block; margin-bottom: 10px; font: 400 13px/1 var(--font-plex-mono), monospace; letter-spacing: .1em; color: ${c.BLUE}; }
+  .fm-h2::before { content: var(--fm-entry) "." counter(fm-sec); display: block; margin-bottom: 10px; font: 400 13px/1 var(--font-plex-mono), monospace; letter-spacing: .1em; color: ${c.BLUE}; }
   .fm-h3 { margin-top: 1.8em !important; font-size: 22px; font-weight: 700; letter-spacing: -0.015em; color: ${c.INK}; }
   .fm-ul { list-style: none; padding: 0; }
   .fm-ul > li { position: relative; padding-left: 30px; }

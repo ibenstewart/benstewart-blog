@@ -34,10 +34,10 @@ export function ManualView({ posts, themes }: { posts: ConceptPost[]; themes: Th
 
       <ManualTopBar />
 
-      {/* §1 Situations */}
+      {/* Part 1: Situations */}
       <section id="situations" className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] border-b-2 tab:grid-cols-1" style={{ borderColor: INK }}>
         <div className="border-r-2 p-10 tab:border-r-0 tab:border-b-2 mob:p-6" style={{ borderColor: INK }}>
-          <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>§1 · SITUATIONS</p>
+          <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>PART 1 · SITUATIONS</p>
           <h1 className="mt-5 text-[clamp(44px,5.6vw,84px)] font-bold leading-[0.92] tracking-[-0.045em]">
             What are you <span className="fm-hl">dealing with</span> today?
           </h1>
@@ -100,9 +100,9 @@ export function ManualView({ posts, themes }: { posts: ConceptPost[]; themes: Th
         </div>
       </section>
 
-      {/* §2 Toolkit */}
+      {/* Part 2: Toolkit */}
       <section id="toolkit" className="border-b-2 px-10 py-20 mob:px-6" style={{ borderColor: INK }}>
-        <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>§2 · TOOLKIT</p>
+        <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>PART 2 · TOOLKIT</p>
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <h2 className="text-[clamp(36px,4.4vw,64px)] font-bold leading-[0.95] tracking-[-0.04em]">Six tools you can steal.</h2>
           <p className="text-[16px]" style={{ color: GREY }}>Tap a card to flip it.</p>
@@ -133,9 +133,9 @@ export function ManualView({ posts, themes }: { posts: ConceptPost[]; themes: Th
         </div>
       </section>
 
-      {/* §3 Chapters */}
+      {/* Part 3: Chapters */}
       <section id="chapters" className="px-10 py-20 mob:px-6">
-        <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>§3 · CHAPTERS</p>
+        <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>PART 3 · CHAPTERS</p>
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <h2 className="text-[clamp(36px,4.4vw,64px)] font-bold leading-[0.95] tracking-[-0.04em]">The whole manual.</h2>
           <div className="min-w-[260px]">
@@ -166,7 +166,8 @@ export function ManualView({ posts, themes }: { posts: ConceptPost[]; themes: Th
                           style={{ borderColor: INK, background: isRead ? INK : 'transparent', color: HI }}>{isRead ? '✓' : ''}</button>
                         <Link href={entryHref(p.slug)} className="text-[15px] font-medium leading-[1.3] no-underline hover:underline"
                           style={{ color: isRead ? GREY : INK, textDecoration: isRead ? 'line-through' : undefined }}>
-                          <span className="mr-1.5 text-[12px]" style={{ ...mono, color: t.colour }}>§{n}</span>{p.title}
+                          <span className="mr-1.5 text-[12px]" style={{ ...mono, color: t.colour }}>{n}</span>{p.title}
+                          {p.draft && <span className="ml-1.5 rounded px-1.5 py-0.5 align-middle text-[10px] tracking-[0.08em]" style={{ ...mono, background: HI, color: INK }}>DRAFT</span>}
                         </Link>
                       </li>
                     );
