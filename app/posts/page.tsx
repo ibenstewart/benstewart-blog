@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/posts';
 import { chapters } from '@/lib/manual';
@@ -8,17 +9,11 @@ import { textLinkClass } from '@/app/components/TextLink';
 
 const postsDescription = 'Every field report by Ben Stewart on leading engineering teams through AI, newest first.';
 
-export const metadata: Metadata = {
-  title: 'All entries',
+export const metadata: Metadata = pageMetadata({
+  title: 'All posts on engineering leadership and AI',
   description: postsDescription,
-  alternates: { canonical: 'https://www.benstewart.ai/posts' },
-  openGraph: {
-    title: 'All entries | Ben Stewart',
-    description: postsDescription,
-    url: 'https://www.benstewart.ai/posts',
-    images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
-  },
-};
+  path: '/posts',
+});
 
 /** The manual by date: every published entry, newest first, with its number and chapter. */
 export default async function PostsPage() {
@@ -42,7 +37,7 @@ export default async function PostsPage() {
     <>
       <PageHead label="Index · All entries" title="Every entry, by date.">
         <p className="mt-6 max-w-[56ch] text-[1.1875rem] leading-[1.6] text-faint">
-          The <Link href="/#chapters" className={textLinkClass}>chapters</Link> group the manual by theme. This is the same {posts.length} entries in the order they were written, for when you want to see what&apos;s new or read it from the start.
+          Same {posts.length} entries as the <Link href="/#chapters" className={textLinkClass}>chapters</Link>, in the order I wrote them. Handy if you want to see what&apos;s new, or start at the beginning.
         </p>
       </PageHead>
       <section aria-label="Entries" className="col-bleed">

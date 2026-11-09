@@ -2,6 +2,8 @@ import React, { ComponentPropsWithoutRef, isValidElement, ReactNode } from 'reac
 import Link from 'next/link';
 import { highlight } from 'sugar-high';
 import { ArticleJsonLd, FAQJsonLd, PersonJsonLd } from './app/components/JsonLd';
+import { getAllPosts } from './lib/posts';
+import { THEMES } from './lib/manual';
 import { PostNav } from './app/components/PostNav';
 import { PostHeader } from './app/components/PostHeader';
 import { textLinkClass } from './app/components/TextLink';
@@ -85,6 +87,29 @@ type PostSchemaProps = {
   slug: string;
   image?: string;
 };
+
+/**
+ * A post's BlogPosting JSON-LD. The chapter and themes come from the post's
+ * own metadata by slug, so `articleSection` always matches the entry header.
+ */
+async function PostSchema({ title, description, date, lastModified, slug, image }: PostSchemaProps) {
+  const posts = await getAllPosts(undefined, { includeDrafts: true });
+  const themes = (posts.find((p) => p.slug === slug)?.themes ?? [])
+    .map((id) => THEMES.find((t) => t.id === id)?.name)
+    .filter((name): name is string => Boolean(name));
+  return (
+    <ArticleJsonLd
+      title={title}
+      description={description}
+      date={date}
+      lastModified={lastModified}
+      url={`https://www.benstewart.ai/posts/${slug}`}
+      image={image}
+      section={themes[0]}
+      keywords={themes}
+    />
+  );
+}
 
 const calloutLabels: Record<Required<CalloutProps>['type'], string> = {
   insight: 'Insight',
@@ -367,16 +392,7 @@ const components = {
     );
   },
   Lede: ({ children }: LedeProps) => <div className="lede">{children}</div>,
-  PostSchema: ({ title, description, date, lastModified, slug, image }: PostSchemaProps) => (
-    <ArticleJsonLd
-      title={title}
-      description={description}
-      date={date}
-      lastModified={lastModified}
-      url={`https://www.benstewart.ai/posts/${slug}`}
-      image={image}
-    />
-  ),
+  PostSchema: (props: PostSchemaProps) => <PostSchema {...props} />,
   FAQJsonLd: (props: { faqs: { question: string; answer: string }[] }) => <FAQJsonLd {...props} />,
   PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
   PostHeader: (props: { title: string; slug: string }) => <PostHeader {...props} />,

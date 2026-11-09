@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/posts';
 import { chapters } from '@/lib/manual';
-import { PersonJsonLd } from '@/app/components/JsonLd';
+import { ProfilePageJsonLd } from '@/app/components/JsonLd';
 import { OrganiserKit } from '@/app/components/manual/OrganiserKit';
 import { PageHead, PageSection } from '@/app/components/manual/PageHead';
 import { textLinkClass } from '@/app/components/TextLink';
@@ -12,17 +13,12 @@ import { VOXEL } from './voxel-data';
 
 const bioDescription = 'Ben Stewart, VP of Engineering at Skyscanner. Field reports on leading engineering teams through AI.';
 
-export const metadata: Metadata = {
-  title: 'Bio',
+export const metadata: Metadata = pageMetadata({
+  title: 'About Ben Stewart, VP of Engineering at Skyscanner',
   description: bioDescription,
-  alternates: { canonical: 'https://www.benstewart.ai/bio' },
-  openGraph: {
-    title: 'Bio - Ben Stewart',
-    description: bioDescription,
-    url: 'https://www.benstewart.ai/bio',
-    images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
-  },
-};
+  path: '/bio',
+  absolute: true,
+});
 
 /** The timeline, oldest first. `level` only places each role on the climb. */
 const ROUTE: Waypoint[] = [
@@ -57,7 +53,7 @@ export default async function BioPage() {
           ['Name', 'Ben Stewart'],
           ['Role', 'VP of Engineering, Skyscanner'],
           ['Base', 'Glasgow'],
-          ['In the field since', '2006'],
+          ['Writing code since', '2006'],
           ['Entries filed', String(posts.length)],
         ].map(([k, v]) => (
           <div key={k} className="grid grid-cols-[1fr_auto] gap-3 border-b border-hair pb-2.5 last:border-0 last:pb-0 mob:grid-cols-1 mob:gap-0 mob:pb-1.5">
@@ -77,7 +73,7 @@ export default async function BioPage() {
         standfirst="I run engineering teams that are working out AI in real time, and I write about it here while it's still messy."
         aside={authorCard}
       >
-        <PersonJsonLd />
+        <ProfilePageJsonLd />
         <div className="mt-7 grid max-w-[62ch] gap-4 text-[1.1875rem] leading-[1.6] text-faint">
           <p>At home I have a wife, a daughter and a dog that I met in that exact order. I build things and help teams build better.</p>
           <p>Currently at Skyscanner, working on how technology, product, and people come together to make travel simpler.</p>
@@ -97,9 +93,9 @@ export default async function BioPage() {
         </ul>
       </PageHead>
 
-      <PageSection id="route" label="A.1 · The route so far" title="Twenty years, one long climb.">
+      <PageSection id="route" label="A.1 · The route so far" title="Twenty years, mostly uphill.">
         <p className="mt-5 max-w-[56ch] text-[1.1875rem] leading-[1.6] text-faint">
-          From writing SQL at Arnold Clark in 2006 to running a 250-engineer org at Skyscanner. The flat bit at the start is three engineering jobs; the climb starts with the first team.
+          I started out writing SQL at Arnold Clark in 2006. Now I run a 250-engineer org at Skyscanner. The flat bit at the start is three engineering jobs; the climb starts when I got my first team.
         </p>
         <div className="mt-10 overflow-hidden rounded-3xl border-2 border-ink bg-accent tab:hidden">
           <RouteChart route={ROUTE} />
@@ -118,7 +114,7 @@ export default async function BioPage() {
         </ol>
       </PageSection>
 
-      <PageSection id="covers" label="A.2 · What this manual covers" title="Field reports from the AI transition.">
+      <PageSection id="covers" label="A.2 · The chapters" title="What I write about.">
         <p className="mt-5 max-w-[62ch] text-[1.1875rem] leading-[1.6] text-faint">
           Mostly what happens when you run engineering teams through AI. Which tasks I hand over and which I keep, what it cost when I got that wrong, and the old processes teams keep running underneath the new tools. The view behind most of it is that AI adoption is a leadership problem before it&apos;s a tooling one. The older posts are about leadership from before AI turned up, and plenty of it still applies.
         </p>

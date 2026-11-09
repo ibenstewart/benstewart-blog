@@ -37,7 +37,7 @@ export function BookingCard({ talks }: { talks: string[] }) {
       }}
     >
       <p className="label text-white/80">Booking request</p>
-      <p id="booking-card-title" className="mt-3 text-[1.75rem] leading-[1.1] font-bold tracking-[-0.02em]">Three things and it&apos;s a yes or a no.</p>
+      <p id="booking-card-title" className="mt-3 text-[1.75rem] leading-[1.1] font-bold tracking-[-0.02em]">Tell me three things and I&apos;ll tell you if I can do it.</p>
       <div className="mt-6 grid grid-cols-2 gap-4 cards:grid-cols-1">
         <label className={lab}>
           Date

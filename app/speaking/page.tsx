@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/posts';
 import { entryNumbers } from '@/lib/manual';
@@ -9,17 +10,11 @@ import { BookingCard } from './BookingCard';
 
 const speakingDescription = 'Talks by Ben Stewart on leading engineering teams through AI: the guardrail as a price, what level a task deserves, and sustainable pace.';
 
-export const metadata: Metadata = {
-  title: 'Speaking',
+export const metadata: Metadata = pageMetadata({
+  title: 'Speaking on AI and engineering leadership',
   description: speakingDescription,
-  alternates: { canonical: 'https://www.benstewart.ai/speaking' },
-  openGraph: {
-    title: 'Speaking - Ben Stewart',
-    description: speakingDescription,
-    url: 'https://www.benstewart.ai/speaking',
-    images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
-  },
-};
+  path: '/speaking',
+});
 
 // ============================================
 // ADD YOUR CONTENT HERE
@@ -119,7 +114,7 @@ export default async function SpeakingPage() {
     <>
       <PageHead
         label="Appendix B · Speaking"
-        title="Talks from the field."
+        title="What I talk about."
         standfirst="I talk to engineering and product leaders about what AI is actually doing to the way teams work."
       >
         <div className="mt-8 flex flex-wrap items-center gap-2">

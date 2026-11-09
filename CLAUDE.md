@@ -39,6 +39,10 @@ export const metadata = {
     canonical: 'https://www.benstewart.ai/posts/[slug]'
   },
   openGraph: {
+    type: "article",
+    siteName: "Ben Stewart",
+    publishedTime: "YYYY-MM-DD",
+    authors: ["https://www.benstewart.ai/bio"],
     title: "Post Title",
     description: "A concise description for SEO and social sharing.",
     url: "https://www.benstewart.ai/posts/[slug]",
@@ -64,6 +68,8 @@ Content goes here...
 **Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders the end of the entry automatically: Mark as read, the entry's tool (if it has one), the next step (the reading order the reader came from, otherwise the next entry in its chapter), newer and older by date, and the author note. The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and they show as Keep reading cards.
 
 **Note:** `themes` is one to five of `people` (Leading people), `words` (Saying it well), `breaks` (When it breaks), `ai` (Working with AI) and `self` (Looking after yourself). The **first** theme is the post's chapter and decides its entry number. `quote` is a line lifted from the post itself.
+
+**Note:** A post's `openGraph` replaces the root layout's rather than merging with it, so each post carries `type: "article"`, `siteName` and `publishedTime` (the same date as `date`) itself; the validator checks for them. Top-level pages use `pageMetadata()` from `lib/site.ts` for the same reason.
 
 **Note:** The share image is the post's Field manual card, `/images/posts/[slug]-og.png`, made by `npm run og-cards -- [slug]`. Use the relative path in `openGraph.images` and the **absolute** URL in the `<PostSchema>` `image` prop (JSON-LD requires it).
 

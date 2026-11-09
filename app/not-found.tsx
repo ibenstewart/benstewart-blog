@@ -29,7 +29,7 @@ export default async function NotFound() {
     <>
       <PageHead label="Error 404 · Not found" title="This page isn't in the manual.">
         <p className="mt-6 max-w-[52ch] text-[1.1875rem] leading-[1.6] text-faint">
-          The link might be old, or the page might have moved when the site became a field manual. Every entry is still here, by chapter or by date.
+          The link might be old or mistyped. Every post is still here, by chapter or by date.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/#chapters" className={`${button} surface-dark bg-ink text-paper`}>

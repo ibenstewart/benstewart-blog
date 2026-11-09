@@ -193,6 +193,14 @@ async function main() {
     if (!metaBlock.includes('openGraph')) {
       postErrors.push('missing openGraph');
     } else {
+      // A post's openGraph replaces the root layout's, so it has to say it's
+      // an article itself (og:type, article:published_time).
+      if (!/\btype:\s*["']article["']/.test(metaBlock)) {
+        postErrors.push('missing openGraph type: "article"');
+      }
+      if (!/\bpublishedTime:\s*["']\d{4}-\d{2}-\d{2}["']/.test(metaBlock)) {
+        postErrors.push('missing openGraph publishedTime');
+      }
       if (!metaBlock.includes('images')) {
         postErrors.push('missing openGraph.images');
       } else {

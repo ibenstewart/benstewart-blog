@@ -46,7 +46,7 @@ export function Situations({ situations, entries, count }: { situations: Situati
           What are you <span className="hl">dealing with</span> today?
         </h1>
         <p className="mt-6 max-w-[42ch] text-[1.125rem] leading-[1.5] text-faint">
-          I&apos;m Ben Stewart, VP of Engineering at Skyscanner. These are {count} field reports on leading engineers and working with AI, sorted by the problem in front of you rather than the date I wrote them.
+          I&apos;m Ben Stewart, VP of Engineering at Skyscanner. I&apos;ve written {count} field reports on leading engineering teams through AI. Pick the problem you&apos;ve got and I&apos;ll tell you which ones to read, and in what order.
         </p>
         <ul role="list" className="mt-8 grid gap-2">
           {situations.map((s) => {

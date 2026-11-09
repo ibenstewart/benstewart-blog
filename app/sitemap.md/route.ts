@@ -8,14 +8,14 @@ export async function GET() {
 
 ## About This Site
 
-Ben Stewart's personal blog. ${SITE_DESCRIPTION}
+Ben Stewart's blog, laid out as a field manual for leading engineering teams through AI. ${SITE_DESCRIPTION}
 
 ## Main Pages
 
-- [Home](${SITE_URL}/) - Introduction and featured writing
-- [Bio](${SITE_URL}/bio) - Career timeline and background
-- [Posts](${SITE_URL}/posts) - All blog posts
-- [Speaking](${SITE_URL}/speaking) - Conference talks, podcasts, and articles
+- [Home](${SITE_URL}/) - Reading orders by situation, six named tools and five chapters
+- [Posts](${SITE_URL}/posts) - Every post by date, newest first
+- [Bio](${SITE_URL}/bio) - Career timeline and a short bio for organisers
+- [Speaking](${SITE_URL}/speaking) - Talks, podcasts, videos and articles
 
 ## Blog Posts
 
