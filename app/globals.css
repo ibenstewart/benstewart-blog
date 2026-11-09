@@ -904,6 +904,56 @@
   }
 }
 
+/* Home: reading-order steps slide in, chapter bars grow, cards flip. */
+@media (prefers-reduced-motion: no-preference) {
+  .step-in {
+    animation: rise-in-x 550ms var(--ease-out) both;
+  }
+  .grow-bar {
+    transition: width 800ms var(--ease-out);
+  }
+  .flip-inner {
+    transition: transform 700ms var(--ease-out);
+  }
+}
+.flip {
+  perspective: 1200px;
+}
+.flip-inner {
+  transform-style: preserve-3d;
+}
+.flip[data-open] .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip[data-open] .flip-inner,
+  .flip-back {
+    transform: none;
+  }
+  .flip:not([data-open]) .flip-back,
+  .flip[data-open] .flip-front {
+    visibility: hidden;
+  }
+}
+
+/* Tick boxes are 24px to look at and 44px to hit with a finger. */
+.tick {
+  position: relative;
+}
+@media (pointer: coarse) {
+  .tick::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+  }
+}
+
 /* Tool drawings move only when asked: on hover or focus of their card. */
 @media (prefers-reduced-motion: no-preference) {
   .tool-donut {
