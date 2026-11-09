@@ -9,6 +9,7 @@ export function ManualTopBar({ current }: { current?: string }) {
     ['toolkit', '/demo/redesigns/manual#toolkit'],
     ['chapters', '/demo/redesigns/manual#chapters'],
     ['all entries', '/demo/redesigns/manual/entries'],
+    ['speaking', '/demo/redesigns/manual/speaking'],
     ['bio', '/demo/redesigns/manual/bio'],
   ];
   return (
@@ -18,7 +19,7 @@ export function ManualTopBar({ current }: { current?: string }) {
       </Link>
       <nav aria-label="Field manual" className="flex gap-5 text-[14px] font-medium mob:w-full mob:gap-3 mob:overflow-x-auto mob:text-[12px]" style={mono}>
         {nav.map(([label, href]) => (
-          <Link key={label} href={href} aria-current={current && label.includes(current) ? 'page' : undefined} className="shrink-0 whitespace-nowrap no-underline hover:underline" style={{ color: current && label.includes(current) ? INK : GREY }}>{label}</Link>
+          <Link key={label} href={href} aria-current={current && label.includes(current) ? 'page' : undefined} className={`shrink-0 whitespace-nowrap no-underline hover:underline ${label === 'situations' || label === 'toolkit' ? 'mob:hidden' : ''}`} style={{ color: current && label.includes(current) ? INK : GREY }}>{label}</Link>
         ))}
       </nav>
     </header>

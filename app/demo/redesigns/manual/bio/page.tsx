@@ -1,5 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import { VoxelHead } from './VoxelHead';
+import { VOXEL } from './voxel-data';
 import { getConceptPosts, THEMES } from '../../_lib/data';
 import { BG, BLUE, GREY, HI, INK, MANUAL_CSS, chapters, entryHref, mono } from '../content';
 import { ManualFooter, ManualTopBar } from '../chrome';
@@ -115,9 +116,7 @@ export default async function BioPage() {
   return (
     <div className="rd-root" style={{ background: BG, color: INK }}>
       <style>{MANUAL_CSS + `
-        .fm-duo { position: relative; background: ${BLUE}; isolation: isolate; }
-        .fm-duo img { filter: grayscale(1) contrast(1.2) brightness(1.08); mix-blend-mode: screen; }
-        .fm-duo::after { content: ""; position: absolute; inset: 0; background: ${BG}; mix-blend-mode: multiply; pointer-events: none; }
+        .fm-vox { background-image: linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px); background-size: 100% calc(100% / ${VOXEL.h} * 4), calc(100% / ${VOXEL.w} * 4) 100%; }
         .fm-trail { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fm-draw 2.2s cubic-bezier(.45,0,.2,1) .2s forwards; }
         @keyframes fm-draw { to { stroke-dashoffset: 0; } }
         .fm-flag { transform-box: fill-box; transform-origin: 0 100%; animation: fm-plant .5s cubic-bezier(.16,1,.3,1) 2.2s both; }
@@ -132,9 +131,9 @@ export default async function BioPage() {
       {/* Header: the author card and the author in his own words */}
       <header className="border-b-2 px-10 pb-14 pt-12 mob:px-6 mob:pb-10 mob:pt-8" style={{ borderColor: INK }}>
         <div className="mx-auto grid max-w-[1180px] grid-cols-[300px_minmax(0,1fr)] items-start gap-14 tab:grid-cols-[240px_minmax(0,1fr)] tab:gap-10 mob:grid-cols-1">
-          <aside className="overflow-hidden rounded-3xl border-2 mob:grid mob:grid-cols-[112px_minmax(0,1fr)]" style={{ borderColor: INK, background: '#fff' }}>
-            <div className="fm-duo">
-              <Image src="/images/ben-stewart.jpg" alt="Ben Stewart speaking at a Skyscanner event" width={280} height={350} className="block h-auto w-full mob:h-full mob:object-cover" priority />
+          <aside className="overflow-hidden rounded-3xl border-2 mob:grid mob:grid-cols-[144px_minmax(0,1fr)]" style={{ borderColor: INK, background: '#fff' }}>
+            <div className="fm-vox mob:flex mob:items-end" style={{ background: BLUE }}>
+              <VoxelHead className="w-full" />
             </div>
             <dl className="grid gap-3 p-5 text-[13px] tracking-[0.06em] mob:gap-2 mob:p-3.5 mob:text-[12px]" style={mono}>
               {[
@@ -253,7 +252,7 @@ export default async function BioPage() {
             </div>
           </div>
           <div className="grid content-end gap-4">
-            <Link href="/speaking" className="group block rounded-3xl p-7 no-underline transition-transform hover:-translate-y-1" style={{ background: BLUE, color: '#fff' }}>
+            <Link href="/demo/redesigns/manual/speaking" className="group block rounded-3xl p-7 no-underline transition-transform hover:-translate-y-1" style={{ background: BLUE, color: '#fff' }}>
               <span className="block text-[13px] tracking-[0.1em] opacity-80" style={mono}>HOST A PODCAST OR RUN AN EVENT?</span>
               <span className="mt-3 block text-[28px] font-bold leading-[1.1] tracking-[-0.02em]">Here&apos;s what I talk about <span className="nudge inline-block" style={{ color: HI }} aria-hidden>→</span></span>
             </Link>
