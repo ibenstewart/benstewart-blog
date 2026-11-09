@@ -25,7 +25,7 @@ Where this spec and the code disagree on a value, the code wins; fix this file. 
 
 - **Light theme only.** No dark mode, no `prefers-color-scheme` rules, no theme toggle. `color-scheme: light`.
 - **Plain numbers, never §.**
-- **No one else's artwork.** The footer glen is drawn in code (`scripts/footer-art/draw-glen.py`); the voxel head is built from Ben's own photo (`scripts/voxel-head/build-head.py`).
+- **Credit anyone else's artwork.** The footer's mesas are by @uixhassan and the footer credits him by name; the voxel head is built from Ben's own photo (`scripts/voxel-head/build-head.py`).
 - **UK English, sentence case, no em dashes in UI strings.**
 - **WCAG 2.2 AA everywhere** (section 7).
 
@@ -95,7 +95,7 @@ All copy lives in `lib/manual-data.mjs`; `lib/manual.ts` types it and works thin
 ### 5.1 Chrome (every page, `app/layout.tsx`)
 
 - **TopBar** (`app/components/chrome/`): "Ben Stewart" with the ink FIELD MANUAL pill, and mono links: situations and toolkit (hidden on mobile), chapters, all entries, speaking, bio. The current link gets `aria-current="page"` and a blue underline.
-- **SiteFooter**: the glen (`SceneFooter`, `public/images/footer/glen.jpg`) under a blue sky, the name, "Glasgow · N entries filed", and outlined link chips.
+- **SiteFooter**: the mesas (`SceneFooter`, `public/images/footer/mesas.jpg`, by @uixhassan) under a blue sky, the name, "Glasgow · N entries filed", the illustration credit, and outlined link chips.
 
 ### 5.2 Home (`app/page.tsx`)
 
