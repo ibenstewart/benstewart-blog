@@ -1,10 +1,10 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { IBM_Plex_Mono, Schibsted_Grotesk, Source_Serif_4 } from 'next/font/google';
+import { IBM_Plex_Mono, Schibsted_Grotesk } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
-import Link from 'next/link';
 import { PersonJsonLd, WebsiteJsonLd } from './components/JsonLd';
-import { SiteNav } from './components/SiteNav';
+import { SiteFooter } from './components/chrome/SiteFooter';
+import { TopBar } from './components/chrome/TopBar';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/lib/site';
 
 export { viewport } from './viewport';
@@ -16,18 +16,12 @@ const schibsted = Schibsted_Grotesk({
   variable: '--font-schibsted'
 });
 
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
-  weight: '400',
-  style: ['italic'],
-  variable: '--font-source-serif'
-});
-
+// The manual's labels, entry numbers and badges are mono, so it's above the
+// fold on every page: preloaded, in the three weights the site uses.
 const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-plex-mono',
-  preload: false
+  weight: ['400', '500', '700'],
+  variable: '--font-plex-mono'
 });
 
 export const metadata: Metadata = {
@@ -66,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${schibsted.variable} ${sourceSerif.variable} ${plexMono.variable}`}>
+    <html lang="en-GB" className={`${schibsted.variable} ${plexMono.variable}`}>
       <body className="antialiased font-sans">
         <a
           href="#main"
@@ -77,78 +71,14 @@ export default function RootLayout({
         <WebsiteJsonLd />
         <PersonJsonLd />
         <div className="flex min-h-screen flex-col bg-paper text-ink">
-          <Masthead />
+          <TopBar />
           <main id="main" className="page-grid flex-1 content-start">
             {children}
           </main>
-          <Footer />
+          <SiteFooter />
           <Analytics />
         </div>
       </body>
     </html>
-  );
-}
-
-const wordmarkClass =
-  'whitespace-nowrap text-[1.375rem] leading-none font-bold tracking-[-0.03em] text-ink no-underline mob:text-[1.1875rem] tight:text-[1.125rem]';
-
-function Masthead() {
-  const links = [
-    { name: 'posts', url: '/posts' },
-    { name: 'bio', url: '/bio' },
-    { name: 'speaking', url: '/speaking' }
-  ];
-
-  return (
-    <header className="site-container flex items-center justify-between gap-6 pt-[calc(32px+env(safe-area-inset-top))] mob:gap-3 mob:pt-[calc(20px+env(safe-area-inset-top))]">
-      <Link href="/" className={`masthead-wordmark ${wordmarkClass}`}>
-        Ben Stewart
-      </Link>
-      <SiteNav links={links} />
-    </header>
-  );
-}
-
-function Footer() {
-  const links = [
-    { name: 'posts', url: '/posts', external: false },
-    { name: 'rss', url: '/feed.xml', external: false },
-    { name: 'github', url: 'https://github.com/ibenstewart', external: true },
-    { name: 'x', url: 'https://x.com/benstewart__', external: true },
-    { name: 'linkedin', url: 'https://www.linkedin.com/in/ben-stewart-90944595/', external: true },
-    { name: 'contact', url: 'mailto:ben@benstewart.ai', external: true }
-  ];
-
-  const pillClass =
-    'inline-flex h-11 items-center rounded-full border border-hair px-5 text-base font-medium text-ink no-underline transition-colors hover:border-accent hover:text-accent mob:h-10 mob:px-4 mob:text-[0.9375rem]';
-
-  return (
-    <footer className="site-container mt-[var(--section)] pb-[calc(64px+env(safe-area-inset-bottom))]">
-      <div className="flex flex-wrap items-end justify-between gap-8 border-t border-hair pt-10 mob:block">
-        <div>
-          <Link href="/" className={`block ${wordmarkClass}`}>
-            Ben Stewart
-          </Link>
-          <p className="mt-2.5 text-[0.9375rem] font-medium tracking-[0.005em] text-red">Glasgow</p>
-        </div>
-        <nav aria-label="Footer">
-          <ul role="list" className="flex flex-wrap gap-2.5 mob:mt-7">
-            {links.map((link) => (
-              <li key={link.name}>
-                {link.external ? (
-                  <a href={link.url} target="_blank" rel="noopener noreferrer" className={pillClass}>
-                    {link.name}
-                  </a>
-                ) : (
-                  <Link href={link.url} className={pillClass}>
-                    {link.name}
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </footer>
   );
 }

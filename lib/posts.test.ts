@@ -197,6 +197,19 @@ describe('getAllPosts', () => {
     expect(post.title).toBe("Ralph Isn't the Point");
   });
 
+  it('reads themes, quote and the Substack import flag from the metadata block', async () => {
+    await writePost(
+      postsDir,
+      'tagged',
+      `export const metadata = { title: "T", date: "2023-09-18", themes: ["ai", "words"], quote: "Say \\"less\\"." };\n\nquote: "not this one"`,
+    );
+    await writePost(postsDir, 'bare', `export const metadata = { title: "B", date: "2024-01-01" };`);
+
+    const [bare, tagged] = await getAllPosts(postsDir);
+    expect(tagged).toMatchObject({ themes: ['ai', 'words'], quote: 'Say "less".', importDate: true });
+    expect(bare).toMatchObject({ themes: [], quote: null, importDate: false });
+  });
+
   describe('readingMinutes', () => {
     it('rounds to the nearest minute at 230 words per minute', async () => {
       const words = new Array(460).fill('word').join(' '); // 460 words -> 2 min
@@ -277,6 +290,10 @@ describe('groupPostsByYear', () => {
     date,
     readingMinutes: 1,
     draft: false,
+    words: 600,
+    themes: [],
+    quote: null,
+    importDate: false,
   });
 
   it('returns an empty array for no posts', () => {
@@ -323,6 +340,10 @@ describe('pickPosts', () => {
     date: '2024-01-01',
     readingMinutes: 1,
     draft: false,
+    words: 600,
+    themes: [],
+    quote: null,
+    importDate: false,
   });
 
   it('returns posts in slug order and skips unknown slugs', () => {

@@ -4,6 +4,7 @@ import {
   ArticleJsonLd,
   FAQJsonLd,
   PersonJsonLd,
+  ProfilePageJsonLd,
   WebsiteJsonLd,
 } from './JsonLd';
 
@@ -73,6 +74,24 @@ describe('ArticleJsonLd', () => {
     expect(parsed.image).toBe(
       'https://www.benstewart.ai/images/posts/a-post-0.png',
     );
+  });
+
+  it('names the chapter as articleSection and every theme as keywords', () => {
+    const { container } = render(
+      <ArticleJsonLd {...baseProps} section="Working with AI" keywords={['Working with AI', 'Saying it well']} />,
+    );
+    const { parsed } = readJsonLd(container);
+    expect(parsed.articleSection).toBe('Working with AI');
+    expect(parsed.keywords).toBe('Working with AI, Saying it well');
+    expect(parsed.isPartOf['@id']).toBe('https://www.benstewart.ai/#website');
+    expect(parsed.publisher['@id']).toBe(parsed.author['@id']);
+  });
+
+  it('leaves out articleSection and keywords without themes', () => {
+    const { container } = render(<ArticleJsonLd {...baseProps} keywords={[]} />);
+    const { parsed } = readJsonLd(container);
+    expect(parsed).not.toHaveProperty('articleSection');
+    expect(parsed).not.toHaveProperty('keywords');
   });
 
   it('escapes < characters in the rendered script to prevent HTML injection', () => {
@@ -160,5 +179,15 @@ describe('WebsiteJsonLd', () => {
     expect(parsed.name).toBe('Ben Stewart');
     expect(parsed.url).toBe('https://www.benstewart.ai');
     expect(parsed.author.name).toBe('Ben Stewart');
+  });
+});
+
+describe('ProfilePageJsonLd', () => {
+  it('points the bio page at the site Person by @id', () => {
+    const { container } = render(<ProfilePageJsonLd />);
+    const { parsed } = readJsonLd(container);
+    expect(parsed['@type']).toBe('ProfilePage');
+    expect(parsed.url).toBe('https://www.benstewart.ai/bio');
+    expect(parsed.mainEntity).toEqual({ '@id': 'https://www.benstewart.ai/#person' });
   });
 });

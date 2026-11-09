@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 
 /**
- * A fenced code block with a Copy button (DESIGN.md 4.3, plan KTD9).
+ * A fenced code block with a Copy button (docs/design/field-manual/DESIGN.md 5.3).
  * The button sits outside the <pre> so the copied text never includes it,
  * and stays hidden until JS runs and the Clipboard API is available, so the
  * block works fully without JavaScript.

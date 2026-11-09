@@ -1,27 +1,31 @@
 @import 'tailwindcss';
 
-/* Glasgow Civic breakpoints (DESIGN.md 3.4, plan KTD14). Inclusive max-width,
+/* Breakpoints (docs/design/field-manual/DESIGN.md 3.3). Inclusive max-width,
    largest first so the narrower ones win. Use these, not sm/md/lg or max-[...]. */
 @custom-variant tab (@media (max-width: 1080px));
 @custom-variant cards (@media (max-width: 960px));
 @custom-variant mob (@media (max-width: 760px));
 @custom-variant tight (@media (max-width: 380px));
 
-/* Light theme only (DESIGN.md 2). */
+/* Light theme only. Field manual palette (docs/design/field-manual/DESIGN.md 3.1):
+   paper, ink and one blue, with a highlighter yellow for the things to read first.
+   The old Glasgow Civic names stay so existing utilities keep working. */
 :root {
   color-scheme: light;
 
-  --paper: #FDFCFA;
-  --raise: #F6F1E7;
-  --ink: #1C2731;
-  --muted: #4E5964;
-  --faint: #5E6873;
-  --hair: #DDD7CC;
-  --accent: #004A93;
-  --accent-deep: #003A75;
-  --blond: #EDE3D1;
-  --blond-line: #E4D8C2;
-  --red: #9C4A33;
+  --paper: #F6F5F0;
+  --card: #FFFFFF;
+  --raise: #EEECE5;
+  --ink: #0E0F12;
+  --muted: #2B2E34;
+  --faint: #5C5F66;
+  --hair: #DAD9D3;
+  --accent: #003593;
+  --accent-deep: #00266B;
+  --hi: #FFD84A;
+  --blond: #FFF1BF;
+  --blond-line: #E9E1C4;
+  --red: #A63A22;
 
   --sh-identifier: var(--ink);
   --sh-keyword: #004A93;
@@ -38,7 +42,7 @@
   --measure: 640px;
   --hang: 24px;
 
-  /* Motion (DESIGN.md 3.5). One ease-out curve; feedback is fast, state changes
+  /* Motion (DESIGN.md 6). One ease-out curve; feedback is fast, state changes
      a little slower, and the arch is the only sequence that runs near a second. */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --t-fast: 150ms;
@@ -47,6 +51,8 @@
 
 @theme {
   --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-hi: var(--hi);
   --color-raise: var(--raise);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
@@ -58,13 +64,11 @@
   --color-blond-line: var(--blond-line);
   --color-red: var(--red);
   --font-sans: var(--font-schibsted), 'Helvetica Neue', Arial, system-ui, sans-serif;
-  --font-serif: var(--font-source-serif), Georgia, 'Times New Roman', serif;
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @layer base {
   html {
-    min-width: 360px;
     scrollbar-gutter: stable;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -148,7 +152,7 @@
     color: var(--color-ink);
   }
 
-  /* Reduced motion (DESIGN.md 3.5): nothing moves, but colour and opacity
+  /* Reduced motion (DESIGN.md 6): nothing moves, but colour and opacity
      feedback stays. Transitions keep their timing for colour and opacity only,
      so a transform or width change happens instantly. Animations that exist
      have their own reduced variants next to them. */
@@ -196,20 +200,13 @@
   }
 
   /* Inherit-only pages (no full-width header or hero first) still need air below the masthead. */
-  .page-grid:not(:has(> .col-full:first-child)) {
+  .page-grid:not(:has(> .col-full:first-child, > .col-bleed:first-child)) {
     padding-top: clamp(48px, 6vw, 96px);
   }
 
   /* Prose rhythm: skip the first block after scripts, the post header and the hero. Components override. */
   .page-grid > :where(:not(script, .post-head, .hero-fig) + *) {
     margin-top: 1.1em;
-  }
-
-  /* The homepage hero already shows the name at full size, so the masthead
-     wordmark steps aside there. visibility keeps the nav pill in place and
-     takes the link out of the tab order and accessibility tree. */
-  body:has(.home-hero) .masthead-wordmark {
-    visibility: hidden;
   }
 
   .page-grid > .col-wide {
@@ -224,7 +221,44 @@
     padding-inline: var(--gutter);
   }
 
-  /* ---------- Post page (DESIGN.md 4.3) ---------- */
+  /* Edge to edge: Field manual sections with ink rules that run the full
+     width of the window. They carry their own padding. */
+  .page-grid > .col-bleed {
+    grid-column: full;
+    width: 100%;
+  }
+  .page-grid:has(> .col-bleed:first-child) {
+    padding-top: 0;
+  }
+  /* Air above the footer, unless the page already ends on a ruled section. */
+  .page-grid:not(:has(> .col-bleed:last-child)) {
+    padding-bottom: var(--section);
+  }
+
+  /* Focus on blue and ink: the ring turns yellow. */
+  .surface-dark :focus-visible,
+  .surface-dark:focus-visible {
+    outline-color: var(--color-hi);
+  }
+
+  /* The highlighter: a yellow band behind the lower part of the line. */
+  .hl {
+    background: linear-gradient(var(--color-hi), var(--color-hi)) 0 88% / 100% 40% no-repeat;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Small mono labels. Written in sentence case and capitalised here, so a
+     screen reader reads words, not letters. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Post page (DESIGN.md 5.3) ---------- */
 
   /* Header and hero spacing (KTD4). The header's bottom margin drops when a hero
      follows it; PostSchema/FAQJsonLd scripts may sit between them. */
@@ -297,7 +331,7 @@
     margin-top: 0.8em;
   }
   /* The first block after the header, a hero or a script never adds its own top
-     margin: the header and hero already carry the gap (DESIGN.md 4.3). A hero
+     margin: the header and hero already carry the gap (DESIGN.md 5.3). A hero
      keeps its own top margin. Higher specificity than the block rules above. */
   .page-grid > :is(script, .post-head, .hero-fig) + :not(.hero-fig, script) {
     margin-top: 0;
@@ -321,44 +355,69 @@
     }
   }
 
-  /* Numbered lists: blue numerals hang in the margin (KTD13: class-scoped). */
+  /* Sections number themselves from the entry: PostHeader sets --entry on
+     #main, so the first h2 of entry 4.2 reads "4.2.1". Pages without an
+     entry number leave --entry unset, which drops the label. */
+  #main {
+    counter-reset: sec;
+  }
+  .prose-h2 {
+    counter-increment: sec;
+  }
+  .prose-h2::before {
+    content: var(--entry) '.' counter(sec);
+    display: block;
+    margin-bottom: 10px;
+    font: 400 0.8125rem/1 var(--font-mono);
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+  }
+
+  /* Numbered lists: yellow numerals on ink tiles. */
   .prose-ol {
     counter-reset: step;
   }
   .prose-ol > li {
     position: relative;
+    padding-left: 40px;
     counter-increment: step;
   }
   .prose-ol > li + li {
-    margin-top: 0.85em;
+    margin-top: 0.6em;
   }
   .prose-ol > li::before {
     content: counter(step) / '';
     position: absolute;
-    top: 0;
-    right: calc(100% + var(--hang));
-    font-weight: 700;
-    color: var(--color-accent);
-    font-variant-numeric: tabular-nums;
+    left: 0;
+    top: 0.15em;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--color-ink);
+    color: var(--color-hi);
+    font: 700 0.875rem/1 var(--font-mono);
   }
 
-  /* Bulleted lists: 7px faint dots, 28px text indent. */
+  /* Bulleted lists: small highlighter squares with an ink edge. */
   .prose-ul > li {
     position: relative;
-    padding-left: 28px;
+    padding-left: 30px;
   }
   .prose-ul > li + li {
-    margin-top: 0.35em;
+    margin-top: 0.45em;
   }
   .prose-ul > li::before {
     content: '';
     position: absolute;
-    left: 6px;
-    top: 0.66em;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--color-faint);
+    left: 2px;
+    top: 0.5em;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 2px solid var(--color-ink);
+    background: var(--color-hi);
   }
   li > .prose-ul,
   li > .prose-ol {
@@ -368,11 +427,10 @@
     margin-top: 1.1em;
   }
 
-  /* Pull quote: 4px blue bar with rounded ends, hanging in the margin. */
-  .pull-quote > blockquote {
+  /* Markdown blockquote: a 4px blue bar hanging in the margin. */
+  .prose-quote {
     position: relative;
   }
-  .pull-quote > blockquote::before,
   .prose-quote::before {
     content: '';
     position: absolute;
@@ -383,14 +441,33 @@
     border-radius: 2px;
     background: var(--color-accent);
   }
-  /* Markdown blockquote: the quieter cousin, 3px hair bar. */
-  .prose-quote {
-    position: relative;
+
+  /* The contents rail sits in the left margin on wide screens only. */
+  .entry-rail {
+    display: none;
   }
-  .prose-quote::before {
-    width: 3px;
-    border-radius: 1.5px;
-    background: var(--color-hair);
+  @media (min-width: 1240px) {
+    .entry-rail {
+      position: fixed;
+      top: 96px;
+      left: var(--gutter);
+      z-index: 5;
+      display: block;
+      width: min(260px, calc((100vw - var(--measure)) / 2 - var(--gutter) - 40px));
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--t-state) var(--ease-out), visibility 0s linear var(--t-state);
+    }
+    .entry-rail[data-shown] {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity var(--t-state) var(--ease-out);
+    }
+    .entry-rail-fill {
+      transition: height var(--t-state) var(--ease-out);
+    }
   }
 
   /* hr and Divider: a hair rule across the column. */
@@ -434,18 +511,9 @@
   }
 
   @media (max-width: 960px) {
-    .prose-ol > li {
-      padding-left: 32px;
-    }
-    .prose-ol > li::before {
-      right: auto;
-      left: 0;
-    }
-    .pull-quote > blockquote,
     .prose-quote {
       padding-left: 24px;
     }
-    .pull-quote > blockquote::before,
     .prose-quote::before {
       right: auto;
       left: 0;
@@ -480,105 +548,8 @@
   }
 }
 
-/* Post cards (DESIGN.md 4.2 favourites, 4.3 Keep reading; plan KTD10). Shared by
-   PostCard on the homepage and at the end of posts. Spacing above the list is set
-   by the caller. */
-@layer components {
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 24px;
-  }
-
-  .post-card {
-    position: relative;
-    display: grid;
-    grid-row: span 3;
-    grid-template-rows: subgrid;
-    row-gap: 0;
-    border-top: 2px solid var(--color-ink);
-    padding-top: 24px;
-  }
-
-  .post-card-title {
-    font-weight: 500;
-    font-size: clamp(1.375rem, 2vw, 1.75rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
-    text-wrap: balance;
-    padding-right: 16px;
-    transition: color 150ms;
-  }
-
-  .post-card:hover .post-card-title {
-    color: var(--color-accent);
-  }
-
-  .post-card-excerpt {
-    margin-top: 12px;
-    padding-right: 24px;
-    font-weight: 400;
-    font-size: 1.1875rem;
-    line-height: 1.4;
-    color: var(--color-muted);
-    text-wrap: pretty;
-  }
-
-  .post-card-meta {
-    margin-top: 18px;
-    font-weight: 500;
-    font-size: 0.9375rem;
-    letter-spacing: 0.005em;
-    color: var(--color-faint);
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Whole-card (or whole-row) link: the overlay takes the click and the focus ring. */
-  .post-link {
-    color: inherit;
-    text-decoration: none;
-  }
-  .post-link::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-  }
-  .post-link:focus-visible {
-    outline: none;
-  }
-  .post-link:focus-visible::after {
-    outline: 3px solid var(--color-accent);
-    outline-offset: 4px;
-    border-radius: 6px;
-  }
-
-  @media (max-width: 960px) {
-    .cards {
-      grid-template-columns: 1fr;
-      row-gap: 48px;
-    }
-    .post-card {
-      display: block;
-      grid-row: auto;
-    }
-  }
-
-  @media (max-width: 760px) {
-    .cards {
-      row-gap: 40px;
-    }
-    .post-card-excerpt {
-      font-size: 1.0625rem;
-    }
-    .post-card-meta {
-      font-size: 0.875rem;
-    }
-  }
-}
-
-/* Motion (DESIGN.md 3.6). Blue means go, so the blue things move: arrows nudge,
-   rules fill with blue, the nav marks where you are, and the arch rises once.
+/* Motion (DESIGN.md 6). Blue means go, so the blue things move: arrows nudge,
+   cards lift, chapter bars grow, and a post's hero rises through its arch once.
    The reading column never moves. Every rule that moves something either sits
    behind prefers-reduced-motion: no-preference or has a reduced variant beside it. */
 @keyframes arch-rise {
@@ -597,32 +568,6 @@
   to {
     translate: 0 0;
     opacity: 1;
-  }
-}
-@keyframes rise-in-y {
-  from {
-    translate: 0 -20px;
-    opacity: 0;
-  }
-  to {
-    translate: 0 0;
-    opacity: 1;
-  }
-}
-@keyframes rule-draw {
-  from {
-    scale: 0 1;
-  }
-  to {
-    scale: 1 1;
-  }
-}
-@keyframes num-rise {
-  from {
-    translate: 0 105%;
-  }
-  to {
-    translate: 0 0;
   }
 }
 @keyframes settle {
@@ -665,126 +610,10 @@
     }
   }
 
-  /* Rules turn blue: cards (favourites, Keep reading) and archive rows draw a
-     blue rule from the left on hover or focus; it leaves to the right. */
-  .post-card::before,
-  .archive-row::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--color-accent);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 220ms var(--ease-out), opacity var(--t-fast) linear;
-    pointer-events: none;
-  }
-  .post-card::before {
-    top: -2px;
-  }
-  .archive-row::after {
-    bottom: -1px;
-  }
-  .post-card:is(:hover, :focus-within)::before,
-  .archive-row:is(:hover, :focus-within)::after {
-    transform: scaleX(1);
-    transform-origin: left;
-    transition-duration: 460ms, var(--t-fast);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .post-card::before,
-    .archive-row::after {
-      transform: none;
-      opacity: 0;
-    }
-    .post-card:is(:hover, :focus-within)::before,
-    .archive-row:is(:hover, :focus-within)::after {
-      opacity: 1;
-    }
-  }
-
-  /* You are here: one deep-blue segment marks the current section in the nav
-     pill and glides to whichever link is hovered or focused (SiteNav). Without
-     script, the current link and hovered links carry the fill themselves. */
-  .site-nav a[aria-current],
-  .site-nav:not([data-ready]) a:hover {
-    background-color: var(--color-accent-deep);
-  }
-  .site-nav[data-ready] a[aria-current] {
-    background-color: transparent;
-  }
-  .nav-seg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-radius: 999px;
-    background: var(--color-accent-deep);
-    opacity: 0;
-    pointer-events: none;
-    transition: translate 380ms var(--ease-out), width 380ms var(--ease-out), opacity var(--t-fast) linear;
-  }
-  .site-nav[data-ready] .nav-seg[data-on] {
-    opacity: 1;
-  }
-  .site-nav[data-instant] .nav-seg {
-    transition: none;
-  }
-
-  /* Start here: the rows draw their own rules so the arch sequence can draw
-     them in; the arrow turns to point at the hovered row (StartHereMotion). */
-  .start-row::before,
-  .start-row:last-child::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--color-hair);
-    transform-origin: left;
-  }
-  .start-row::before {
-    top: 0;
-  }
-  .start-row:last-child::after {
-    bottom: 0;
-  }
-  .start-num > span {
-    display: block;
-  }
-  .start-arch {
-    --arch: 999px;
-  }
-  .start-arrow {
-    rotate: var(--point, 0deg);
-  }
-
-  /* The arch rises: plays once. `data-rise="armed"` holds the first frame while
-     the section is still below the fold; "play" runs it. */
+  /* A post's hero image rises through its arch once. `data-rise="armed"`
+     holds the first frame while the figure is still below the fold; "play"
+     runs it (HeroImage). */
   @media (prefers-reduced-motion: no-preference) {
-    .start-arrow {
-      transition: rotate 420ms var(--ease-out);
-    }
-    .rise[data-rise] .start-arch {
-      animation: arch-rise 900ms var(--ease-out) both;
-    }
-    .rise[data-rise] .start-arrow {
-      animation: rise-in-x 520ms var(--ease-out) 440ms both;
-    }
-    .rise[data-rise] .start-row::before {
-      animation: rule-draw 600ms var(--ease-out) calc(200ms + var(--i, 0) * 90ms) both;
-    }
-    .rise[data-rise] .start-row:last-child::after {
-      animation: rule-draw 600ms var(--ease-out) calc(290ms + var(--i, 0) * 90ms) both;
-    }
-    .rise[data-rise] .start-num {
-      clip-path: inset(-50% -20% 0 -20%);
-    }
-    .rise[data-rise] .start-num > span {
-      animation: num-rise 640ms var(--ease-out) calc(280ms + var(--i, 0) * 90ms) both;
-    }
     .hero-fig .frame[data-rise] {
       animation: arch-rise 1000ms var(--ease-out) both;
     }
@@ -792,34 +621,152 @@
       animation: settle 1400ms var(--ease-out) both;
     }
   }
-  @media (prefers-reduced-motion: no-preference) and (max-width: 760px) {
-    .rise[data-rise] .start-arrow {
-      animation-name: rise-in-y;
-    }
-  }
   @media (prefers-reduced-motion: reduce) {
-    .rise[data-rise] .start-arch,
     .hero-fig .frame[data-rise] {
       animation: fade-in 300ms linear both;
     }
   }
-  .rise[data-rise='armed'] :is(.start-arch, .start-arrow, .start-num > span),
-  .rise[data-rise='armed'] .start-row::before,
-  .rise[data-rise='armed'] .start-row:last-child::after,
   .hero-fig .frame[data-rise='armed'],
   .hero-fig .frame[data-rise='armed'] img {
     animation-play-state: paused;
   }
 }
 
-/* Unlayered on purpose: no utility can reach ::first-letter (plan KTD15). */
-.lede > p::first-letter {
-  float: left;
-  font-size: 4.3rem;
-  line-height: 0.8;
-  padding: 0.35rem 0.6rem 0 0;
-  font-weight: 700;
+/* Unlayered on purpose: the lede's paragraphs carry the prose utilities from
+   the p mapping, and only unlayered CSS beats a utility. */
+.lede > p {
+  font-size: 1.4375rem;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
+}
+@media (max-width: 760px) {
+  .lede > p {
+    font-size: 1.25rem;
+  }
+}
+
+/* Home: reading-order steps slide in, chapter bars grow, cards flip. */
+@media (prefers-reduced-motion: no-preference) {
+  .step-in {
+    animation: rise-in-x 550ms var(--ease-out) both;
+  }
+  .grow-bar {
+    transition: width 800ms var(--ease-out);
+  }
+  .flip-inner {
+    transition: transform 700ms var(--ease-out);
+  }
+}
+.flip {
+  perspective: 1200px;
+}
+.flip-inner {
+  transform-style: preserve-3d;
+}
+.flip[data-open] .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip[data-open] .flip-inner,
+  .flip-back {
+    transform: none;
+  }
+  .flip:not([data-open]) .flip-back,
+  .flip[data-open] .flip-front {
+    visibility: hidden;
+  }
+}
+
+/* Tick boxes are 24px to look at and 44px to hit with a finger. */
+.tick {
+  position: relative;
+}
+@media (pointer: coarse) {
+  .tick::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+  }
+}
+
+/* Tool drawings move only when asked: on hover or focus of their card. */
+@media (prefers-reduced-motion: no-preference) {
+  .tool-donut {
+    transition: stroke-width 300ms var(--ease-out);
+  }
+  .tool-reveal {
+    transform-origin: 100px 100px;
+    transition: scale 500ms var(--ease-out);
+  }
+  .tool-key {
+    transition: translate 120ms var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+}
+.tool-reveal {
+  scale: 0;
+}
+:is(.tool-card:hover, .tool-card:focus-within, .tool-card[data-open]) .tool-donut {
+  stroke-width: 40;
+}
+:is(.tool-card:hover, .tool-card:focus-within, .tool-card[data-open]) .tool-reveal {
+  scale: 1;
+}
+:is(.tool-card:hover, .tool-card:focus-within) .tool-key {
+  translate: 0 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tool-reveal {
+    scale: 1;
+  }
+}
+
+/* Bio: a faint 4-voxel grid behind the head, and the climb that draws
+   itself in once with the flag planted at the end. Reduced motion shows the
+   finished drawing. */
+@layer components {
+  .vox-grid {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  }
+  .route-trail {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: route-draw 2.2s cubic-bezier(0.45, 0, 0.2, 1) 0.2s forwards;
+  }
+  .route-flag {
+    transform-box: fill-box;
+    transform-origin: 0 100%;
+    animation: route-plant 0.5s var(--ease-out) 2.2s both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .route-trail {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+    .route-flag {
+      animation: none;
+    }
+  }
+}
+@keyframes route-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes route-plant {
+  from {
+    transform: scaleY(0);
+  }
 }
 
 /* Tweet embeds (react-tweet). Unlayered on purpose: react-tweet's own CSS is
@@ -835,5 +782,8 @@
   --tweet-bg-color-hover: var(--raise);
   --tweet-color-blue-secondary: var(--accent);
   --tweet-color-blue-secondary-hover: rgb(0 74 147 / 0.08);
+  /* 24px header lines so the name, handle and Follow links meet the 24px
+     target size (WCAG 2.5.8); the two lines now match the 48px avatar. */
+  --tweet-header-line-height: 1.5rem;
   border-radius: 20px;
 }

@@ -9,12 +9,28 @@ export const sql = postgres(process.env.POSTGRES_URL!, {
 const nextConfig: NextConfig = {
   pageExtensions: ['mdx', 'ts', 'tsx'],
   async redirects() {
+    // Share cards moved from hand-made -og.jpg files to rendered -og.png
+    // ones; old shares that still point at a .jpg get the new card.
+    const oldShareCards = [
+      'a-prompt-to-your-leadership-style',
+      'leadership-as-a-service',
+      'multi-agent-ai-strategy',
+      'ralph-isnt-the-point',
+      'the-truth-about-authentic-leadership',
+      'what-level-does-this-task-deserve',
+    ].map((slug) => ({
+      source: `/images/posts/${slug}-og.jpg`,
+      destination: `/images/posts/${slug}-og.png`,
+      permanent: true,
+    }));
+
     const staticRedirects = [
       {
         source: '/posts/thinking-engine',
         destination: '/posts/multi-agent-ai-strategy',
         permanent: true,
       },
+      ...oldShareCards,
     ];
 
     if (!process.env.POSTGRES_URL) {

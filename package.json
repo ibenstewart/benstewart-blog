@@ -7,7 +7,9 @@
     "delete": "rm -rf app/n",
     "validate-posts": "node scripts/validate-posts.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "og-cards": "node --experimental-strip-types --no-warnings scripts/og-cards.mts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@next/mdx": "15.3.3",
@@ -24,6 +26,8 @@
     "sugar-high": "^0.9.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "1.63.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^22.15.29",
@@ -35,5 +39,8 @@
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
     "vitest": "^4.1.5"
+  },
+  "overrides": {
+    "playwright-core": "1.63.0"
   }
 }

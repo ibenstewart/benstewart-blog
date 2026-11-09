@@ -11,7 +11,7 @@ const RISE_MS = 1600;
  * gets `is-empty` and CSS hides the whole figure. The useEffect check covers
  * errors that fired before hydration.
  *
- * The arch rises (DESIGN.md 3.6): if the image is still loading when the
+ * The arch rises (docs/design/field-manual/DESIGN.md 6): if the image is still loading when the
  * component mounts, the frame is armed and the image rises through the arch
  * once it arrives. An image that is already showing is never hidden again, so
  * a cached image simply stays put.

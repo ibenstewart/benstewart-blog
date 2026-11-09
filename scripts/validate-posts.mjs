@@ -16,6 +16,7 @@ import {
   matchQuotedPropInTag,
   stripFencedCodeBlocks,
 } from '../lib/mdx-parsing.mjs';
+import { MAX_THEMES, THEMES, manualSlugRefs, parseThemes } from '../lib/manual-data.mjs';
 
 const POSTS_DIR = new URL('../app/posts', import.meta.url).pathname;
 const PUBLIC_DIR = new URL('../public', import.meta.url).pathname;
@@ -102,6 +103,45 @@ export function checkPostHeaderFormat(bodyContent, slug) {
   return errors;
 }
 
+/**
+ * Checks the Field manual fields in a post's metadata block: one to
+ * MAX_THEMES known themes (the first is the post's chapter) and a non-empty
+ * `quote`. Returns an array of error message strings.
+ */
+export function checkManualMetadata(metaBlock) {
+  const errors = [];
+  const themes = parseThemes(metaBlock);
+  const known = THEMES.map((t) => t.id);
+  if (themes === null) {
+    errors.push(`missing metadata.themes (one to ${MAX_THEMES} of: ${known.join(', ')})`);
+  } else if (themes.length === 0) {
+    errors.push('metadata.themes is empty; the first theme decides the chapter');
+  } else {
+    if (themes.length > MAX_THEMES) errors.push(`metadata.themes has ${themes.length} themes; the most is ${MAX_THEMES}`);
+    for (const t of themes) {
+      if (!known.includes(t)) errors.push(`unknown theme "${t}" (known: ${known.join(', ')})`);
+    }
+    if (new Set(themes).size !== themes.length) errors.push('metadata.themes repeats a theme');
+  }
+  const quote = matchQuoted(metaBlock, 'quote');
+  if (quote === null) errors.push('missing metadata.quote (one pull line from the post)');
+  else if (!quote.trim()) errors.push('metadata.quote is empty');
+  return errors;
+}
+
+/**
+ * Checks every situation and tool in lib/manual-data.mjs points at a real,
+ * published post. `published` is the set of post slugs that aren't drafts.
+ */
+export function checkManualRefs(postDirs, published) {
+  const errors = [];
+  for (const { slug, from } of manualSlugRefs()) {
+    if (!postDirs.includes(slug)) errors.push(`${from} points at "${slug}", which has no post directory`);
+    else if (!published.has(slug)) errors.push(`${from} points at "${slug}", which is a draft`);
+  }
+  return errors;
+}
+
 async function main() {
   let errors = 0;
 
@@ -110,6 +150,7 @@ async function main() {
     errors++;
   }
 
+  const published = new Set();
   const entries = await readdir(POSTS_DIR, { withFileTypes: true });
   const postDirs = entries
     .filter((e) => e.isDirectory())
@@ -152,6 +193,14 @@ async function main() {
     if (!metaBlock.includes('openGraph')) {
       postErrors.push('missing openGraph');
     } else {
+      // A post's openGraph replaces the root layout's, so it has to say it's
+      // an article itself (og:type, article:published_time).
+      if (!/\btype:\s*["']article["']/.test(metaBlock)) {
+        postErrors.push('missing openGraph type: "article"');
+      }
+      if (!/\bpublishedTime:\s*["']\d{4}-\d{2}-\d{2}["']/.test(metaBlock)) {
+        postErrors.push('missing openGraph publishedTime');
+      }
       if (!metaBlock.includes('images')) {
         postErrors.push('missing openGraph.images');
       } else {
@@ -170,6 +219,8 @@ async function main() {
     const bodyContent = metaEnd === -1 ? content : content.slice(metaEnd);
 
     postErrors.push(...checkPostHeaderFormat(bodyContent, slug));
+    postErrors.push(...checkManualMetadata(metaBlock));
+    if (!/\bdraft:\s*true\b/.test(metaBlock)) published.add(slug);
 
     if (!bodyContent.includes('<PostSchema')) {
       postErrors.push('missing <PostSchema> component');
@@ -237,6 +288,11 @@ async function main() {
     } else {
       console.log(`  OK    ${slug}`);
     }
+  }
+
+  for (const err of checkManualRefs(postDirs, published)) {
+    console.error(`  FAIL  manual: ${err}`);
+    errors++;
   }
 
   console.log(`\n${postDirs.length} posts checked, ${errors} error(s)`);

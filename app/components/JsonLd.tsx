@@ -1,6 +1,7 @@
-import { SITE_DESCRIPTION } from '@/lib/site';
+import { SITE_DESCRIPTION, SITE_URL } from '@/lib/site';
 
 export const PERSON_ID = 'https://www.benstewart.ai/#person';
+export const WEBSITE_ID = 'https://www.benstewart.ai/#website';
 
 const SAME_AS = [
   'https://www.linkedin.com/in/ben-stewart-90944595/',
@@ -15,9 +16,13 @@ type ArticleJsonLdProps = {
   lastModified?: string;
   url: string;
   image?: string;
+  /** The entry's chapter name, e.g. "Working with AI". */
+  section?: string;
+  /** Every theme the entry is tagged with, by name. */
+  keywords?: string[];
 };
 
-export function ArticleJsonLd({ title, description, date, lastModified, url, image }: ArticleJsonLdProps) {
+export function ArticleJsonLd({ title, description, date, lastModified, url, image, section, keywords }: ArticleJsonLdProps) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -39,10 +44,15 @@ export function ArticleJsonLd({ title, description, date, lastModified, url, ima
     },
     publisher: {
       '@type': 'Person',
+      '@id': PERSON_ID,
       name: 'Ben Stewart',
       url: 'https://www.benstewart.ai',
     },
+    isPartOf: { '@type': 'WebSite', '@id': WEBSITE_ID },
+    inLanguage: 'en-GB',
     ...(image && { image: image }),
+    ...(section && { articleSection: section }),
+    ...(keywords && keywords.length > 0 ? { keywords: keywords.join(', ') } : {}),
   };
 
   return (
@@ -103,14 +113,38 @@ export function WebsiteJsonLd() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': WEBSITE_ID,
     name: 'Ben Stewart',
     url: 'https://www.benstewart.ai',
+    inLanguage: 'en-GB',
     description: SITE_DESCRIPTION,
     author: {
       '@type': 'Person',
       '@id': PERSON_ID,
       name: 'Ben Stewart',
     },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+    />
+  );
+}
+
+/**
+ * The bio page as a ProfilePage about the site's Person. The Person itself is
+ * in the root layout on every page; this points at it by @id.
+ */
+export function ProfilePageJsonLd() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: `${SITE_URL}/bio`,
+    name: 'About Ben Stewart',
+    mainEntity: { '@id': PERSON_ID },
+    isPartOf: { '@id': WEBSITE_ID },
   };
 
   return (

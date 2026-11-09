@@ -1,0 +1,110 @@
+export const metadata = {
+  title: "Three Redesigns in One Evening: The Demo Is the Cheap Part",
+  date: "2026-11-09",
+  themes: ["ai", "words"],
+  quote: "A design that needs explaining has already failed.",
+  subtitle: "Three complete redesigns in one evening. Picking one took three days.",
+  description: "I asked Claude Code for complete redesigns of this blog and had three working concepts before bed. Choosing, checking and shipping one properly is the real work.",
+  draft: true,
+  robots: { index: false, follow: false },
+  alternates: {
+    canonical: 'https://www.benstewart.ai/posts/the-demo-is-the-cheap-part'
+  },
+  openGraph: {
+    type: "article",
+    siteName: "Ben Stewart",
+    publishedTime: "2026-11-09",
+    authors: ["https://www.benstewart.ai/bio"],
+    title: "Three Redesigns in One Evening: The Demo Is the Cheap Part",
+    description: "I asked Claude Code for complete redesigns of this blog and had three working concepts before bed. Choosing, checking and shipping one properly is the real work.",
+    url: "https://www.benstewart.ai/posts/the-demo-is-the-cheap-part",
+    images: [{ url: "/images/posts/the-demo-is-the-cheap-part-og.png", width: 1200, height: 630 }],
+  }
+};
+
+<PostHeader title="The Demo Is the Cheap Part" slug="the-demo-is-the-cheap-part" />
+
+<PostSchema
+  title="Three Redesigns in One Evening: The Demo Is the Cheap Part"
+  description="I asked Claude Code for complete redesigns of this blog and had three working concepts before bed. Choosing, checking and shipping one properly is the real work."
+  date="2026-11-09"
+  slug="the-demo-is-the-cheap-part"
+  image="https://www.benstewart.ai/images/posts/the-demo-is-the-cheap-part-og.png"
+/>
+
+<Lede>It's Friday night, it's been a long week, and instead of switching off I type a lazy request into Claude Code. "Why don't we spend some of tonight, and offer me some complete redesigns?" I want two or three directions that take this site somewhere completely different. Animation, visualisations, maybe even the content itself.</Lede>
+
+By the end of the evening I had three, and they weren't mood boards. They were working pages on a preview link, wired up to every real post on this blog.
+
+Here's the strange part. Building them took one evening. Choosing between them took three days, and working out what it would take to ship the winner properly is still going.
+
+That's the whole post, really. The making got cheap. Everything around the making didn't.
+
+## Three directions before bed
+
+The first was **Atlas**, a data map of everything I've written. A timeline river of posts, a map of the themes I keep coming back to, bars showing how long each one runs. Beautiful, slightly smug, the kind of thing you build to show off.
+
+The second was **Broadsheet**, the blog as a newspaper. A masthead, a ticker of pull quotes, a lead story and "back issues" for the old Substack posts. Fun for a week, then probably exhausting.
+
+The third was **Field manual**, the blog as a playbook. You don't browse it; you pick the situation you're in. "Something's on fire." "I've just become a manager." "I talk too much in meetings." Each one hands you a reading order of three posts, with a line on why each one matters. The frameworks I keep banging on about (W.A.I.S.T., the watermelon, 25/50/25) become flip cards in a toolkit.
+
+A month ago I signed off the current design, Glasgow Civic. I like it. I wasn't looking to replace it, I was looking to be surprised, and two of the three managed it.
+
+## The footer came first
+
+What happened next wasn't very strategic. On Monday I dug out four blue illustrations I'd saved; riders crossing a desert of mesas, torii gates in snow, chess pieces in sand, cows in a meadow. I asked whether one could be a footer.
+
+Claude mocked up all four with a switcher, recommended the mesas or the gates because they only use blue and cream, and then asked something I hadn't thought about. Where did these come from? The filenames looked like they'd been saved from X. If I don't know who drew it, I can't ship it.
+
+I picked the mesas anyway, then asked which of the three directions it suited. It went into all of them, and that settled it. Riders heading out across open country belong on a field manual. It looks like the cover of one.
+
+The question didn't go away, though. The mesas are by [@uixhassan](https://x.com/uixhassan), and they're his, not mine. So I asked Claude to draw something in the same spirit that it made itself. About ten minutes later I had a Highland glen in the same blue and cream; four walkers and a dog on a path to a bothy by a loch, geese overhead, every line drawn in code. It's the footer now. I still owe him a pint.
+
+<Callout type="story">
+I chose a whole direction for this site because of a footer I didn't own. Somewhere a design lead is wincing. In fairness, it was the first thing that felt like the site rather than a clever concept.
+</Callout>
+
+## The squiggle
+
+So we built Field manual properly. Every post became a numbered entry; a chapter by theme, a number by date, the situations it helps with, the tools it introduces and the next step in your reading order. The entries render the real posts, not lorem ipsum.
+
+Then I sent a message I was half embarrassed to send. "Are these icons before numbers an error? §1"
+
+They weren't an error. It was the section sign, the squiggle you see in legal documents and standards. Claude had reached for it because a manual has sections. Technically correct. Completely useless to anyone who isn't a lawyer.
+
+If I had to ask, every reader would have had to ask. It's plain numbers now.
+
+<KeyPoint>A design that needs explaining has already failed. The cheapest usability test you'll ever run is being confused by your own website.</KeyPoint>
+
+## The demo is the cheap part
+
+Then I asked the question that actually matters; what would it take to do this for the whole site, properly? Make sure it works. Accessibility, testing, all of it.
+
+The answer was a plan, and it was humbling. The demo I'd been admiring had problems you can't see in a screenshot:
+
+- The amber chapter colour has a contrast ratio of about 2:1 against the paper, less than half what readable text needs.
+- The flip cards keep the back face on the page while it's hidden, so a keyboard user tabs onto a button they can't see.
+- A little animation of keys being pressed loops forever, which breaks the rule about letting people stop things that move.
+
+Fixing that lot took eight rounds of changes, more than 80 unit tests and more than 90 browser and accessibility checks that didn't exist before. They earned their keep straight away. The first run caught faint text in the reading-order cards at the end of each post, and every page scrolling sideways on the narrowest phones. Then CI caught something the sandbox couldn't even load; the Follow link on an embedded tweet was too small to tap.
+
+The one part Claude can't do is the last bit. Every situation, tool line and chapter blurb is copy written in my voice, and I'm the only one who can say whether it sounds like me.
+
+That's the bit nobody puts in the screenshot, and it's most of the bloody work.
+
+I've [written before](/posts/ai-made-writing-free) that AI didn't remove the cost of writing; it moved it onto the reader. Design works the same way. Three redesigns in an evening didn't remove the cost of a redesign. It moved it from making to choosing, and from choosing to checking. The demo is the cheap part now. Taste, judgement and the boring 80% are still the job.
+
+(Which, honestly, is the same lesson as [the first time I built this blog with Claude](/posts/i-built-this-blog-with-claude-code). The tool doesn't have taste. You do.)
+
+## What I'd do again
+
+- **Ask for directions, not a design.** Three wildly different options taught me more about what I wanted than one polished one would have.
+- **Make the demo real.** Working pages on real content surface problems no mockup will. The squiggle only showed up because the numbers were real.
+- **Ask who made it.** Claude asked where the images came from before I'd thought to. That question costs nothing on day one and a lot after launch.
+- **Ask the boring question early.** "What would it take to ship this properly?" belongs before you fall in love, not after.
+
+*Ben Stewart is an engineering leader at [Skyscanner](https://skyscanner.net), writing about software and leadership at [benstewart.ai](https://www.benstewart.ai).*
+
+<TLDR>I asked Claude Code for complete redesigns on a Friday night and had three working concepts before bed. I picked one because of a footer illustration that wasn't mine (so Claude drew me an original), and found a design flaw by being confused by my own site. Making the demo is cheap now. Choosing, checking and shipping it properly (accessibility, testing, copy, rights) is still the expensive part, and it's still yours.</TLDR>
+
+<PostNav slug="the-demo-is-the-cheap-part" related={["ai-made-writing-free", "i-built-this-blog-with-claude-code", "what-level-does-this-task-deserve"]} />
