@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
 import type { ConceptPost, ThemeId } from '../_lib/data';
+import { SceneFooter } from '../_lib/SceneFooter';
 
 type Theme = { id: ThemeId; name: string; colour: string };
 
@@ -300,10 +301,28 @@ export function ManualView({ posts, themes }: { posts: ConceptPost[]; themes: Th
         </div>
       </section>
 
-      <footer className="flex flex-wrap justify-between gap-4 border-t-2 px-10 py-8 text-[13px] mob:px-6" style={{ ...mono, borderColor: INK, color: GREY }}>
-        <span>Ben Stewart · Glasgow · Field manual, revision {posts.length}</span>
-        <span>posts · rss · github · x · linkedin · contact</span>
-      </footer>
+      {/* Footer: out in the field */}
+      <SceneFooter src="/images/footer/mesas.jpg" sky="#003593" className="border-t-2" style={{ borderColor: INK }}>
+        <div className="px-10 pt-16 mob:px-6" style={{ color: '#fff' }}>
+          <div className="flex flex-wrap items-start justify-between gap-8">
+            <div>
+              <p className="text-[clamp(32px,4vw,56px)] font-bold leading-none tracking-[-0.04em]">
+                Ben Stewart <span className="ml-1 rounded px-2 py-1 align-middle text-[13px] tracking-[0.08em]" style={{ ...mono, background: HI, color: INK }}>FIELD MANUAL</span>
+              </p>
+              <p className="mt-4 text-[13px] tracking-[0.1em] opacity-80" style={mono}>GLASGOW · REVISION {posts.length} · YOU&apos;VE READ {read.length} OF {posts.length}</p>
+            </div>
+            <nav aria-label="Footer">
+              <ul className="flex flex-wrap gap-2">
+                {[['posts', '/posts'], ['rss', '/feed.xml'], ['github', 'https://github.com/ibenstewart'], ['x', 'https://x.com/benstewart__'], ['linkedin', 'https://www.linkedin.com/in/ben-stewart-90944595/'], ['contact', 'mailto:ben@benstewart.ai']].map(([n, href]) => (
+                  <li key={n}>
+                    <a href={href} className="inline-flex h-11 items-center rounded-xl border-2 px-4 text-[16px] font-bold no-underline transition-colors hover:bg-white hover:text-[#003593]" style={{ borderColor: 'rgba(255,255,255,.55)', color: '#fff' }}>{n}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </SceneFooter>
     </div>
   );
 }

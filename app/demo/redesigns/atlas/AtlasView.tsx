@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ConceptPost, ThemeId } from '../_lib/data';
+import { SceneFooter } from '../_lib/SceneFooter';
 
 type Theme = { id: ThemeId; name: string; colour: string };
 
@@ -209,10 +210,11 @@ export function AtlasView({ posts, themes }: { posts: ConceptPost[]; themes: The
         </div>
       </section>
 
-      {/* Theme chips */}
+      {/* Theme chips stick only while the charts are on screen, not over the footer. */}
+      <div>
       <div className="sticky top-0 z-20 mt-16 border-y backdrop-blur" style={{ borderColor: 'rgba(18,20,23,.12)', background: 'rgba(243,241,234,.85)' }}>
-        <div className="mx-auto flex max-w-[1240px] flex-wrap items-center gap-2 px-6 py-3">
-          <span className="mr-2 text-[12px] uppercase tracking-[0.12em]" style={{ ...mono, color: MUTED }}>Filter</span>
+        <div className="mx-auto flex max-w-[1240px] flex-wrap items-center gap-2 px-6 py-3 mob:flex-nowrap mob:overflow-x-auto">
+          <span className="mr-2 shrink-0 text-[12px] uppercase tracking-[0.12em]" style={{ ...mono, color: MUTED }}>Filter</span>
           {themes.map((t) => {
             const on = focus === t.id;
             const count = posts.filter((p) => p.themes.includes(t.id)).length;
@@ -220,7 +222,7 @@ export function AtlasView({ posts, themes }: { posts: ConceptPost[]; themes: The
               <button
                 key={t.id}
                 onClick={() => setFocus(on ? null : t.id)}
-                className="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-[14px] font-medium transition-colors"
+                className="inline-flex h-9 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 text-[14px] font-medium transition-colors"
                 style={{ borderColor: on ? t.colour : 'rgba(18,20,23,.2)', background: on ? t.colour : 'transparent', color: on ? '#fff' : INK }}
               >
                 <span className="h-2.5 w-2.5 rounded-full" style={{ background: on ? '#fff' : t.colour }} />
@@ -363,7 +365,7 @@ export function AtlasView({ posts, themes }: { posts: ConceptPost[]; themes: The
       </section>
 
       {/* Index */}
-      <section className="mx-auto max-w-[1240px] px-6 pb-32 pt-24">
+      <section className="mx-auto max-w-[1240px] px-6 pb-28 pt-24">
         <SectionLabel n="04" title="Index" note={focus ? `Showing ${themes.find((t) => t.id === focus)!.name.toLowerCase()}.` : 'Everything, newest first.'} />
         <ul className="mt-8 border-t-2" style={{ borderColor: INK }}>
           {posts.filter((p) => !focus || p.themes.includes(focus)).map((p) => (
@@ -382,6 +384,42 @@ export function AtlasView({ posts, themes }: { posts: ConceptPost[]; themes: The
           ))}
         </ul>
       </section>
+      </div>
+
+      {/* Footer: the edge of the map */}
+      <SceneFooter
+        src="/images/footer/mesas.jpg"
+        sky="#003593"
+        overlay={{
+          backgroundImage:
+            'linear-gradient(rgba(243,241,234,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(243,241,234,.07) 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+        }}
+      >
+        <div className="mx-auto max-w-[1240px] px-6 pt-20 mob:pt-14" style={{ color: PAPER }}>
+          <div className="flex flex-wrap items-end justify-between gap-8 border-b pb-6" style={{ borderColor: 'rgba(243,241,234,.3)' }}>
+            <div>
+              <p className="text-[clamp(32px,4vw,56px)] font-bold leading-none tracking-[-0.04em]">Ben Stewart</p>
+              <p className="mt-3 text-[13px] uppercase tracking-[0.14em] opacity-80" style={mono}>
+                Glasgow · 55.8642° N, 4.2518° W · {posts.length} posts mapped
+              </p>
+            </div>
+            <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-[13px] uppercase tracking-[0.12em]" style={mono}>
+              {[['posts', '/posts'], ['rss', '/feed.xml'], ['github', 'https://github.com/ibenstewart'], ['x', 'https://x.com/benstewart__'], ['linkedin', 'https://www.linkedin.com/in/ben-stewart-90944595/'], ['contact', 'mailto:ben@benstewart.ai']].map(([n, href]) => (
+                <a key={n} href={href} className="no-underline hover:underline" style={{ color: PAPER }}>{n}</a>
+              ))}
+            </nav>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+            {themes.map((t) => (
+              <span key={t.id} className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.1em] opacity-80" style={mono}>
+                <span className="h-2.5 w-2.5 rounded-full" style={{ background: t.colour, outline: '1.5px solid rgba(243,241,234,.7)' }} />
+                {t.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </SceneFooter>
     </div>
   );
 }

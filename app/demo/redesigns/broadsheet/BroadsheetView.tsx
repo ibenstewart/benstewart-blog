@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { ConceptPost, ThemeId } from '../_lib/data';
+import { SceneFooter } from '../_lib/SceneFooter';
 
 type Theme = { id: ThemeId; name: string; colour: string };
 
@@ -254,10 +255,24 @@ export function BroadsheetView({ posts, themes, today }: { posts: ConceptPost[];
             </div>
           ))}
         </div>
-        <p className="mt-16 border-t pt-4 text-center text-[13px] uppercase tracking-[0.14em]" style={{ borderColor: INK, color: GREY }}>
-          Printed in Glasgow on recycled electrons · Set in Fraunces and Source Serif
-        </p>
       </section>
+
+      {/* Footer: the back page, set as a reversed engraving */}
+      <SceneFooter src="/images/footer/mesas-ink.jpg" sky={INK}>
+        <div className="mx-auto max-w-[1280px] px-6 pt-16 text-center" style={{ color: PAPER }}>
+          <p className="text-[clamp(44px,7vw,96px)] font-[800] leading-[0.85] tracking-[-0.045em]" style={{ ...display, fontVariationSettings: '"opsz" 144' }}>
+            Ben Stewart
+          </p>
+          <nav aria-label="Footer" className="mx-auto mt-6 flex max-w-[760px] flex-wrap justify-center gap-x-7 gap-y-2 border-y-[3px] border-double py-3 text-[13px] font-semibold uppercase tracking-[0.16em]" style={{ borderColor: PAPER, ...display }}>
+            {[['Posts', '/posts'], ['RSS', '/feed.xml'], ['GitHub', 'https://github.com/ibenstewart'], ['X', 'https://x.com/benstewart__'], ['LinkedIn', 'https://www.linkedin.com/in/ben-stewart-90944595/'], ['Contact', 'mailto:ben@benstewart.ai']].map(([n, href]) => (
+              <a key={n} href={href} className="no-underline hover:underline" style={{ color: PAPER }}>{n}</a>
+            ))}
+          </nav>
+          <p className="mt-4 text-[13px] uppercase tracking-[0.14em] opacity-70">
+            Printed in Glasgow on recycled electrons · Set in Fraunces and Source Serif
+          </p>
+        </div>
+      </SceneFooter>
     </div>
   );
 }
