@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
+import React, { ComponentPropsWithoutRef, isValidElement, ReactNode } from 'react';
 import Link from 'next/link';
 import { highlight } from 'sugar-high';
 import { ArticleJsonLd, FAQJsonLd, PersonJsonLd } from './app/components/JsonLd';
@@ -108,11 +108,23 @@ const proseText =
 const calloutLabelColour: Record<Required<CalloutProps>['type'], string> = {
   insight: 'text-accent',
   warning: 'text-red',
-  tip: 'text-accent',
+  tip: 'text-[#1C7A62]',
   story: 'text-faint',
 };
 
 type FenceProps = { className?: string; children?: ReactNode };
+
+/** Plain text of a heading's children, for its id. */
+function textOf(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(textOf).join('');
+  if (isValidElement<{ children?: ReactNode }>(node)) return textOf(node.props.children);
+  return '';
+}
+
+/** "The wrong question" -> "the-wrong-question", for section links and the contents rail. */
+export const headingId = (children: ReactNode) =>
+  textOf(children).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 const components = {
   h1: (props: HeadingProps) => (
@@ -121,15 +133,19 @@ const components = {
       {...props}
     />
   ),
-  h2: (props: HeadingProps) => (
+  // Sections are numbered from the entry number by CSS (.prose-h2::before).
+  h2: ({ children, ...props }: HeadingProps) => (
     <h2
-      className="prose-h2 scroll-mt-8 text-[clamp(1.625rem,2.2vw,2rem)] leading-[1.15] font-bold tracking-[-0.025em] text-ink mob:text-[1.5rem]"
+      id={headingId(children)}
+      className="prose-h2 scroll-mt-8 text-[clamp(1.75rem,3vw,2.375rem)] leading-[1.05] font-bold tracking-[-0.03em] text-ink mob:text-[1.625rem]"
       {...props}
-    />
+    >
+      {children}
+    </h2>
   ),
   h3: (props: HeadingProps) => (
     <h3
-      className="prose-h3 scroll-mt-8 text-[1.25rem] leading-[1.3] font-bold tracking-[-0.012em] text-ink"
+      className="prose-h3 scroll-mt-8 text-[1.375rem] leading-[1.25] font-bold tracking-[-0.015em] text-ink"
       {...props}
     />
   ),
@@ -181,7 +197,7 @@ const components = {
     <span className="block text-center">
       <img className="mx-auto h-auto max-w-[min(100%,640px)] rounded-2xl" alt={alt} {...props} />
       {alt && (
-        <span className="mt-3 block font-serif text-[0.9375rem] leading-[1.45] text-muted italic">
+        <span className="mt-3 block text-[0.9375rem] leading-[1.45] text-faint">
           {alt}
         </span>
       )}
@@ -237,7 +253,7 @@ const components = {
   ),
   blockquote: (props: BlockquoteProps) => (
     <blockquote
-      className="prose-quote font-serif text-[1.25rem] leading-[1.55] text-muted italic [&_p]:font-serif [&_p]:text-[1.25rem] [&_p]:leading-[1.55] [&_p]:text-muted [&_p]:italic"
+      className="prose-quote text-[1.3125rem] leading-[1.55] text-ink [&_p]:text-[1.3125rem] [&_p]:leading-[1.55] [&_p]:text-ink"
       {...props}
     />
   ),
@@ -245,25 +261,17 @@ const components = {
   // Custom components. None may wrap children in a <p> (docs/solutions/ui-bugs/
   // mdx-component-p-wrapper-invalid-nesting.md).
   Callout: ({ children, type = 'insight', label }: CalloutProps) => (
-    <div className="callout rounded-[20px] border border-hair bg-paper px-8 py-7 mob:px-[22px] mob:py-6">
-      <p
-        className={`text-[0.8125rem] leading-[1.4] font-bold tracking-[0.08em] uppercase ${calloutLabelColour[type]}`}
-      >
-        {label ?? calloutLabels[type]}
-      </p>
-      <div className={`mt-2.5 ${proseText} [&>*+*]:mt-[1.1em]`}>{children}</div>
-    </div>
+    <aside className="callout rounded-[20px] border-2 border-ink bg-card px-7 py-6 mob:px-[22px] mob:py-5">
+      <p className={`label ${calloutLabelColour[type]}`}>{label ?? calloutLabels[type]}</p>
+      <div className="mt-3 text-[1.0625rem] leading-[1.6] text-muted [&_p]:text-[1.0625rem] [&_p]:leading-[1.6] [&_li]:text-[1.0625rem] [&>*+*]:mt-[0.8em]">{children}</div>
+    </aside>
   ),
   PullQuote: ({ children, author }: PullQuoteProps) => (
-    <figure className="pull-quote text-[1.1875rem] mob:text-[1.125rem]">
-      <blockquote className="text-[clamp(1.375rem,2vw,1.625rem)] leading-[1.38] font-medium tracking-[-0.015em] text-pretty text-ink mob:text-[1.3125rem] [&_p]:text-[clamp(1.375rem,2vw,1.625rem)] [&_p]:leading-[1.38] [&_p]:font-medium [&_p]:tracking-[-0.015em] [&_p]:text-ink mob:[&_p]:text-[1.3125rem] [&>*+*]:mt-[0.8em]">
+    <figure className="pull-quote border-t-2 border-ink pt-5">
+      <blockquote className="text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.08] font-bold tracking-[-0.03em] text-pretty text-ink [&_p]:text-[clamp(1.75rem,3.4vw,2.5rem)] [&_p]:leading-[1.08] [&_p]:font-bold [&_p]:tracking-[-0.03em] [&_p]:text-ink [&>*+*]:mt-[0.6em]">
         {children}
       </blockquote>
-      {author && (
-        <figcaption className="mt-3 text-[0.9375rem] font-medium tracking-[0.005em] text-faint">
-          {author}
-        </figcaption>
-      )}
+      {author && <figcaption className="label mt-3 text-faint">{author}</figcaption>}
     </figure>
   ),
   Divider: ({ style = 'dots' }: DividerProps) => {
@@ -271,24 +279,31 @@ const components = {
     return <hr className="prose-hr" />;
   },
   KeyPoint: ({ children }: KeyPointProps) => (
-    <div className="key-point border-t-2 border-ink pt-5 text-[1.3125rem] leading-[1.4] font-medium text-ink [&_p]:text-[1.3125rem] [&_p]:leading-[1.4] [&_p]:font-medium [&_p]:tracking-normal [&_p]:text-ink [&>*+*]:mt-[0.8em]">
-      {children}
-    </div>
+    <aside className="key-point rounded-[20px] bg-hi px-7 py-6 text-ink mob:px-[22px]">
+      <p className="label text-ink">Key point</p>
+      <div className="mt-3 text-[clamp(1.375rem,2.4vw,1.75rem)] leading-[1.2] font-bold tracking-[-0.02em] [&_p]:text-[clamp(1.375rem,2.4vw,1.75rem)] [&_p]:leading-[1.2] [&_p]:font-bold [&_p]:tracking-[-0.02em] [&_p]:text-ink [&>*+*]:mt-[0.6em]">
+        {children}
+      </div>
+    </aside>
   ),
   Scenario: ({ speaker, children }: ScenarioProps) => (
-    <div className="scenario">
-      <span className="block text-[0.9375rem] font-medium tracking-[0.005em] text-faint">
-        {speaker}
-      </span>
-      <div className="mt-1 pl-6 font-serif text-[1.25rem] leading-[1.55] text-muted italic [&_p]:font-serif [&_p]:text-[1.25rem] [&_p]:leading-[1.55] [&_p]:text-muted [&_p]:italic [&>*+*]:mt-[0.8em]">
+    <div className={`scenario grid ${speaker === 'Me' ? 'justify-items-end' : 'justify-items-start'}`}>
+      <span className="label mb-1.5 text-faint">{speaker}</span>
+      <div
+        className={`max-w-[520px] rounded-[18px] border-2 px-4 py-3 text-[1.125rem] leading-[1.5] [&>*+*]:mt-[0.6em] [&_p]:text-[1.125rem] [&_p]:leading-[1.5] ${
+          speaker === 'Me'
+            ? 'rounded-br-[4px] border-accent bg-accent text-white [&_p]:text-white [&_strong]:text-white'
+            : 'rounded-bl-[4px] border-ink bg-card text-ink [&_p]:text-ink'
+        }`}
+      >
         {children}
       </div>
     </div>
   ),
   TLDR: ({ children }: TLDRProps) => (
-    <section className="tldr col-wide mx-auto w-full max-w-[736px] rounded-[28px] bg-blond px-12 pt-10 pb-11 mob:rounded-[22px] mob:px-[26px] mob:pt-8 mob:pb-[34px]">
-      <h2 className="text-[1.375rem] leading-[1.2] font-bold tracking-[-0.015em] text-ink">TL;DR</h2>
-      <div className="mt-3.5 text-[1.125rem] leading-[1.6] text-ink mob:text-[1.0625rem] [&_li]:text-ink [&_p]:text-[1.125rem] [&_p]:leading-[1.6] [&_p]:text-ink mob:[&_p]:text-[1.0625rem] [&>*+*]:mt-[1em]">
+    <section aria-label="In short" className="tldr surface-dark col-wide mx-auto w-full max-w-[736px] rounded-[24px] bg-ink px-10 pt-8 pb-9 text-white mob:rounded-[20px] mob:px-[24px] mob:pt-7 mob:pb-8">
+      <h2 className="label text-hi">In short</h2>
+      <div className="mt-3.5 text-[1.25rem] leading-[1.5] font-medium text-white mob:text-[1.125rem] [&_li]:text-white [&_p]:text-[1.25rem] [&_p]:leading-[1.5] [&_p]:font-medium [&_p]:text-white mob:[&_p]:text-[1.125rem] [&_strong]:text-hi [&_a]:text-white [&>*+*]:mt-[0.8em]">
         {children}
       </div>
     </section>
@@ -344,10 +359,10 @@ const components = {
           style={{ maxWidth: width ? `min(100%, ${width})` : 'min(100%, 640px)' }}
         />
         {caption && (
-          <figcaption className="mt-3 font-serif text-[0.9375rem] leading-[1.45] text-muted italic">
+          <figcaption className="mt-3 text-[0.9375rem] leading-[1.45] text-faint">
             {caption}
             {credit && (
-              <span className="font-sans font-medium tracking-[0.005em] text-faint not-italic">
+              <span className="font-mono text-[0.8125rem] tracking-[0.04em] text-faint">
                 {' · '}
                 {credit}
               </span>

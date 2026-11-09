@@ -364,44 +364,69 @@
     }
   }
 
-  /* Numbered lists: blue numerals hang in the margin (KTD13: class-scoped). */
+  /* Sections number themselves from the entry: PostHeader sets --entry on
+     #main, so the first h2 of entry 4.2 reads "4.2.1". Pages without an
+     entry number leave --entry unset, which drops the label. */
+  #main {
+    counter-reset: sec;
+  }
+  .prose-h2 {
+    counter-increment: sec;
+  }
+  .prose-h2::before {
+    content: var(--entry) '.' counter(sec);
+    display: block;
+    margin-bottom: 10px;
+    font: 400 0.8125rem/1 var(--font-mono);
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+  }
+
+  /* Numbered lists: yellow numerals on ink tiles. */
   .prose-ol {
     counter-reset: step;
   }
   .prose-ol > li {
     position: relative;
+    padding-left: 40px;
     counter-increment: step;
   }
   .prose-ol > li + li {
-    margin-top: 0.85em;
+    margin-top: 0.6em;
   }
   .prose-ol > li::before {
     content: counter(step) / '';
     position: absolute;
-    top: 0;
-    right: calc(100% + var(--hang));
-    font-weight: 700;
-    color: var(--color-accent);
-    font-variant-numeric: tabular-nums;
+    left: 0;
+    top: 0.15em;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--color-ink);
+    color: var(--color-hi);
+    font: 700 0.875rem/1 var(--font-mono);
   }
 
-  /* Bulleted lists: 7px faint dots, 28px text indent. */
+  /* Bulleted lists: small highlighter squares with an ink edge. */
   .prose-ul > li {
     position: relative;
-    padding-left: 28px;
+    padding-left: 30px;
   }
   .prose-ul > li + li {
-    margin-top: 0.35em;
+    margin-top: 0.45em;
   }
   .prose-ul > li::before {
     content: '';
     position: absolute;
-    left: 6px;
-    top: 0.66em;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--color-faint);
+    left: 2px;
+    top: 0.5em;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 2px solid var(--color-ink);
+    background: var(--color-hi);
   }
   li > .prose-ul,
   li > .prose-ol {
@@ -411,11 +436,10 @@
     margin-top: 1.1em;
   }
 
-  /* Pull quote: 4px blue bar with rounded ends, hanging in the margin. */
-  .pull-quote > blockquote {
+  /* Markdown blockquote: a 4px blue bar hanging in the margin. */
+  .prose-quote {
     position: relative;
   }
-  .pull-quote > blockquote::before,
   .prose-quote::before {
     content: '';
     position: absolute;
@@ -426,14 +450,33 @@
     border-radius: 2px;
     background: var(--color-accent);
   }
-  /* Markdown blockquote: the quieter cousin, 3px hair bar. */
-  .prose-quote {
-    position: relative;
+
+  /* The contents rail sits in the left margin on wide screens only. */
+  .entry-rail {
+    display: none;
   }
-  .prose-quote::before {
-    width: 3px;
-    border-radius: 1.5px;
-    background: var(--color-hair);
+  @media (min-width: 1240px) {
+    .entry-rail {
+      position: fixed;
+      top: 96px;
+      left: var(--gutter);
+      z-index: 5;
+      display: block;
+      width: min(260px, calc((100vw - var(--measure)) / 2 - var(--gutter) - 40px));
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--t-state) var(--ease-out), visibility 0s linear var(--t-state);
+    }
+    .entry-rail[data-shown] {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity var(--t-state) var(--ease-out);
+    }
+    .entry-rail-fill {
+      transition: height var(--t-state) var(--ease-out);
+    }
   }
 
   /* hr and Divider: a hair rule across the column. */
@@ -477,18 +520,9 @@
   }
 
   @media (max-width: 960px) {
-    .prose-ol > li {
-      padding-left: 32px;
-    }
-    .prose-ol > li::before {
-      right: auto;
-      left: 0;
-    }
-    .pull-quote > blockquote,
     .prose-quote {
       padding-left: 24px;
     }
-    .pull-quote > blockquote::before,
     .prose-quote::before {
       right: auto;
       left: 0;
@@ -855,14 +889,51 @@
   }
 }
 
-/* Unlayered on purpose: no utility can reach ::first-letter (plan KTD15). */
-.lede > p::first-letter {
-  float: left;
-  font-size: 4.3rem;
-  line-height: 0.8;
-  padding: 0.35rem 0.6rem 0 0;
-  font-weight: 700;
+/* Unlayered on purpose: the lede's paragraphs carry the prose utilities from
+   the p mapping, and only unlayered CSS beats a utility. */
+.lede > p {
+  font-size: 1.4375rem;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
+}
+@media (max-width: 760px) {
+  .lede > p {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tool drawings move only when asked: on hover or focus of their card. */
+@media (prefers-reduced-motion: no-preference) {
+  .tool-donut {
+    transition: stroke-width 300ms var(--ease-out);
+  }
+  .tool-reveal {
+    transform-origin: 100px 100px;
+    transition: scale 500ms var(--ease-out);
+  }
+  .tool-key {
+    transition: translate 120ms var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+}
+.tool-reveal {
+  scale: 0;
+}
+:is(.tool-card:hover, .tool-card:focus-within, .tool-card[data-open]) .tool-donut {
+  stroke-width: 40;
+}
+:is(.tool-card:hover, .tool-card:focus-within, .tool-card[data-open]) .tool-reveal {
+  scale: 1;
+}
+:is(.tool-card:hover, .tool-card:focus-within) .tool-key {
+  translate: 0 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tool-reveal {
+    scale: 1;
+  }
 }
 
 /* Tweet embeds (react-tweet). Unlayered on purpose: react-tweet's own CSS is
