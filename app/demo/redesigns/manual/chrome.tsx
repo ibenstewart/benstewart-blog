@@ -9,8 +9,8 @@ export function ManualTopBar({ current }: { current?: string }) {
     ['toolkit', '/demo/redesigns/manual#toolkit'],
     ['chapters', '/demo/redesigns/manual#chapters'],
     ['all entries', '/demo/redesigns/manual/entries'],
-    ['speaking', '/demo/redesigns/manual/speaking'],
-    ['bio', '/demo/redesigns/manual/bio'],
+    ['speaking', '/speaking'],
+    ['bio', '/bio'],
   ];
   return (
     <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b-2 px-6 py-4" style={{ borderColor: INK, background: BG }}>

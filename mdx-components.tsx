@@ -2,10 +2,8 @@ import React, { ComponentPropsWithoutRef, isValidElement, ReactNode } from 'reac
 import Link from 'next/link';
 import { highlight } from 'sugar-high';
 import { ArticleJsonLd, FAQJsonLd, PersonJsonLd } from './app/components/JsonLd';
-import { RelatedPosts } from './app/components/RelatedPosts';
 import { PostNav } from './app/components/PostNav';
 import { PostHeader } from './app/components/PostHeader';
-import { PostList } from './app/components/PostList';
 import { textLinkClass } from './app/components/TextLink';
 import { CodeBlock } from './app/components/CodeBlock';
 import { HeroImage } from './app/components/HeroImage';
@@ -380,10 +378,8 @@ const components = {
     />
   ),
   FAQJsonLd: (props: { faqs: { question: string; answer: string }[] }) => <FAQJsonLd {...props} />,
-  RelatedPosts: (props: { posts: { slug: string; title: string }[] }) => <RelatedPosts {...props} />,
   PostNav: (props: { slug: string; related?: string[] }) => <PostNav {...props} />,
   PostHeader: (props: { title: string; slug: string }) => <PostHeader {...props} />,
-  PostList: (props: { slugs?: string[] }) => <PostList {...props} />,
   Quadrant,
   Stats,
   TweetEmbed,

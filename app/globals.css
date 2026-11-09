@@ -986,6 +986,46 @@
   }
 }
 
+/* Bio: a faint 4-voxel grid behind the head, and the climb that draws
+   itself in once with the flag planted at the end. Reduced motion shows the
+   finished drawing. */
+@layer components {
+  .vox-grid {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  }
+  .route-trail {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: route-draw 2.2s cubic-bezier(0.45, 0, 0.2, 1) 0.2s forwards;
+  }
+  .route-flag {
+    transform-box: fill-box;
+    transform-origin: 0 100%;
+    animation: route-plant 0.5s var(--ease-out) 2.2s both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .route-trail {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+    .route-flag {
+      animation: none;
+    }
+  }
+}
+@keyframes route-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes route-plant {
+  from {
+    transform: scaleY(0);
+  }
+}
+
 /* Tweet embeds (react-tweet). Unlayered on purpose: react-tweet's own CSS is
    unlayered, so overrides inside a layer would lose to it. Swaps X's palette
    and type for the site tokens. */
