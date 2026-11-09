@@ -10,7 +10,7 @@ export const metadata = { title: 'Footer concept: illustrated' };
 export default function FooterConceptPage() {
   return (
     <>
-      <style>{`body:has(.fx-root) footer.site-container { display: none; }`}</style>
+      <style>{`body:has(.fx-root) footer.site-chrome { display: none; }`}</style>
       <h1 className="fx-root text-[clamp(40px,5vw,64px)] font-bold leading-none tracking-[-0.035em]">Illustrated footer</h1>
       <p className="text-[19px] text-muted">
         The end of a real post, with the footer swapped for one of four illustrations. Use the switcher at the bottom of the screen to compare them.

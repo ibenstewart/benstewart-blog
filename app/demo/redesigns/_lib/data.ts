@@ -71,7 +71,7 @@ export const QUOTES: Record<string, string> = {
   'am-i-technically-dangerous': 'Going deep vs going wide.',
 };
 
-export type ConceptPost = Post & {
+export type ConceptPost = Omit<Post, 'themes' | 'quote' | 'words' | 'importDate'> & {
   words: number;
   themes: ThemeId[];
   quote: string | null;

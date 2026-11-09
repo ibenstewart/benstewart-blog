@@ -290,6 +290,10 @@ describe('groupPostsByYear', () => {
     date,
     readingMinutes: 1,
     draft: false,
+    words: 600,
+    themes: [],
+    quote: null,
+    importDate: false,
   });
 
   it('returns an empty array for no posts', () => {
@@ -336,6 +340,10 @@ describe('pickPosts', () => {
     date: '2024-01-01',
     readingMinutes: 1,
     draft: false,
+    words: 600,
+    themes: [],
+    quote: null,
+    importDate: false,
   });
 
   it('returns posts in slug order and skips unknown slugs', () => {

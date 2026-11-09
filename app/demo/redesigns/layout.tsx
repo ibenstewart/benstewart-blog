@@ -15,8 +15,8 @@ export default function RedesignsLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <style>{`
-        body:has(.rd-root) header.site-container,
-        body:has(.rd-root) footer.site-container { display: none; }
+        body:has(.rd-root) .site-chrome { display: none; }
+        main:has(> .rd-root) { padding: 0 !important; }
         main:has(> .rd-root) { display: block; padding: 0; }
         html:has(.rd-root) { scrollbar-gutter: auto; }
         main > .rd-root { margin: 0; }
