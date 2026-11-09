@@ -1,11 +1,13 @@
 ---
-title: Glasgow Civic design system
+title: Glasgow Civic design system (superseded)
 status: approved by Ben, 2 October 2026
 scope: homepage, post page, site chrome (masthead and footer). Light theme only.
 plan: docs/plans/2026-10-02-001-feat-glasgow-civic-redesign-plan.md
 ---
 
 # Glasgow Civic design system
+
+> **Superseded on 9 November 2026 by the Field manual** (`docs/design/field-manual/DESIGN.md`). Kept for history; nothing here applies to the site any more.
 
 The visual system for benstewart.ai. It takes the restraint of the 2026 america.gov redesign (a white page, very little on it, one accent colour, huge whitespace, pill-shaped controls) and roots it in Glasgow: sandstone and Saltire blue, wayfinding-style numerals and labels, a sturdy grotesk. Think of the signage and print of a well-made modern Scottish museum or library.
 

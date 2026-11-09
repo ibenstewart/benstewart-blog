@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { IBM_Plex_Mono, Schibsted_Grotesk, Source_Serif_4 } from 'next/font/google';
+import { IBM_Plex_Mono, Schibsted_Grotesk } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { PersonJsonLd, WebsiteJsonLd } from './components/JsonLd';
 import { SiteFooter } from './components/chrome/SiteFooter';
@@ -16,18 +16,12 @@ const schibsted = Schibsted_Grotesk({
   variable: '--font-schibsted'
 });
 
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
-  weight: '400',
-  style: ['italic'],
-  variable: '--font-source-serif'
-});
-
+// The manual's labels, entry numbers and badges are mono, so it's above the
+// fold on every page: preloaded, in the three weights the site uses.
 const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-plex-mono',
-  preload: false
+  weight: ['400', '500', '700'],
+  variable: '--font-plex-mono'
 });
 
 export const metadata: Metadata = {
@@ -66,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-GB" className={`${schibsted.variable} ${sourceSerif.variable} ${plexMono.variable}`}>
+    <html lang="en-GB" className={`${schibsted.variable} ${plexMono.variable}`}>
       <body className="antialiased font-sans">
         <a
           href="#main"

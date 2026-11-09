@@ -9,8 +9,8 @@ Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing ab
 - **Framework:** Next.js 15 with App Router
 - **Styling:** Tailwind CSS v4
 - **Content:** MDX files in `app/posts/[slug]/page.mdx`
-- **Fonts:** Schibsted Grotesk (everything), Source Serif 4 italic only (asides), IBM Plex Mono (code), all via next/font Google Fonts
-- **Design system:** Glasgow Civic, spec in `docs/design/glasgow-civic/DESIGN.md` (wins on any value it states)
+- **Fonts:** Schibsted Grotesk (everything you read), IBM Plex Mono (labels, entry numbers, badges, code), both via next/font Google Fonts
+- **Design system:** Field manual, spec in `docs/design/field-manual/DESIGN.md` (Glasgow Civic is superseded)
 - **Deployment:** Vercel (auto-deploys from GitHub)
 - **Repo:** https://github.com/ibenstewart/benstewart-blog
 
@@ -18,7 +18,10 @@ Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing ab
 ```bash
 npm run dev              # Start dev server (uses Turbopack)
 npm run build            # Build for production (uses webpack)
-npm run validate-posts   # Check all posts have required SEO metadata
+npm run validate-posts   # Check all posts have required SEO metadata, themes and quotes
+npm test                 # Unit and component tests (Vitest)
+npm run test:e2e         # Every page at desktop and phone widths, plus axe-core (Playwright)
+npm run og-cards         # Render every share card (add -- <slug> for one)
 ```
 
 ## Blog Post Structure
@@ -28,6 +31,8 @@ Posts live in `app/posts/[slug]/page.mdx` with this format:
 export const metadata = {
   title: "Post Title",
   date: "YYYY-MM-DD",
+  themes: ["ai", "people"],
+  quote: "One pull line from the post, used on cards and the share card.",
   subtitle: "Optional subtitle",
   description: "A concise description for SEO and social sharing.",
   alternates: {
@@ -37,7 +42,7 @@ export const metadata = {
     title: "Post Title",
     description: "A concise description for SEO and social sharing.",
     url: "https://www.benstewart.ai/posts/[slug]",
-    images: [{ url: "/images/og-default.png", width: 1200, height: 630 }],
+    images: [{ url: "/images/posts/[slug]-og.png", width: 1200, height: 630 }],
   }
 };
 
@@ -48,6 +53,7 @@ export const metadata = {
   description="A concise description for SEO and social sharing."
   date="YYYY-MM-DD"
   slug="[slug]"
+  image="https://www.benstewart.ai/images/posts/[slug]-og.png"
 />
 
 Content goes here...
@@ -55,9 +61,11 @@ Content goes here...
 <PostNav slug="[slug]" related={["other-slug", "another-slug"]} />
 ```
 
-**Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders previous/next links automatically (derived from post dates via `lib/posts.ts`). The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and their display titles are resolved automatically.
+**Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders the end of the entry automatically: Mark as read, the entry's tool (if it has one), the next step (the reading order the reader came from, otherwise the next entry in its chapter), newer and older by date, and the author note. The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and they show as Keep reading cards.
 
-**Note:** If the post has a custom OG image, use a relative path for the `images` URL (e.g. `"/images/posts/[slug]-0.png"`) and add the `image` prop to `<PostSchema>` with the **absolute** URL (JSON-LD requires it).
+**Note:** `themes` is one to five of `people` (Leading people), `words` (Saying it well), `breaks` (When it breaks), `ai` (Working with AI) and `self` (Looking after yourself). The **first** theme is the post's chapter and decides its entry number. `quote` is a line lifted from the post itself.
+
+**Note:** The share image is the post's Field manual card, `/images/posts/[slug]-og.png`, made by `npm run og-cards -- [slug]`. Use the relative path in `openGraph.images` and the **absolute** URL in the `<PostSchema>` `image` prop (JSON-LD requires it).
 
 **Important:** The `title`, `description`, and `date` in `<PostSchema>` must match the values in the `metadata` export. The validation script checks for drift between them.
 
@@ -66,50 +74,46 @@ Available components in `mdx-components.tsx`:
 
 | Component | Usage | Description |
 |-----------|-------|-------------|
-| `<KeyPoint>` | `<KeyPoint>Important text</KeyPoint>` | Highlighted box for key takeaways |
-| `<Callout>` | `<Callout type="insight\|warning\|tip\|story" label="Optional">` | Quiet outlined panel (1px hair border, 20px radius) with a small uppercase label (Insight/Worth knowing/Try this/Story, or `label` to override); blue label for insight and tip, red for warning, grey for story |
+| `<KeyPoint>` | `<KeyPoint>Important text</KeyPoint>` | Yellow panel labelled Key point, big bold ink text |
+| `<Callout>` | `<Callout type="insight\|warning\|tip\|story" label="Optional">` | White panel with a 2px ink border (20px radius) and a mono label (Insight/Worth knowing/Try this/Story, or `label` to override); blue for insight, red for warning, green for tip, grey for story |
 | `<Quadrant>` | `<Quadrant x={["Easy", "Hard"]} y={["Expensive", "Cheap"]} cells={[...4]} />` | 2x2 grid with axis labels; each cell has `level`, `title`, `example` and optional `off` (dashed, struck-through). Cells stack on mobile and name their own row and column |
 | `<Stats>` | `<Stats items={[{ value: "24", label: "sessions" }]} />` | Row of big accent numerals with labels under a 2px ink rule; 4 across, 2 on mobile |
-| `<PullQuote>` | `<PullQuote author="Name">Quote</PullQuote>` | Large styled quote with attribution |
-| `<Scenario>` | `<Scenario speaker="Name">Dialog</Scenario>` | Conversation/dialog formatting |
-| `<TLDR>` | `<TLDR>Summary</TLDR>` | Article summary box |
+| `<PullQuote>` | `<PullQuote author="Name">Quote</PullQuote>` | Big bold ink line over a 2px ink rule, with a mono attribution |
+| `<Scenario>` | `<Scenario speaker="Name">Dialog</Scenario>` | Chat bubbles; `speaker="Me"` sits on the right in blue, everyone else on the left in white |
+| `<TLDR>` | `<TLDR>Summary</TLDR>` | Ink panel labelled "In short" (an h2, so it shows in the contents rail's heading order) |
 | `<Timeline>` | Wrapper for Event components | Career/timeline container |
 | `<Event>` | `<Event year="2024" title="Role">Description</Event>` | Timeline entry |
-| `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | Prev/next + related links at the end of every post |
-| `<PostHeader>` | `<PostHeader title="Post Title" slug="[slug]" />` | Opens the post body, centred: breadcrumb pill to /posts, title, serif-italic standfirst (the `subtitle`), and a sentence-case meta line (date + reading time), all resolved from `lib/posts.ts` by slug - replaces the old `# Title` H1 |
-| `<PostList>` | `<PostList slugs={["slug-a", "slug-b"]} />` | Editorial rows (title, subtitle, date, reading time) for a set of posts; omit `slugs` to list every post, newest first |
+| `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | The end of every entry: Mark as read, its tool, the next step, Keep reading, newer/older and the author note |
+| `<PostHeader>` | `<PostHeader title="Post Title" slug="[slug]" />` | Opens the entry, full width: chapter breadcrumb, entry number badge, title, the `subtitle` under the highlighter, a mono meta line (minutes, filed date, words, Mark as read) and "Use this when" chips for the situations it's on. Everything but the title is resolved from `lib/posts.ts` and `lib/manual.ts` by slug. Also numbers the entry's sections and renders the contents rail. Replaces the old `# Title` H1 |
 | `<Figure>` | `<Figure src="/images/posts/[slug]-0.png" alt="..." caption="..." credit="..." width="420px" />` | Image with optional caption and credit; `width` overrides the default max-width (capped at the column). Add `hero` for a full-width arched hero image (up to 960px, natural ratio, no visible caption, hidden if the image fails to load) |
-| `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Wraps the opening paragraph with a grotesk 700 drop-cap first letter |
+| `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Sets the opening paragraph larger, in ink, weight 500 |
 
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`
-2. Create `page.mdx` with metadata export (including canonical, openGraph, images), a `<PostHeader title="..." slug="[slug]" />` opening the body, a `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
-3. Make the 1200x630 share card from `docs/og-card/template.html` and point `openGraph.images` and the `<PostSchema>` `image` prop at it (`/images/posts/[slug]-og.png`, absolute URL in the schema). The template takes the display title in the query string; `--virtual-time-budget` gives Google Fonts time to load:
-   ```bash
-   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu --hide-scrollbars \
-     --window-size=1200,630 --virtual-time-budget=5000 --screenshot=public/images/posts/[slug]-og.png \
-     "file://$PWD/docs/og-card/template.html?t=Post%20Display%20Title"
-   ```
-   Check it with `file` (1200 x 630) and open it. The card is light on purpose, so a dark-mode Mac renders it the same. For a post whose own image is the share image, use `?img=<url-encoded file:// path>` to letterbox it on the paper background, then convert with `sips -s format jpeg -s formatOptions 85 card.png --out public/images/posts/[slug]-og.jpg` (under 300 KB)
-4. To feature it on the homepage, add its slug to the `startHere` or `favourites` export in `app/page.mdx`. Every other post appears in the homepage Archive automatically
-5. Run `npm run validate-posts` to confirm all required SEO fields are present
+2. Create `page.mdx` with metadata export (including `themes`, `quote`, canonical, openGraph, images), a `<PostHeader title="..." slug="[slug]" />` opening the body, a `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
+3. Make the share card with `npm run og-cards -- [slug]` (needs Playwright's Chromium once: `npx playwright install chromium`). It renders `docs/og-card/template.html` with the entry number, chapter, title and `quote` into `public/images/posts/[slug]-og.png`. Open it to check; a long title shrinks to fit. Point `openGraph.images` and the `<PostSchema>` `image` prop at it
+4. It joins its chapter on the homepage, `/posts` and the footer count automatically. To put it on a reading order or make it a tool, edit `SITUATIONS` or `TOOLS` in `lib/manual-data.mjs`
+5. Run `npm run validate-posts` to confirm all required SEO fields, themes and quote are present, then `npm test` (the entry-number snapshot will show the new number; update it with `npx vitest run -u` if that's the only change)
 6. Commit and push - Vercel auto-deploys
 
-**IMPORTANT:** Posts are automatically included in the sitemap, the `/posts` listing page, and the RSS feed — all derived from the filesystem via `lib/posts.ts`. The listing shows each post's H1 as its title and the `subtitle` metadata as its blurb. If adding a new top-level page (not a post), add the route to the `routes` array in `app/sitemap.ts`.
+**IMPORTANT:** Posts are automatically included in the sitemap, the `/posts` listing page, and the RSS feed — all derived from the filesystem via `lib/posts.ts`. The listing shows each post's display title and the `subtitle` metadata as its blurb. If adding a new top-level page (not a post), add the route to the `routes` array in `app/sitemap.ts`.
 
 ## Key Files
 - `app/layout.tsx` - Main layout, font, metadata
 - `app/viewport.ts` - Viewport config (safe area support for iPhone)
-- `app/page.mdx` - Homepage
-- `app/bio/page.mdx` - Bio page with timeline
-- `app/posts/page.tsx` - Posts listing page (generated from the filesystem)
+- `app/page.tsx` - Homepage: situations, toolkit and chapters (server page with client islands in `app/components/home/`)
+- `app/bio/page.tsx` - Bio (Appendix A): author card with the voxel head, the climb, chapters, short bio. The head is built by `scripts/voxel-head/build-head.py` into `app/bio/voxel-data.ts`
+- `app/posts/page.tsx` - All entries by date (generated from the filesystem)
 - `lib/posts.ts` - Shared post index (powers the listing, RSS feed, PostHeader, and PostNav)
+- `lib/manual-data.mjs` - The manual's copy: themes (chapters), situations (reading orders) and tools. Plain ESM so the validator can read it
+- `lib/manual.ts` - Chapters, entry numbers, next in chapter, reading-order position, typed on top of `manual-data.mjs`
+- `app/components/manual/` - The manual's shared parts: PageHead, EntryCard, NextStep, Contents rail, ReadToggle and read state, ToolArt, EntriesList, OrganiserKit (the one short bio)
 - `lib/mdx-parsing.mjs` - Shared escape-aware MDX parsing helpers (metadata block extraction, JSX prop extraction, fence stripping) used by both `lib/posts.ts` and `scripts/validate-posts.mjs`
-- `app/speaking/page.tsx` - Speaking page (videos, podcasts, articles)
+- `app/speaking/page.tsx` - Speaking (Appendix B): talks, booking card, videos, podcasts, articles
 - `mdx-components.tsx` - Custom MDX components
-- `app/components/SiteNav.tsx` - The blue nav pill and its "you are here" segment (client component)
-- `app/components/home/StartHereMotion.tsx` - The Start here section's arch rise and pointing arrow (client component)
-- `app/globals.css` - Tokens, fonts, the `.page-grid` breakout grid, custom breakpoint variants and component CSS
+- `app/components/chrome/` - TopBar (with the client `TopNav` and its "you are here" link), SiteFooter and the glen SceneFooter
+- `docs/og-card/template.html` and `scripts/og-cards.mts` - Share card template and renderer
+- `app/globals.css` - Tokens, the `.page-grid` breakout grid, `.col-bleed`, `.label`, `.hl`, custom breakpoint variants and component CSS
 - `app/sitemap.ts` - Auto-generated sitemap
 - `docs/solutions/` - Documented solutions to past problems (bugs, workflow gotchas, best practices), organised by category with YAML frontmatter (`module`, `tags`, `problem_type`) - relevant when implementing or debugging in a documented area
 
@@ -118,29 +122,33 @@ Hard-won knowledge from working in this repo. Read before touching posts or meta
 
 - **Two titles per post, on purpose.** The display title used on `/posts`, the homepage, and PostNav links comes from `<PostHeader title="...">` (or a legacy `# ...` H1, still supported by the validator for posts that haven't migrated). The `metadata.title` export is the longer SEO title used in `<title>`, OG tags, and the RSS feed. Several posts differ deliberately (e.g. `sustainable` displays "Sustainable Pace Just Got Faster" but its SEO title is "Sustainable Pace With AI: Why You're Probably Doing It Twice"). Don't "fix" the mismatch; change the PostHeader title prop if you want a different listing title.
 - **Metadata is parsed by regex, not by evaluating the MDX.** `lib/posts.ts`, `app/sitemap.ts`, and `scripts/validate-posts.mjs` all regex-scan the raw file and take the **first** match. Keep the `export const metadata` block at the top of every post, and avoid literal strings like `date: "YYYY-MM-DD"` or `title: "..."` in body prose or code blocks above it — they'd be picked up as the post's metadata.
-- **Eleven posts share the date 2023-09-18.** That's the Substack import date, not their real publication dates. They sort as one cluster (alphabetical by title within the tie) on `/posts` and in prev/next navigation. Backfilling real dates in each post's `metadata.date` will automatically fix the listing order, prev/next links, RSS feed, and sitemap — no other changes needed.
+- **Eleven posts share the date 2023-09-18.** That's the Substack import date, not their real publication dates. They sort as one cluster (alphabetical by title within the tie) on `/posts`, in newer/older navigation and inside their chapters, and their entries say "From the Substack archive". Ben decided on 9 Nov 2026 to leave them: backfilling real dates would **renumber** those entries.
+- **Entry numbers are computed, not stored.** Chapter = first theme; position = date order within the chapter (title breaks ties, drafts last). Changing a post's first theme or date moves its number and can shift others in both chapters. The snapshot in `lib/__snapshots__/manual.test.ts.snap` makes that visible; don't update it blindly.
 - **Hiding a post: `draft: true`.** Add `draft: true` and `robots: { index: false, follow: false }` to a post's metadata export to merge it without publishing it. The page still builds and loads at its URL (handy for checking it on production), but `lib/posts.ts`, both sitemaps and the RSS feed skip it, so it's off `/posts`, the homepage and prev/next. To publish, delete both lines and set the real `date`.
-- **`npm run validate-posts` is the safety net.** It checks SEO fields, PostSchema/metadata drift, OG images existing on disk, and that every post ends with a `<PostNav>` whose slug matches its directory and whose `related` slugs point at real posts. It also enforces that every post has **exactly one** of a `<PostHeader>` or a legacy `# ` H1 (both, or neither, fails the check), that a `<PostHeader>` has a non-empty `title` prop and a `slug` prop matching its directory, and that a `<PostSchema>` slug matches too. Fenced code blocks are stripped before the H1 check, so a `# ` inside a code sample isn't mistaken for a real heading. Run it after any post change.
+- **`npm run validate-posts` is the safety net.** It checks one to five known `themes` and a `quote` on every post, that every situation and tool points at a real, published post, SEO fields, PostSchema/metadata drift, OG images existing on disk, and that every post ends with a `<PostNav>` whose slug matches its directory and whose `related` slugs point at real posts. It also enforces that every post has **exactly one** of a `<PostHeader>` or a legacy `# ` H1 (both, or neither, fails the check), that a `<PostHeader>` has a non-empty `title` prop and a `slug` prop matching its directory, and that a `<PostSchema>` slug matches too. Fenced code blocks are stripped before the H1 check, so a `# ` inside a code sample isn't mistaken for a real heading. Run it after any post change.
 - **Tests follow a temp-dir pattern.** `lib/posts.test.ts` and `app/sitemap.test.ts` write throwaway posts into a `mkdtemp` directory rather than mocking `fs`. Follow that pattern for anything else that reads the posts directory.
 
 ## Style Notes
 - **Light theme only.** No dark mode, no `prefers-color-scheme` rules, no theme toggle (reversed July's dark-mode support on 2 Oct 2026).
-- **Layout:** `<main>` is a breakout grid (`.page-grid`). Post blocks sit in a 640px `content` column by default; components opt out with `.col-wide` (about 960px) or `.col-full` (the 1312px container). Grid children use `margin-top` only; the one exception is `.post-head` and `.hero-fig`, which carry a bottom margin so the first block after them can drop its own (KTD4).
-- **Type:** prose body is 19px Schibsted Grotesk in `muted` grey; headings and `strong` are `ink`. Weights are 400, 500 or 700 only, never arbitrary `font-[...]` weights.
-- **Serif means italic.** Source Serif 4 is loaded italic only, so anything `font-serif` must also be `italic` (standfirsts, excerpts, captions, Scenario dialogue, markdown blockquote). Everything else is `font-sans`.
+- **Plain numbers, never §.** Entries are `4.8`, sections `4.8.2`, page sections `A.1`.
+- **Layout:** `<main>` is a breakout grid (`.page-grid`). Post blocks sit in a 640px `content` column by default; components opt out with `.col-wide` (about 960px), `.col-full` (the 1312px container) or `.col-bleed` (edge to edge, for ruled sections; put the content in a `max-w-[1180px]` box with `px-[var(--gutter)]`). A page that starts or ends with a `.col-bleed` drops the grid's top or bottom padding. Grid children use `margin-top` only; the one exception is `.post-head` and `.hero-fig`, which carry a bottom margin so the first block after them can drop its own.
+- **Type:** prose body is 19px Schibsted Grotesk in `muted` grey; headings and `strong` are `ink`. Weights are 400, 500 or 700 only, never arbitrary `font-[...]` weights. There is no serif.
+- **Labels:** small mono labels use the `.label` class (mono, 13px, tracked, uppercase by CSS). Write the text in sentence case so screen readers read words, not letters.
+- **Highlighter:** `.hl` puts the yellow band behind a line. One per page, usually the standfirst.
 - **Breakpoints:** use the inclusive custom variants `tab` (1080px), `cards` (960px), `mob` (760px) and `tight` (380px). Do not use `sm`/`md`/`lg` or `max-[...]`.
 - **CSS layering:** custom CSS that targets elements which also carry utilities goes in `@layer components` or `@layer base`; unlayered CSS beats every Tailwind utility in v4.
-- **Motion:** blue means go, so the blue things move: arrows nudge, card and archive rules draw blue, the nav segment glides, and the arch rises once. The reading column never moves. Tokens, the full list and the reduced-motion behaviour are in DESIGN.md 3.6. Any new animation needs a `prefers-reduced-motion` variant and must never hide content while waiting for script. Give any new arrow inside a link the `nudge` class (plus `nudge-back` when it points left).
-- **Links:** `textLinkClass` in `app/components/TextLink.tsx`: ink text, 2px accent underline at 0.22em offset, accent text on hover.
-- **Colour tokens:** `paper`, `raise`, `ink`, `muted`, `faint`, `hair`, `accent`, `accent-deep`, `blond`, `blond-line`, `red`. Never put `faint` text on `blond`.
+- **Motion:** arrows nudge, cards lift, chapter bars grow, toolkit cards flip, tool drawings move on hover or focus only, and a post's hero rises through its arch once. The reading column never moves. The full list and the reduced-motion behaviour are in DESIGN.md 6. Any new animation needs a `prefers-reduced-motion` variant and must never hide content while waiting for script. Give any new arrow inside a link the `nudge` class (plus `nudge-back` when it points left).
+- **Links:** `textLinkClass` in `app/components/TextLink.tsx`: ink text, 2px accent underline at 0.22em offset, highlighter background on hover.
+- **Dark grounds:** put `surface-dark` on anything with an ink or blue background so its focus ring turns yellow.
+- **Colour tokens:** `paper`, `card`, `raise`, `ink`, `muted`, `faint`, `hair`, `accent`, `accent-deep`, `hi` (highlighter yellow), `blond`, `blond-line`, `red`. Never put `faint` text on `blond`. The five theme colours in `lib/manual-data.mjs` are for bars and dots only, never text.
 - **Code blocks:** fences with a language are syntax-highlighted; unlabelled fences render as plain ink. Every block gets a Copy button.
-- Safe-area padding for the iPhone notch lives on the masthead, footer and `--gutter`.
+- Safe-area padding for the iPhone notch lives on the top bar, footer and `--gutter`.
 
 ## Git Workflow
 Always commit changes with descriptive messages and push to trigger Vercel deployment.
 
 ## Images
-Store post images in `public/images/posts/` with naming convention: `[slug]-[n].jpg`
+Store post images in `public/images/posts/` with naming convention: `[slug]-[n].jpg`. Share cards are `[slug]-og.png`, made by `npm run og-cards`.
 
 ## Conversion Script
 `scripts/convert-substack.mjs` - Converts Substack HTML exports to MDX (used for initial import)
