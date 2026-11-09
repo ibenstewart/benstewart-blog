@@ -12,10 +12,10 @@ export type OrderView = {
 export type ChapterNextView = { chapter: string; number: string; slug: string; title: string; subtitle: string | null };
 
 const STATES = {
-  done: { tag: 'Before this', card: 'border-ink bg-transparent text-faint', tagColour: 'text-accent' },
-  here: { tag: "You're here", card: 'surface-dark border-ink bg-ink text-white', tagColour: 'text-hi' },
-  next: { tag: 'Next', card: 'surface-dark border-accent bg-accent text-white', tagColour: 'text-hi' },
-  later: { tag: 'After that', card: 'border-ink bg-card text-ink', tagColour: 'text-accent' },
+  done: { tag: 'Before this', card: 'border-ink bg-transparent text-faint', tagColour: 'text-accent', quiet: 'text-faint' },
+  here: { tag: "You're here", card: 'surface-dark border-ink bg-ink text-white', tagColour: 'text-hi', quiet: 'text-white/85' },
+  next: { tag: 'Next', card: 'surface-dark border-accent bg-accent text-white', tagColour: 'text-hi', quiet: 'text-white/90' },
+  later: { tag: 'After that', card: 'border-ink bg-card text-ink', tagColour: 'text-accent', quiet: 'text-faint' },
 } as const;
 
 /**
@@ -44,7 +44,7 @@ export function NextStep({ orders, chapterNext }: { orders: OrderView[]; chapter
         <span className="font-mono text-[2.125rem] font-bold text-hi">{chapterNext.number}</span>
         <span>
           <span className="block text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.05] font-bold tracking-[-0.02em] group-hover:underline">{chapterNext.title}</span>
-          {chapterNext.subtitle && <span className="mt-2 block text-[1rem] opacity-85">{chapterNext.subtitle}</span>}
+          {chapterNext.subtitle && <span className="mt-2 block text-[1rem] text-white/90">{chapterNext.subtitle}</span>}
         </span>
       </Link>
     </div>
@@ -71,12 +71,12 @@ export function NextStep({ orders, chapterNext }: { orders: OrderView[]; chapter
                 >
                   <span className="label flex items-center justify-between gap-3">
                     <span className={s.tagColour}>{s.tag}</span>
-                    <span className="opacity-80">Entry {it.number} · {it.minutes} min</span>
+                    <span className={s.quiet}>Entry {it.number} · {it.minutes} min</span>
                   </span>
                   <span className="mt-4 text-[clamp(1.375rem,2.2vw,1.75rem)] leading-[1.08] font-bold tracking-[-0.02em] group-hover:underline">
                     {it.title}
                   </span>
-                  <span className="mt-2 text-[1rem] opacity-85">{it.why}</span>
+                  <span className={`mt-2 text-[1rem] ${s.quiet}`}>{it.why}</span>
                   {state === 'next' && <span aria-hidden className="nudge mt-5 text-[1.75rem] font-bold text-hi">→</span>}
                 </Link>
               </li>

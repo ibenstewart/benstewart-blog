@@ -20,7 +20,7 @@ npm run dev              # Start dev server (uses Turbopack)
 npm run build            # Build for production (uses webpack)
 npm run validate-posts   # Check all posts have required SEO metadata, themes and quotes
 npm test                 # Unit and component tests (Vitest)
-npm run test:e2e         # Every page at desktop and phone widths, plus axe-core (Playwright)
+npm run test:e2e         # After a build: every page at desktop and phone widths, plus axe-core (Playwright, e2e/)
 npm run og-cards         # Render every share card (add -- <slug> for one)
 ```
 
@@ -126,6 +126,8 @@ Hard-won knowledge from working in this repo. Read before touching posts or meta
 - **Entry numbers are computed, not stored.** Chapter = first theme; position = date order within the chapter (title breaks ties, drafts last). Changing a post's first theme or date moves its number and can shift others in both chapters. The snapshot in `lib/__snapshots__/manual.test.ts.snap` makes that visible; don't update it blindly.
 - **Hiding a post: `draft: true`.** Add `draft: true` and `robots: { index: false, follow: false }` to a post's metadata export to merge it without publishing it. The page still builds and loads at its URL (handy for checking it on production), but `lib/posts.ts`, both sitemaps and the RSS feed skip it, so it's off `/posts`, the homepage and prev/next. To publish, delete both lines and set the real `date`.
 - **`npm run validate-posts` is the safety net.** It checks one to five known `themes` and a `quote` on every post, that every situation and tool points at a real, published post, SEO fields, PostSchema/metadata drift, OG images existing on disk, and that every post ends with a `<PostNav>` whose slug matches its directory and whose `related` slugs point at real posts. It also enforces that every post has **exactly one** of a `<PostHeader>` or a legacy `# ` H1 (both, or neither, fails the check), that a `<PostHeader>` has a non-empty `title` prop and a `slug` prop matching its directory, and that a `<PostSchema>` slug matches too. Fenced code blocks are stripped before the H1 check, so a `# ` inside a code sample isn't mistaken for a real heading. Run it after any post change.
+- **The copy review page is `/copy-review`.** It lists every theme, situation, tool and pull quote with the entry it points at, for signing off copy. It's noindex and not linked or in the sitemap; keep it that way.
+- **Browser tests run against a production build.** `npm run test:e2e` starts `next start` on port 3200 (or set `BASE_URL` to test a preview). Locally, `npx playwright install chromium` once. In dev, a post with an embedded tweet can crash the client if the tweet can't be fetched; that's a Next dev overlay bug, not the site, so check those pages on a build.
 - **Tests follow a temp-dir pattern.** `lib/posts.test.ts` and `app/sitemap.test.ts` write throwaway posts into a `mkdtemp` directory rather than mocking `fs`. Follow that pattern for anything else that reads the posts directory.
 
 ## Style Notes

@@ -150,4 +150,4 @@ Nothing waits for script to appear, and nothing moves on its own forever.
 - Drawings are `aria-hidden` when their name is already on the page; the climb is one `role="img"` with the timeline as text beside it.
 - Targets are at least 24px, 44px on touch.
 - Read state lives in `localStorage` behind `try`/`catch`; pages render unread first.
-- `npm run test:e2e` visits every page at desktop and phone widths and runs axe-core (serious and critical issues fail).
+- `npm run test:e2e` (after `npm run build`) visits every page at desktop and phone widths, checks 320px reflow and runs axe-core on a representative set (serious and critical issues fail). CI runs it on every PR.
