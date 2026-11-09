@@ -137,7 +137,10 @@ export function ManualView({ posts, themes }: { posts: ConceptPost[]; themes: Th
       <section id="chapters" className="px-10 py-20 mob:px-6">
         <p className="text-[13px] tracking-[0.1em]" style={{ ...mono, color: BLUE }}>PART 3 · CHAPTERS</p>
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
-          <h2 className="text-[clamp(36px,4.4vw,64px)] font-bold leading-[0.95] tracking-[-0.04em]">The whole manual.</h2>
+          <div>
+            <h2 className="text-[clamp(36px,4.4vw,64px)] font-bold leading-[0.95] tracking-[-0.04em]">The whole manual.</h2>
+            <p className="mt-4 text-[17px]"><Link href="/demo/redesigns/manual/entries" className="font-bold underline decoration-2 underline-offset-4" style={{ color: INK, textDecorationColor: BLUE }}>Prefer it by date? See every entry, newest first</Link></p>
+          </div>
           <div className="min-w-[260px]">
             <p className="text-[15px] font-medium" style={mono}>You&apos;ve read {read.length} of {posts.length}</p>
             <div className="mt-2 h-3 overflow-hidden rounded-full" style={{ background: 'rgba(14,15,18,.1)' }}>

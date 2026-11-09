@@ -120,7 +120,7 @@ export function chapters(posts: ConceptPost[], themes: Theme[]) {
 }
 
 export const FOOTER_LINKS: [string, string][] = [
-  ['posts', '/posts'],
+  ['all entries', '/demo/redesigns/manual/entries'],
   ['rss', '/feed.xml'],
   ['github', 'https://github.com/ibenstewart'],
   ['x', 'https://x.com/benstewart__'],

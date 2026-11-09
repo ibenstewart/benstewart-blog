@@ -8,17 +8,18 @@ export function ManualTopBar({ current }: { current?: string }) {
     ['situations', '/demo/redesigns/manual#situations'],
     ['toolkit', '/demo/redesigns/manual#toolkit'],
     ['chapters', '/demo/redesigns/manual#chapters'],
+    ['all entries', '/demo/redesigns/manual/entries'],
+    ['bio', '/demo/redesigns/manual/bio'],
   ];
   return (
-    <header className="flex items-center justify-between gap-4 border-b-2 px-6 py-4" style={{ borderColor: INK, background: BG }}>
+    <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b-2 px-6 py-4" style={{ borderColor: INK, background: BG }}>
       <Link href="/demo/redesigns/manual" className="text-[20px] font-bold tracking-[-0.03em] no-underline" style={{ color: INK }}>
         Ben Stewart <span className="ml-2 rounded px-2 py-0.5 align-middle text-[12px] tracking-[0.08em]" style={{ ...mono, background: INK, color: BG }}>FIELD MANUAL</span>
       </Link>
-      <nav className="flex gap-5 text-[14px] font-medium mob:hidden" style={mono}>
+      <nav aria-label="Field manual" className="flex gap-5 text-[14px] font-medium mob:w-full mob:gap-3 mob:overflow-x-auto mob:text-[12px]" style={mono}>
         {nav.map(([label, href]) => (
-          <Link key={label} href={href} className="no-underline hover:underline" style={{ color: current && label.includes(current) ? INK : GREY }}>{label}</Link>
+          <Link key={label} href={href} aria-current={current && label.includes(current) ? 'page' : undefined} className="shrink-0 whitespace-nowrap no-underline hover:underline" style={{ color: current && label.includes(current) ? INK : GREY }}>{label}</Link>
         ))}
-        <Link href="/bio" className="no-underline hover:underline" style={{ color: GREY }}>bio</Link>
       </nav>
     </header>
   );
