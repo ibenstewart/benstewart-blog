@@ -16,13 +16,13 @@ const pill =
   'inline-flex h-11 items-center rounded-xl border-2 border-white/55 px-4 text-base font-bold text-white no-underline transition-colors hover:bg-white hover:text-accent';
 
 /**
- * The footer: the wordmark and links in the sky of the glen, an original
- * illustration drawn in code (scripts/footer-art/draw-glen.py).
+ * The footer: the wordmark and links in the sky of the mesas, an
+ * illustration by @uixhassan, credited under the wordmark.
  */
 export async function SiteFooter() {
   const filed = (await getAllPosts()).length;
   return (
-    <SceneFooter src="/images/footer/glen.jpg" sky="#003593" focus="30% 100%" className="site-chrome surface-dark border-t-2 border-ink">
+    <SceneFooter src="/images/footer/mesas.jpg" sky="#003593" focus="22% 100%" className="site-chrome surface-dark border-t-2 border-ink">
       <div className="px-[var(--gutter)] pt-16 text-white">
         <div className="flex flex-wrap items-start justify-between gap-8">
           <div>
@@ -34,6 +34,12 @@ export async function SiteFooter() {
             </span>
             <p className="mt-4 font-mono text-[0.8125rem] tracking-[0.1em] text-white/85 uppercase">
               Glasgow · {filed} entries filed
+            </p>
+            <p className="mt-2 font-mono text-[0.8125rem] tracking-[0.1em] text-white/85 uppercase">
+              Illustration by{' '}
+              <a href="https://x.com/uixhassan" target="_blank" rel="noopener noreferrer" className="text-white underline decoration-2 underline-offset-[0.22em]">
+                @uixhassan
+              </a>
             </p>
           </div>
           <nav aria-label="Footer">

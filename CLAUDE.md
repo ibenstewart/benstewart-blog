@@ -117,7 +117,7 @@ Available components in `mdx-components.tsx`:
 - `lib/mdx-parsing.mjs` - Shared escape-aware MDX parsing helpers (metadata block extraction, JSX prop extraction, fence stripping) used by both `lib/posts.ts` and `scripts/validate-posts.mjs`
 - `app/speaking/page.tsx` - Speaking (Appendix B): talks, booking card, videos, podcasts, articles
 - `mdx-components.tsx` - Custom MDX components
-- `app/components/chrome/` - TopBar (with the client `TopNav` and its "you are here" link), SiteFooter and the glen SceneFooter
+- `app/components/chrome/` - TopBar (with the client `TopNav` and its "you are here" link), SiteFooter and the mesas SceneFooter (the illustration is by @uixhassan and the footer credits him; keep the credit if the picture stays)
 - `docs/og-card/template.html` and `scripts/og-cards.mts` - Share card template and renderer
 - `app/globals.css` - Tokens, the `.page-grid` breakout grid, `.col-bleed`, `.label`, `.hl`, custom breakpoint variants and component CSS
 - `app/sitemap.ts` - Auto-generated sitemap
