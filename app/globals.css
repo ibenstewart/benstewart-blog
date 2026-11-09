@@ -782,5 +782,8 @@
   --tweet-bg-color-hover: var(--raise);
   --tweet-color-blue-secondary: var(--accent);
   --tweet-color-blue-secondary-hover: rgb(0 74 147 / 0.08);
+  /* 24px header lines so the name, handle and Follow links meet the 24px
+     target size (WCAG 2.5.8); the two lines now match the 48px avatar. */
+  --tweet-header-line-height: 1.5rem;
   border-radius: 20px;
 }
