@@ -67,7 +67,7 @@ Content goes here...
 
 **Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders the end of the entry automatically and keeps it short: Mark as read (with a one-line link to the toolkit if the entry has a tool), one next step (the next entry on the reading order the reader came from, otherwise the next entry in its chapter), newer and older by date, and a two-line author note. The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and they show beside the next step as plain "Also worth a read" links.
 
-**Note:** `themes` is one to five of `people` (Leading people), `words` (Saying it well), `breaks` (When it breaks), `ai` (Working with AI) and `self` (Looking after yourself). The **first** theme is the post's chapter and decides its entry number. `quote` is a line lifted from the post itself.
+**Note:** `themes` is one to five of `people` (Leading people), `words` (Saying it well), `breaks` (When it breaks), `ai` (Working with AI) and `self` (Looking after yourself). The **first** theme is the post's chapter and decides its entry number. `quote` is a line lifted from the post itself, in Ben's own words: copy it from the body, trimming a sentence short at most. Never paraphrase, never write a new line for it, and never use someone else's quote (the post may quote Eisenhower; the `quote` field may not).
 
 **Note:** A post's `openGraph` replaces the root layout's rather than merging with it, so each post carries `type: "article"`, `siteName` and `publishedTime` (the same date as `date`) itself; the validator checks for them. Top-level pages use `pageMetadata()` from `lib/site.ts` for the same reason.
 
@@ -200,7 +200,7 @@ When writing blog posts, follow Ben's distinctive voice:
 
 **Opening hooks:**
 - Drop the reader into a specific moment: "It's 9:58am and you've been preparing..."
-- Start with the counterintuitive: "Here's the strange part: it works."
+- Start with the counterintuitive: "Here's the strange part. It works."
 - Lead with the contrarian take: "That debate is over. Speed won."
 
 **Sentence structure:**
@@ -245,7 +245,8 @@ When writing blog posts, follow Ben's distinctive voice:
 - Active voice: "you failed" not "a failure occurred"
 
 **Punctuation:**
-- Use semi-colons instead of colons when joining clauses (e.g. "genuinely useful; a system" not "genuinely useful: a system"). Colons are only for introducing lists.
+- Joining two clauses that could each stand alone takes a semi-colon, never a colon (e.g. "genuinely useful; a system" not "genuinely useful: a system"). If the semi-colon reads forced, make it two sentences.
+- A colon introduces something: a list, a bulleted set, a quoted line or an example ("Three things matter: speed, trust and follow-up." or "The standard advice goes like this: ..."). That's the only job it has. Don't swap those colons for semi-colons.
 - Write in **UK English** throughout (analyse, behaviour, colour, organise, etc.)
 
 **Avoid:**
@@ -254,6 +255,8 @@ When writing blog posts, follow Ben's distinctive voice:
 - Overlong explanations of obvious points
 - Academic distancing ("one could argue")
 - Starting sentences with "And", "But", or "Because"
+- Anything that reads as machine-written: a tidy moral bolted onto the end of a section, "it's not X, it's Y" more than once in a post, lists of three for rhythm when there are really two things, and lines that announce what's coming ("Let's dive in", "Here's what I learned")
+- Putting words in Ben's mouth. Pull quotes, card copy and descriptions come from what the post says, not from what would sound good
 
 ### Specific Techniques
 
