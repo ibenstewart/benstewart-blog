@@ -65,7 +65,7 @@ Content goes here...
 <PostNav slug="[slug]" related={["other-slug", "another-slug"]} />
 ```
 
-**Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders the end of the entry automatically: Mark as read, the entry's tool (if it has one), the next step (the reading order the reader came from, otherwise the next entry in its chapter), newer and older by date, and the author note. The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and they show as Keep reading cards.
+**Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders the end of the entry automatically and keeps it short: Mark as read (with a one-line link to the toolkit if the entry has a tool), one next step (the next entry on the reading order the reader came from, otherwise the next entry in its chapter), newer and older by date, and a two-line author note. The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and they show beside the next step as plain "Also worth a read" links.
 
 **Note:** `themes` is one to five of `people` (Leading people), `words` (Saying it well), `breaks` (When it breaks), `ai` (Working with AI) and `self` (Looking after yourself). The **first** theme is the post's chapter and decides its entry number. `quote` is a line lifted from the post itself.
 
@@ -89,7 +89,7 @@ Available components in `mdx-components.tsx`:
 | `<TLDR>` | `<TLDR>Summary</TLDR>` | Ink panel labelled "In short" (an h2, so it shows in the contents rail's heading order) |
 | `<Timeline>` | Wrapper for Event components | Career/timeline container |
 | `<Event>` | `<Event year="2024" title="Role">Description</Event>` | Timeline entry |
-| `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | The end of every entry: Mark as read, its tool, the next step, Keep reading, newer/older and the author note |
+| `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | The end of every entry: Mark as read, one next step, Also worth a read links, newer/older and the author note |
 | `<PostHeader>` | `<PostHeader title="Post Title" slug="[slug]" />` | Opens the entry, full width: chapter breadcrumb, entry number badge, title, the `subtitle` under the highlighter, a mono meta line (minutes, filed date, words, Mark as read) and "Use this when" chips for the situations it's on. Everything but the title is resolved from `lib/posts.ts` and `lib/manual.ts` by slug. Also numbers the entry's sections and renders the contents rail. Replaces the old `# Title` H1 |
 | `<Figure>` | `<Figure src="/images/posts/[slug]-0.png" alt="..." caption="..." credit="..." width="420px" />` | Image with optional caption and credit; `width` overrides the default max-width (capped at the column). Add `hero` for a full-width arched hero image (up to 960px, natural ratio, no visible caption, hidden if the image fails to load) |
 | `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Sets the opening paragraph larger, in ink, weight 500 |

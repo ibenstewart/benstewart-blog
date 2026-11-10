@@ -108,7 +108,7 @@ All copy lives in `lib/manual-data.mjs`; `lib/manual.ts` types it and works thin
 - **PostHeader**: chapter breadcrumb with its theme dot, ink number badge in `hi`, title, standfirst under `.hl`, a label meta row (draft, minutes, filed date or "From the Substack archive", words, Mark as read), and "Use this when" chips linking to `/?situation=<id>`.
 - **Contents rail** (`manual/Contents.tsx`): fixed in the left margin above 1240px, after the header scrolls away; hides at the entry's end and when a wide block is on screen; `aria-current="location"` on the active section.
 - **Post blocks** (`mdx-components.tsx`): Callout (2px ink, white, coloured label), Key point (yellow panel), PullQuote (big ink line over a 2px rule), Scenario (chat bubbles, "Me" in blue on the right), TL;DR (ink panel labelled "In short"), lists (ink numeral tiles, yellow-square bullets), blockquote (blue bar).
-- **PostNav**: Finished? with Mark as read, the tool card for the entry, **NextStep** (the reading order the reader came from via `?via=<id>`, otherwise next in chapter), Keep reading cards, newer and older by date, and the author note.
+- **PostNav**: short on purpose. Mark as read (plus one line linking to the toolkit when the entry has a tool), then **NextStep**: one blue card for the single next entry (the next step on the reading order the reader came from via `?via=<id>`, otherwise next in chapter) with the hand-picked related entries beside it as plain "Also worth a read" links. Then newer and older by date and a two-line author note. No card grids here; one clear next step.
 
 ### 5.4 Other pages
 
