@@ -57,7 +57,11 @@ export function ToolArt({ id }: { id: string }) {
     case 'watermelon':
       return (
         <svg aria-hidden viewBox="0 0 200 200" className="mx-auto h-full">
+          <path d="M100 22 C100 12 106 8 114 8" fill="none" stroke="#1F6B3C" strokeWidth="5" strokeLinecap="round" />
           <circle cx="100" cy="100" r="80" fill="#2E9E5B" />
+          {[0, 26, 52, 71].map((rx) => (
+            <ellipse key={rx} cx="100" cy="100" rx={rx || 0.01} ry="77" fill="none" stroke="#1F6B3C" strokeWidth="7" />
+          ))}
           <g className="tool-reveal">
             <circle cx="100" cy="100" r="66" fill="#E8484F" />
             {[[80, 80], [120, 90], [95, 120], [70, 110], [125, 125]].map(([x, y], i) => (

@@ -102,7 +102,7 @@ All copy lives in `lib/manual-data.mjs`; `lib/manual.ts` types it and works thin
 
 1. **Situations** (`home/Situations.tsx`): the h1 "What are you dealing with today?", the intro, a list of situation buttons (`aria-pressed`), and the blue reading-order panel; a polite live region announces a change; a minutes slider picks entries that fit. `?situation=<id>` preselects one.
 2. **Toolkit** (`home/Toolkit.tsx`): six flip cards. The hidden face is `inert`, the flip button has `aria-expanded`, focus moves to the newly shown face.
-3. **Chapters** (`home/Chapters.tsx`): five chapter cards with a progress bar each, a tick per entry (24px, 44px hit area on touch), and a "read N of M" bar.
+3. **Chapters** (`home/Chapters.tsx`): five chapter cards in three balanced columns (two at 1080px, one on a phone; CSS columns, so a long chapter never leaves empty boxes beside it) with a progress bar each, a tick per entry (24px, 44px hit area on touch), and a "read N of M" bar.
 
 ### 5.3 Entry (`/posts/[slug]`)
 

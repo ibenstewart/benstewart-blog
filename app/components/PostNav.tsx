@@ -61,7 +61,7 @@ export async function PostNav({ slug, related = [] }: PostNavProps) {
       : null;
 
   return (
-    <section aria-label="What next" className="entry-end col-bleed mt-[var(--section)] border-t-2 border-ink">
+    <section aria-label="What next" className="entry-end col-bleed mt-24 border-t-2 border-ink">
       <div className="mx-auto grid max-w-[1180px] gap-12 px-[var(--gutter)] py-14 mob:gap-10 mob:py-10">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <ReadToggle slug={slug} />

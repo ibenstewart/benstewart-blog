@@ -41,17 +41,17 @@ export function Chapters({ chapters, total }: { chapters: ChapterView[]; total: 
           </div>
         </div>
       </div>
-      <div className="mt-10 grid grid-cols-5 gap-4 tab:grid-cols-2 mob:grid-cols-1">
+      <div className="mt-10 columns-3 gap-4 tab:columns-2 mob:columns-1">
         {chapters.map(({ theme, number, entries }) => {
           const done = entries.filter((e) => read.includes(e.slug)).length;
           return (
-            <section key={theme.id} aria-labelledby={`ch-${theme.id}`} className="rounded-3xl border-2 border-ink p-5">
+            <section key={theme.id} aria-labelledby={`ch-${theme.id}`} className="mb-4 break-inside-avoid rounded-3xl border-2 border-ink p-6">
               <p className="label text-faint">Chapter {number}</p>
-              <h3 id={`ch-${theme.id}`} className="mt-1 text-[1.375rem] leading-[1.05] font-bold tracking-[-0.02em] text-ink">{theme.name}</h3>
+              <h3 id={`ch-${theme.id}`} className="mt-1 text-[1.625rem] leading-[1.05] font-bold tracking-[-0.02em] text-ink">{theme.name}</h3>
               <div aria-hidden className="mt-3 h-1.5 overflow-hidden rounded-full bg-ink/10">
                 <div className="grow-bar h-full" style={{ width: `${entries.length ? (done / entries.length) * 100 : 0}%`, background: theme.colour }} />
               </div>
-              <ul role="list" className="mt-4 grid gap-2">
+              <ul role="list" className="mt-5 grid gap-2.5">
                 {entries.map((e) => {
                   const isRead = read.includes(e.slug);
                   return (
@@ -67,9 +67,9 @@ export function Chapters({ chapters, total }: { chapters: ChapterView[]; total: 
                       </button>
                       <Link
                         href={`/posts/${e.slug}`}
-                        className={`text-[0.9375rem] leading-[1.35] font-medium no-underline hover:underline ${isRead ? 'text-faint line-through' : 'text-ink'}`}
+                        className={`text-[1.0625rem] leading-[1.35] font-medium no-underline hover:underline ${isRead ? 'text-faint line-through' : 'text-ink'}`}
                       >
-                        <span className="mr-1.5 font-mono text-[0.75rem] text-accent">{e.number}</span>
+                        <span className="mr-2 font-mono text-[0.8125rem] text-accent">{e.number}</span>
                         {e.title}
                       </Link>
                     </li>
