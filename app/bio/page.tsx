@@ -116,7 +116,7 @@ export default async function BioPage() {
 
       <PageSection id="covers" label="A.2 · The chapters" title="What I write about.">
         <p className="mt-5 max-w-[62ch] text-[1.1875rem] leading-[1.6] text-faint">
-          Mostly what happens when you run engineering teams through AI. Which tasks I hand over and which I keep, what it cost when I got that wrong, and the old processes teams keep running underneath the new tools. The view behind most of it is that AI adoption is a leadership problem before it&apos;s a tooling one. The older posts are about leadership from before AI turned up, and plenty of it still applies.
+          Mostly what happens when you run engineering teams through AI. Which tasks I hand over and which I keep, what it cost when I got that wrong, and the old processes teams keep running underneath the new tools. The view behind most of it is that AI adoption is a leadership problem before it&apos;s a tooling one. The older entries are about leadership from before AI turned up, and plenty of it still applies.
         </p>
         <ul role="list" className="mt-10 grid grid-cols-5 gap-4 tab:grid-cols-3 cards:grid-cols-2 mob:grid-cols-1">
           {chs.map(({ theme, number, entries }) => (

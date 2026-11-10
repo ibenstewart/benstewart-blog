@@ -25,6 +25,7 @@ Where this spec and the code disagree on a value, the code wins; fix this file. 
 
 - **Light theme only.** No dark mode, no `prefers-color-scheme` rules, no theme toggle. `color-scheme: light`.
 - **Plain numbers, never §.**
+- **One name for a post: an entry.** Everything a reader sees on the site calls a post an "entry" ("Every entry, by date", "entries filed", "In this entry"), the whole site "the manual" and a theme a "chapter". "Field reports" is how the writing is described to people who aren't on the site yet (meta descriptions, the short bio, JSON-LD), never a count or a label in the UI. Don't write "posts", "articles" or "blog" in site copy. Code, URLs (`/posts`) and these docs still say post.
 - **Credit anyone else's artwork.** The footer's mesas are by @uixhassan and the footer credits him by name; the voxel head is built from Ben's own photo (`scripts/voxel-head/build-head.py`).
 - **UK English, sentence case, no em dashes in UI strings.**
 - **WCAG 2.2 AA everywhere** (section 7).
