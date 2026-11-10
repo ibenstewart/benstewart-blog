@@ -65,9 +65,9 @@ Content goes here...
 <PostNav slug="[slug]" related={["other-slug", "another-slug"]} />
 ```
 
-**Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders the end of the entry automatically: Mark as read, the entry's tool (if it has one), the next step (the reading order the reader came from, otherwise the next entry in its chapter), newer and older by date, and the author note. The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and they show as Keep reading cards.
+**Note:** Every post ends with `<PostNav slug="[slug]" />`. It renders the end of the entry automatically and keeps it short: Mark as read (with a one-line link to the toolkit if the entry has a tool), one next step (the next entry on the reading order the reader came from, otherwise the next entry in its chapter), newer and older by date, and a two-line author note. The `related` prop is optional; pass 2-3 slugs of hand-picked related posts and they show beside the next step as plain "Also worth a read" links.
 
-**Note:** `themes` is one to five of `people` (Leading people), `words` (Saying it well), `breaks` (When it breaks), `ai` (Working with AI) and `self` (Looking after yourself). The **first** theme is the post's chapter and decides its entry number. `quote` is a line lifted from the post itself.
+**Note:** `themes` is one to five of `people` (Leading people), `words` (Saying it well), `breaks` (When it breaks), `ai` (Working with AI) and `self` (Looking after yourself). The **first** theme is the post's chapter and decides its entry number. `quote` is a line lifted from the post itself, in Ben's own words: copy it from the body, trimming a sentence short at most. Never paraphrase, never write a new line for it, and never use someone else's quote (the post may quote Eisenhower; the `quote` field may not).
 
 **Note:** A post's `openGraph` replaces the root layout's rather than merging with it, so each post carries `type: "article"`, `siteName` and `publishedTime` (the same date as `date`) itself; the validator checks for them. Top-level pages use `pageMetadata()` from `lib/site.ts` for the same reason.
 
@@ -89,7 +89,7 @@ Available components in `mdx-components.tsx`:
 | `<TLDR>` | `<TLDR>Summary</TLDR>` | Ink panel labelled "In short" (an h2, so it shows in the contents rail's heading order) |
 | `<Timeline>` | Wrapper for Event components | Career/timeline container |
 | `<Event>` | `<Event year="2024" title="Role">Description</Event>` | Timeline entry |
-| `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | The end of every entry: Mark as read, its tool, the next step, Keep reading, newer/older and the author note |
+| `<PostNav>` | `<PostNav slug="[slug]" related={["slug-a"]} />` | The end of every entry: Mark as read, one next step, Also worth a read links, newer/older and the author note |
 | `<PostHeader>` | `<PostHeader title="Post Title" slug="[slug]" />` | Opens the entry, full width: chapter breadcrumb, entry number badge, title, the `subtitle` under the highlighter, a mono meta line (minutes, filed date, words, Mark as read) and "Use this when" chips for the situations it's on. Everything but the title is resolved from `lib/posts.ts` and `lib/manual.ts` by slug. Also numbers the entry's sections and renders the contents rail. Replaces the old `# Title` H1 |
 | `<Figure>` | `<Figure src="/images/posts/[slug]-0.png" alt="..." caption="..." credit="..." width="420px" />` | Image with optional caption and credit; `width` overrides the default max-width (capped at the column). Add `hero` for a full-width arched hero image (up to 960px, natural ratio, no visible caption, hidden if the image fails to load) |
 | `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Sets the opening paragraph larger, in ink, weight 500 |
@@ -139,6 +139,7 @@ Hard-won knowledge from working in this repo. Read before touching posts or meta
 ## Style Notes
 - **Light theme only.** No dark mode, no `prefers-color-scheme` rules, no theme toggle (reversed July's dark-mode support on 2 Oct 2026).
 - **Plain numbers, never §.** Entries are `4.8`, sections `4.8.2`, page sections `A.1`.
+- **One name for a post: an entry.** Everything a reader sees on the site calls a post an "entry" ("Every entry, by date", "entries filed", "In this entry"), the whole site "the manual" and a theme a "chapter". "Field reports" is how the writing is described to people who aren't on the site yet (meta descriptions, the short bio, JSON-LD), never a count or a label in the UI. Don't write "posts", "articles" or "blog" in site copy. Code, URLs (`/posts`) and these docs still say post.
 - **Layout:** `<main>` is a breakout grid (`.page-grid`). Post blocks sit in a 640px `content` column by default; components opt out with `.col-wide` (about 960px), `.col-full` (the 1312px container) or `.col-bleed` (edge to edge, for ruled sections; put the content in a `max-w-[1180px]` box with `px-[var(--gutter)]`). A page that starts or ends with a `.col-bleed` drops the grid's top or bottom padding. Grid children use `margin-top` only; the one exception is `.post-head` and `.hero-fig`, which carry a bottom margin so the first block after them can drop its own.
 - **Type:** prose body is 19px Schibsted Grotesk in `muted` grey; headings and `strong` are `ink`. Weights are 400, 500 or 700 only, never arbitrary `font-[...]` weights. There is no serif.
 - **Labels:** small mono labels use the `.label` class (mono, 13px, tracked, uppercase by CSS). Write the text in sentence case so screen readers read words, not letters.
@@ -199,7 +200,7 @@ When writing blog posts, follow Ben's distinctive voice:
 
 **Opening hooks:**
 - Drop the reader into a specific moment: "It's 9:58am and you've been preparing..."
-- Start with the counterintuitive: "Here's the strange part: it works."
+- Start with the counterintuitive: "Here's the strange part. It works."
 - Lead with the contrarian take: "That debate is over. Speed won."
 
 **Sentence structure:**
@@ -244,7 +245,8 @@ When writing blog posts, follow Ben's distinctive voice:
 - Active voice: "you failed" not "a failure occurred"
 
 **Punctuation:**
-- Use semi-colons instead of colons when joining clauses (e.g. "genuinely useful; a system" not "genuinely useful: a system"). Colons are only for introducing lists.
+- Joining two clauses that could each stand alone takes a semi-colon, never a colon (e.g. "genuinely useful; a system" not "genuinely useful: a system"). If the semi-colon reads forced, make it two sentences.
+- A colon introduces something: a list, a bulleted set, a quoted line or an example ("Three things matter: speed, trust and follow-up." or "The standard advice goes like this: ..."). That's the only job it has. Don't swap those colons for semi-colons.
 - Write in **UK English** throughout (analyse, behaviour, colour, organise, etc.)
 
 **Avoid:**
@@ -253,6 +255,8 @@ When writing blog posts, follow Ben's distinctive voice:
 - Overlong explanations of obvious points
 - Academic distancing ("one could argue")
 - Starting sentences with "And", "But", or "Because"
+- Anything that reads as machine-written: a tidy moral bolted onto the end of a section, "it's not X, it's Y" more than once in a post, lists of three for rhythm when there are really two things, and lines that announce what's coming ("Let's dive in", "Here's what I learned")
+- Putting words in Ben's mouth. Pull quotes, card copy and descriptions come from what the post says, not from what would sound good
 
 ### Specific Techniques
 

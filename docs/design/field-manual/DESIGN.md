@@ -25,6 +25,7 @@ Where this spec and the code disagree on a value, the code wins; fix this file. 
 
 - **Light theme only.** No dark mode, no `prefers-color-scheme` rules, no theme toggle. `color-scheme: light`.
 - **Plain numbers, never §.**
+- **One name for a post: an entry.** Everything a reader sees on the site calls a post an "entry" ("Every entry, by date", "entries filed", "In this entry"), the whole site "the manual" and a theme a "chapter". "Field reports" is how the writing is described to people who aren't on the site yet (meta descriptions, the short bio, JSON-LD), never a count or a label in the UI. Don't write "posts", "articles" or "blog" in site copy. Code, URLs (`/posts`) and these docs still say post.
 - **Credit anyone else's artwork.** The footer's mesas are by @uixhassan and the footer credits him by name; the voxel head is built from Ben's own photo (`scripts/voxel-head/build-head.py`).
 - **UK English, sentence case, no em dashes in UI strings.**
 - **WCAG 2.2 AA everywhere** (section 7).
@@ -101,14 +102,14 @@ All copy lives in `lib/manual-data.mjs`; `lib/manual.ts` types it and works thin
 
 1. **Situations** (`home/Situations.tsx`): the h1 "What are you dealing with today?", the intro, a list of situation buttons (`aria-pressed`), and the blue reading-order panel; a polite live region announces a change; a minutes slider picks entries that fit. `?situation=<id>` preselects one.
 2. **Toolkit** (`home/Toolkit.tsx`): six flip cards. The hidden face is `inert`, the flip button has `aria-expanded`, focus moves to the newly shown face.
-3. **Chapters** (`home/Chapters.tsx`): five chapter cards with a progress bar each, a tick per entry (24px, 44px hit area on touch), and a "read N of M" bar.
+3. **Chapters** (`home/Chapters.tsx`): five chapter cards in three balanced columns (two at 1080px, one on a phone; CSS columns, so a long chapter never leaves empty boxes beside it) with a progress bar each, a tick per entry (24px, 44px hit area on touch), and a "read N of M" bar.
 
 ### 5.3 Entry (`/posts/[slug]`)
 
 - **PostHeader**: chapter breadcrumb with its theme dot, ink number badge in `hi`, title, standfirst under `.hl`, a label meta row (draft, minutes, filed date or "From the Substack archive", words, Mark as read), and "Use this when" chips linking to `/?situation=<id>`.
 - **Contents rail** (`manual/Contents.tsx`): fixed in the left margin above 1240px, after the header scrolls away; hides at the entry's end and when a wide block is on screen; `aria-current="location"` on the active section.
 - **Post blocks** (`mdx-components.tsx`): Callout (2px ink, white, coloured label), Key point (yellow panel), PullQuote (big ink line over a 2px rule), Scenario (chat bubbles, "Me" in blue on the right), TL;DR (ink panel labelled "In short"), lists (ink numeral tiles, yellow-square bullets), blockquote (blue bar).
-- **PostNav**: Finished? with Mark as read, the tool card for the entry, **NextStep** (the reading order the reader came from via `?via=<id>`, otherwise next in chapter), Keep reading cards, newer and older by date, and the author note.
+- **PostNav**: short on purpose. Mark as read (plus one line linking to the toolkit when the entry has a tool), then **NextStep**: one blue card for the single next entry (the next step on the reading order the reader came from via `?via=<id>`, otherwise next in chapter) with the hand-picked related entries beside it as plain "Also worth a read" links. Then newer and older by date and a two-line author note. No card grids here; one clear next step.
 
 ### 5.4 Other pages
 

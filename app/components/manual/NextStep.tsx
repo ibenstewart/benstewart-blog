@@ -2,105 +2,73 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { textLinkClass } from '../TextLink';
 
-export type OrderView = {
-  id: string;
-  label: string;
-  step: number;
-  items: { slug: string; title: string; number: string; minutes: number; why: string }[];
-};
-export type ChapterNextView = { chapter: string; number: string; slug: string; title: string; subtitle: string | null };
-
-const STATES = {
-  done: { tag: 'Before this', card: 'border-ink bg-transparent text-faint', tagColour: 'text-accent', quiet: 'text-faint' },
-  here: { tag: "You're here", card: 'surface-dark border-ink bg-ink text-white', tagColour: 'text-hi', quiet: 'text-white/85' },
-  next: { tag: 'Next', card: 'surface-dark border-accent bg-accent text-white', tagColour: 'text-hi', quiet: 'text-white/90' },
-  later: { tag: 'After that', card: 'border-ink bg-card text-ink', tagColour: 'text-accent', quiet: 'text-faint' },
-} as const;
+export type StepView = { label: string; slug: string; href: string; number: string; title: string; line: string | null };
+export type OrderStepView = StepView & { id: string };
+export type RelatedView = { slug: string; number: string; title: string; minutes: number };
 
 /**
- * What to read next. A post on a reading order shows that order with this
- * post marked; the home page's situation links add `?via=<id>`, so a reader
- * who arrived from one situation sees that one. Everything else gets the
- * next entry in its chapter. The server renders the default, so nothing
- * waits for script.
+ * The one thing to read next, with the hand-picked entries beside it as
+ * plain links. A post on a reading order points at the next step of that
+ * order; the home page's situation links add `?via=<id>`, so a reader who
+ * arrived from one situation carries on down that one. Everything else gets
+ * `fallback` (next in its chapter, or failing that another entry). The
+ * server renders the default, so nothing waits for script.
  */
-export function NextStep({ orders, chapterNext }: { orders: OrderView[]; chapterNext: ChapterNextView | null }) {
-  const [via, setVia] = useState(orders[0]?.id ?? null);
+export function NextStep({
+  orderSteps,
+  finished,
+  fallback,
+  related,
+}: {
+  orderSteps: OrderStepView[];
+  /** Reading orders this post is the last step of. */
+  finished: string[];
+  fallback: StepView | null;
+  related: RelatedView[];
+}) {
+  const [via, setVia] = useState<string | null>(null);
 
   useEffect(() => {
-    const wanted = new URLSearchParams(window.location.search).get('via');
-    if (wanted && orders.some((o) => o.id === wanted)) setVia(wanted);
-  }, [orders]);
+    setVia(new URLSearchParams(window.location.search).get('via'));
+  }, []);
 
-  const order = orders.find((o) => o.id === via);
-  const chapterBlock = chapterNext && (
-    <div>
-      <h2 className="label text-accent">Next in {chapterNext.chapter}</h2>
-      <Link
-        href={`/posts/${chapterNext.slug}`}
-        className="surface-dark group mt-6 grid max-w-[720px] grid-cols-[auto_1fr] items-center gap-6 rounded-3xl bg-accent p-7 text-white no-underline transition-transform hover:-translate-y-1 mob:grid-cols-1 mob:gap-3"
-      >
-        <span className="font-mono text-[2.125rem] font-bold text-hi">{chapterNext.number}</span>
-        <span>
-          <span className="block text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.05] font-bold tracking-[-0.02em] group-hover:underline">{chapterNext.title}</span>
-          {chapterNext.subtitle && <span className="mt-2 block text-[1rem] text-white/90">{chapterNext.subtitle}</span>}
-        </span>
-      </Link>
+  const next = (via && finished.includes(via) ? null : orderSteps.find((o) => o.id === via) ?? orderSteps[0]) ?? fallback;
+  const also = related.filter((r) => r.slug !== next?.slug);
+  if (!next && also.length === 0) return null;
+
+  return (
+    <div className="grid grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] items-start gap-x-16 gap-y-12 cards:grid-cols-1">
+      {next && (
+        <div>
+          <h2 className="label text-accent">{next.label}</h2>
+          <Link
+            href={next.href}
+            className="surface-dark group mt-5 grid grid-cols-[auto_1fr_auto] items-center gap-6 rounded-3xl bg-accent p-7 text-white no-underline transition-transform hover:-translate-y-1 mob:grid-cols-[1fr_auto] mob:gap-x-4 mob:gap-y-2 mob:p-6"
+          >
+            <span className="font-mono text-[2.125rem] font-bold text-hi mob:col-span-2 mob:text-[1.5rem]">{next.number}</span>
+            <span>
+              <span className="block text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.05] font-bold tracking-[-0.02em] group-hover:underline">{next.title}</span>
+              {next.line && <span className="mt-2 block text-[1rem] leading-[1.45] text-white/90">{next.line}</span>}
+            </span>
+            <span aria-hidden className="nudge text-[1.75rem] font-bold text-hi">→</span>
+          </Link>
+        </div>
+      )}
+      {also.length > 0 && (
+        <div>
+          <h2 className="label text-accent">Also worth a read</h2>
+          <ul role="list" className="mt-5 grid gap-4">
+            {also.map((r) => (
+              <li key={r.slug} className="text-[1.125rem] leading-[1.35]">
+                <Link href={`/posts/${r.slug}`} className={`font-bold ${textLinkClass}`}>{r.title}</Link>
+                <span className="label ml-3 whitespace-nowrap text-faint mob:mt-1 mob:ml-0 mob:block">{r.number} · {r.minutes} min</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
-
-  if (order) {
-    const last = order.step === order.items.length - 1;
-    const others = orders.filter((o) => o.id !== order.id);
-    return (
-      <div>
-        <h2 className="label text-accent">
-          Reading order · {order.label} · step {order.step + 1} of {order.items.length}
-        </h2>
-        <ol className="mt-6 grid grid-cols-3 gap-4 cards:grid-cols-1">
-          {order.items.map((it, i) => {
-            const state = i < order.step ? 'done' : i === order.step ? 'here' : i === order.step + 1 ? 'next' : 'later';
-            const s = STATES[state];
-            return (
-              <li key={it.slug}>
-                <Link
-                  href={`/posts/${it.slug}?via=${order.id}`}
-                  aria-current={state === 'here' ? 'page' : undefined}
-                  className={`group flex h-full flex-col rounded-3xl border-2 p-6 no-underline transition-transform hover:-translate-y-1 ${s.card}`}
-                >
-                  <span className="label flex items-center justify-between gap-3">
-                    <span className={s.tagColour}>{s.tag}</span>
-                    <span className={s.quiet}>Entry {it.number} · {it.minutes} min</span>
-                  </span>
-                  <span className="mt-4 text-[clamp(1.375rem,2.2vw,1.75rem)] leading-[1.08] font-bold tracking-[-0.02em] group-hover:underline">
-                    {it.title}
-                  </span>
-                  <span className={`mt-2 text-[1rem] ${s.quiet}`}>{it.why}</span>
-                  {state === 'next' && <span aria-hidden className="nudge mt-5 text-[1.75rem] font-bold text-hi">→</span>}
-                </Link>
-              </li>
-            );
-          })}
-        </ol>
-        {others.length > 0 && (
-          <p className="mt-6 text-[0.9375rem] text-faint">
-            Also on the reading order for{' '}
-            {others.map((o, i) => (
-              <span key={o.id}>
-                {i ? ', ' : ''}
-                <button type="button" onClick={() => setVia(o.id)} className="text-ink underline decoration-accent decoration-2 underline-offset-[0.22em] hover:bg-hi">
-                  {o.label.toLowerCase()}
-                </button>
-              </span>
-            ))}
-            .
-          </p>
-        )}
-        {last && chapterBlock && <div className="mt-12">{chapterBlock}</div>}
-      </div>
-    );
-  }
-
-  return chapterBlock || null;
 }

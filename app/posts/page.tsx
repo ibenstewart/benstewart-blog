@@ -7,10 +7,10 @@ import { EntriesList, type EntryRow } from '@/app/components/manual/EntriesList'
 import { PageHead } from '@/app/components/manual/PageHead';
 import { textLinkClass } from '@/app/components/TextLink';
 
-const postsDescription = 'Every field report by Ben Stewart on leading engineering teams through AI, newest first.';
+const postsDescription = "Every entry in Ben Stewart's field manual on leading engineering teams through AI, newest first.";
 
 export const metadata: Metadata = pageMetadata({
-  title: 'All posts on engineering leadership and AI',
+  title: 'Every entry on engineering leadership and AI',
   description: postsDescription,
   path: '/posts',
 });
