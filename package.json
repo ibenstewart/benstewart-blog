@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "write": "node scripts/write/server.mjs",
     "build": "next build",
     "start": "next start",
     "delete": "rm -rf app/n",

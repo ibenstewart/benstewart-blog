@@ -17,6 +17,7 @@ Personal blog for Ben Stewart - engineer turned leader at Skyscanner. Writing ab
 ## Quick Commands
 ```bash
 npm run dev              # Start dev server (uses Turbopack)
+npm run write            # The writing desk: edit posts in the browser with the real page live beside them
 npm run build            # Build for production (uses webpack)
 npm run validate-posts   # Check all posts have required SEO metadata, themes and quotes
 npm test                 # Unit and component tests (Vitest)
@@ -94,6 +95,17 @@ Available components in `mdx-components.tsx`:
 | `<Figure>` | `<Figure src="/images/posts/[slug]-0.png" alt="..." caption="..." credit="..." width="420px" />` | Image with optional caption and credit; `width` overrides the default max-width (capped at the column). Add `screenshot` for a framed screenshot in the wide column. Add `hero` for a full-width arched hero image (up to 960px, natural ratio, no visible caption, hidden if the image fails to load) |
 | `<Lede>` | `<Lede>Opening paragraph...</Lede>` | Sets the opening paragraph larger, in ink, weight 500 |
 
+## The Writing Desk
+`npm run write` opens a local editor at `http://localhost:4321/__write/`. It edits `app/posts/[slug]/page.mdx` in place and saves half a second after the typing stops; the preview on the right is the real page from `next dev`, so Fast Refresh redraws it on every save.
+
+- It starts `next dev` itself, or uses the one already running on port 3000. `--port 4322` moves the desk, `--next http://localhost:3001` points it at another dev server, `--no-open` stops it opening a browser tab.
+- The editor shows the writing only. Title and subtitle sit above it; **Details** holds the search title, description and pull quote, and writes each one everywhere it lives (metadata, `openGraph` when it matched, `<PostSchema>`). Tick **Whole file** to edit the metadata by hand (date, themes, `draft`).
+- Click a paragraph in the preview to put the cursor on it in the source; move the cursor and the preview follows. Following a link to another entry in the preview opens that entry in the editor.
+- **Notes** runs `scripts/write/house-style.mjs`, the mechanical half of the tone guide below (And/But/Because openers, US spellings, hedging, a pull quote that isn't in the post), and the validator's checks for this post on every save. Notes are nudges, not failures.
+- **Changed** shows what's different from the last commit, as prose. Type `/` on an empty line (or press Insert) for the components. Select text for bold, italic, link, "Pull quote" and, if the `claude` command is installed, "Ask Claude", which proposes a rewrite of the selection for you to take or leave.
+- It saves to disk and nothing else: no commits, no pushes. If the file changes underneath it (git, another editor, Claude Code) it reloads, or asks which version to keep if you were mid-edit.
+- It is a local tool, not part of the site: nothing under `scripts/write/` is routed, bundled or deployed, and the server listens on 127.0.0.1 only and writes only `page.mdx` files inside existing post folders.
+
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`
 2. Create `page.mdx` with metadata export (including `themes`, `quote`, canonical, openGraph, images), a `<PostHeader title="..." slug="[slug]" />` opening the body, a `<PostSchema>` component, and `<PostNav slug="[slug]" />` at the end
@@ -118,6 +130,7 @@ Available components in `mdx-components.tsx`:
 - `app/speaking/page.tsx` - Speaking (Appendix B): talks, booking card, videos, podcasts, articles
 - `mdx-components.tsx` - Custom MDX components
 - `app/components/chrome/` - TopBar (with the client `TopNav` and its "you are here" link), SiteFooter and the mesas SceneFooter (the illustration is by @uixhassan and the footer credits him; keep the credit if the picture stays)
+- `scripts/write/` - The writing desk (`npm run write`): `server.mjs` (the desk's API plus a pass-through to `next dev`), `ui/` (the page), `fields.mjs` (reads and rewrites the head of a post), `house-style.mjs` (the tone guide as checks), `locate.mjs` (page to source and back), `diff.mjs`
 - `docs/og-card/template.html` and `scripts/og-cards.mts` - Share card template and renderer
 - `app/globals.css` - Tokens, the `.page-grid` breakout grid, `.col-bleed`, `.label`, `.hl`, custom breakpoint variants and component CSS
 - `app/sitemap.ts` - Auto-generated sitemap
