@@ -34,13 +34,13 @@ export const metadata = {
 
 <Lede>It's Friday night and I should be switching off. Instead I'm typing into Claude Code, about a website I finished redesigning a month ago. "Why don't we spend some of tonight, and offer me some complete redesigns?"</Lede>
 
-I didn't need one. Glasgow Civic was about a month old and I liked it. I think I wanted to ask for the thing you'd be too embarrassed to ask a designer for, which is to bin the lot and show me three different sites by morning.
+I didn't need one. Glasgow Civic was about a month old and I liked it. I think I wanted to ask for the thing you'd be too embarrassed to ask a designer for. Bin the lot and show me three different sites by morning.
 
 <Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-1.jpg" alt="The Glasgow Civic homepage: a pale page with a blue pill navigation, a very large Ben Stewart headline, a photo of Ben speaking into a microphone and a short introduction." caption="What I was offering to bin. Glasgow Civic, a month old." />
 
 It didn't take until morning. Before I went to bed there were three of them on a preview link, each one built out of every post I've ever published here. I sat there clicking round my own writing in three different outfits.
 
-That part took one evening. Picking one took three days. Shipping it properly took more work than building all three, and that's the part worth telling you about.
+That part took one evening. Picking one took three days. Shipping it properly took more work than building all three.
 
 ## Three sites before bed
 
@@ -106,17 +106,15 @@ If I had to ask, you'd have had to ask. They're plain numbers now.
 
 By now I was in love with it, which is the worst possible time to ask a sensible question. I asked anyway. What would it take to do this to the whole site, properly? Accessible, tested, all of it.
 
-The answer was a list, and the list was humbling. The thing I'd been showing off had problems that never turn up in a screenshot:
+The answer was a list of things wrong with the site I'd been admiring.
 
-- The amber I liked for one chapter had a contrast of about 2:1 against the page. Readable text needs more than twice that.
-- The flip cards kept their backs on the page while hidden, so anyone using a keyboard would tab onto a button they couldn't see.
-- A little animation of keys being pressed looped forever, with no way to make it stop.
+The amber on one chapter had a contrast of about 2:1 against the page, when text needs more than twice that to be read. The little keys on one of the tool cards tapped away forever, with no way to make them stop. The flip cards were the worst. Their backs stayed on the page while they were hidden, so anyone finding their way round by keyboard would tab onto a button that wasn't there.
 
-None of those would ever have bothered me. Every one of them would have bothered somebody.
+None of it would ever have bothered me, and every bit of it would have bothered somebody. You can't see any of that in a screenshot.
 
-Fixing them took eight rounds of changes, and left behind more than 80 unit tests and more than 90 browser and accessibility checks that hadn't existed the week before. They paid for themselves on the first run, which found grey text too faint to read at the end of every post and every page sliding sideways on the smallest phones. Then the build server caught one that wouldn't even load on the machine it was written on; the Follow button on an embedded tweet was too small for a thumb.
+Fixing it took eight rounds of changes. What's left behind is more than 80 unit tests and more than 90 browser and accessibility checks that didn't exist the week before, and they paid for themselves on the first run. Grey text too faint to read at the end of every post. Every page sliding sideways on the smallest phones. A Follow button on an embedded tweet too small for a thumb, which only the build server caught.
 
-One job was left that I couldn't hand over. Every situation, every line on a tool card and every chapter blurb is written as me, and I'm the only person who can say whether it sounds like me. So I read all of it.
+One job was left that I couldn't hand over. Every situation, every line on a tool card and every chapter blurb is written as me, and I'm the only person who can say whether it sounds like me. So I read every line.
 
 That's the bit nobody screenshots, and it's most of the bloody work.
 
