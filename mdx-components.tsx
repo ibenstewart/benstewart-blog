@@ -73,6 +73,8 @@ type FigureProps = {
   credit?: string;
   width?: string;
   hero?: boolean;
+  /** A screenshot: sits in the wide column with a 2px ink frame. */
+  screenshot?: boolean;
 };
 
 type LedeProps = {
@@ -361,7 +363,7 @@ const components = {
       )}
     </div>
   ),
-  Figure: ({ src, alt, caption, credit, width, hero }: FigureProps) => {
+  Figure: ({ src, alt, caption, credit, width, hero, screenshot }: FigureProps) => {
     if (hero) {
       return (
         <figure className="hero-fig col-wide">
@@ -370,12 +372,13 @@ const components = {
       );
     }
     return (
-      <figure className="prose-figure text-center">
+      <figure className={`prose-figure text-center ${screenshot ? 'col-wide' : ''}`}>
         <img
           src={src}
           alt={alt}
-          className="mx-auto h-auto rounded-2xl"
-          style={{ maxWidth: width ? `min(100%, ${width})` : 'min(100%, 640px)' }}
+          loading="lazy"
+          className={`mx-auto h-auto rounded-2xl ${screenshot ? 'border-2 border-ink' : ''}`}
+          style={{ maxWidth: width ? `min(100%, ${width})` : screenshot ? '100%' : 'min(100%, 640px)' }}
         />
         {caption && (
           <figcaption className="mt-3 text-[0.9375rem] leading-[1.45] text-faint">
