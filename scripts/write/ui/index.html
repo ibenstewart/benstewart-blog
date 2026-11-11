@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Writing desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="/__write/src/scripts/write/ui/style.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-side">
+      <span class="label">Writing desk</span>
+      <button id="entry-btn" class="entry-btn" type="button" title="Switch entry (Ctrl or Cmd + P)">
+        <span id="entry-name">Loading…</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5 6 8.5l4-4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+      <span id="draft-badge" class="badge" hidden>Draft</span>
+    </div>
+    <div class="bar-side">
+      <span id="status" class="label status" role="status" aria-live="polite"></span>
+      <div class="seg" role="group" aria-label="Layout">
+        <button type="button" data-view="write">Write</button>
+        <button type="button" data-view="both" aria-pressed="true">Both</button>
+        <button type="button" data-view="read">Read</button>
+      </div>
+      <div class="seg" role="group" aria-label="Preview width">
+        <button type="button" data-width="phone">Phone</button>
+        <button type="button" data-width="fit" aria-pressed="true">Fit</button>
+        <button type="button" data-width="desktop">Desktop</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="conflict" class="conflict" hidden>
+    <span>This entry changed on disk while you were typing.</span>
+    <button type="button" id="take-theirs" class="btn">Load that version</button>
+    <button type="button" id="keep-mine" class="btn btn-ink">Keep mine</button>
+  </div>
+
+  <main class="desk" data-view="both">
+    <section class="write" aria-label="Editor">
+      <div class="scroll" id="scroll">
+        <div class="sheet">
+          <div id="head-fields">
+            <textarea id="f-displayTitle" class="f-title" rows="1" spellcheck="true" aria-label="Title" placeholder="Title"></textarea>
+            <textarea id="f-subtitle" class="f-sub" rows="1" spellcheck="true" aria-label="Subtitle" placeholder="Subtitle (the line under the title)"></textarea>
+            <details class="details" id="details">
+              <summary><span class="label">Details</span><span id="details-line" class="label details-line"></span></summary>
+              <label class="field"><span class="label">Search and share title</span>
+                <textarea id="f-seoTitle" rows="1" spellcheck="true"></textarea>
+                <span class="hint">The longer title for Google, share cards and the feed. Kept in step in the metadata and PostSchema.</span>
+              </label>
+              <label class="field"><span class="label">Description</span>
+                <textarea id="f-description" rows="2" spellcheck="true"></textarea>
+                <span class="hint" id="description-hint"></span>
+              </label>
+              <label class="field"><span class="label">Pull quote</span>
+                <textarea id="f-quote" rows="2" spellcheck="true"></textarea>
+                <span class="hint" id="quote-hint"></span>
+              </label>
+              <p class="hint" id="fixed-line"></p>
+            </details>
+          </div>
+          <div class="ed" id="ed">
+            <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+            <textarea id="body" spellcheck="true" aria-label="Entry text" autocapitalize="sentences"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div id="notes" class="notes" hidden></div>
+
+      <footer class="foot">
+        <span id="count" class="label"></span>
+        <span class="foot-gap"></span>
+        <button type="button" id="notes-btn" class="chip" aria-expanded="false"></button>
+        <button type="button" id="changes-btn" class="chip" aria-pressed="false" hidden></button>
+        <button type="button" id="insert-btn" class="chip" title="Insert a component (or type / on an empty line)">Insert</button>
+        <label class="chip chip-check" title="Show the metadata, PostHeader and PostSchema too"><input type="checkbox" id="raw"> Whole file</label>
+      </footer>
+    </section>
+
+    <section class="read" aria-label="Preview">
+      <div class="stage" id="stage"><iframe id="frame" title="The entry as it reads on the site"></iframe></div>
+      <button type="button" id="back" class="chip back" hidden>Back to this entry</button>
+      <div id="changes" class="changes" hidden></div>
+    </section>
+  </main>
+
+  <div id="tools" class="pop tools" hidden>
+    <button type="button" data-do="bold" title="Bold (Ctrl or Cmd + B)"><b>B</b></button>
+    <button type="button" data-do="italic" title="Italic (Ctrl or Cmd + I)"><i>I</i></button>
+    <button type="button" data-do="link" title="Link (Ctrl or Cmd + K)">Link</button>
+    <button type="button" data-do="quote" title="Use this line as the entry's pull quote">Pull quote</button>
+    <button type="button" data-do="ask" id="ask-btn" title="Ask Claude to rework this (Ctrl or Cmd + J)" hidden>Ask Claude</button>
+  </div>
+
+  <div id="ask" class="pop ask" hidden role="dialog" aria-label="Ask Claude">
+    <div class="ask-chips" id="ask-chips"></div>
+    <form id="ask-form"><input id="ask-input" type="text" placeholder="What should change?" autocomplete="off" aria-label="What should change?"><button class="btn btn-ink" type="submit">Ask</button></form>
+    <div id="ask-out" class="ask-out" hidden></div>
+    <div id="ask-actions" class="ask-actions" hidden>
+      <button type="button" class="btn btn-ink" id="ask-use">Use it</button>
+      <button type="button" class="btn" id="ask-again">Try again</button>
+      <button type="button" class="btn" id="ask-drop">Leave it</button>
+    </div>
+  </div>
+
+  <div id="insert" class="pop insert" hidden role="dialog" aria-label="Insert">
+    <input id="insert-filter" type="text" placeholder="Insert…" autocomplete="off" aria-label="Filter components">
+    <ul id="insert-list"></ul>
+  </div>
+
+  <dialog id="picker" class="picker" aria-label="Entries">
+    <input id="picker-filter" type="text" placeholder="Find an entry…" autocomplete="off" aria-label="Find an entry">
+    <ul id="picker-list"></ul>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="/__write/src/scripts/write/ui/app.js"></script>
+</body>
+</html>

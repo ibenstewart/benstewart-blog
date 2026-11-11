@@ -142,6 +142,126 @@ export function checkManualRefs(postDirs, published) {
   return errors;
 }
 
+/**
+ * Every check for one post. `content` is the raw page.mdx and `postDirs` the
+ * list of post slugs (for PostNav's related links). Returns the error
+ * messages and whether the post is a draft. Shared with the writing desk
+ * (scripts/write), which runs it on every save.
+ */
+export async function checkPost(slug, content, postDirs) {
+  const postErrors = [];
+  const metaBlock = extractMetadataBlock(content, { includeExportPrefix: false });
+
+  if (!metaBlock) return { errors: ['no metadata export found'], draft: false };
+
+  // Check required top-level fields
+  for (const field of ['title', 'date', 'description']) {
+    if (!new RegExp(`\\b${field}\\s*:`).test(metaBlock)) {
+      postErrors.push(`missing metadata.${field}`);
+    }
+  }
+
+  // Check alternates.canonical
+  if (!metaBlock.includes('alternates') || !metaBlock.includes('canonical')) {
+    postErrors.push('missing alternates.canonical');
+  }
+
+  // Check openGraph and its required contents
+  let ogImageUrls = [];
+  if (!metaBlock.includes('openGraph')) {
+    postErrors.push('missing openGraph');
+  } else {
+    // A post's openGraph replaces the root layout's, so it has to say it's
+    // an article itself (og:type, article:published_time).
+    if (!/\btype:\s*["']article["']/.test(metaBlock)) {
+      postErrors.push('missing openGraph type: "article"');
+    }
+    if (!/\bpublishedTime:\s*["']\d{4}-\d{2}-\d{2}["']/.test(metaBlock)) {
+      postErrors.push('missing openGraph publishedTime');
+    }
+    if (!metaBlock.includes('images')) {
+      postErrors.push('missing openGraph.images');
+    } else {
+      ogImageUrls = extractOgImageUrls(metaBlock);
+      for (const url of ogImageUrls) {
+        const publicPath = resolvePublicPath(url);
+        if (publicPath && !(await fileExists(publicPath))) {
+          postErrors.push(`openGraph image file missing on disk: ${url}`);
+        }
+      }
+    }
+  }
+
+  // Check PostSchema component exists in the body (after metadata block)
+  const metaEnd = findMetadataBlockEnd(content);
+  const bodyContent = metaEnd === -1 ? content : content.slice(metaEnd);
+
+  postErrors.push(...checkPostHeaderFormat(bodyContent, slug));
+  postErrors.push(...checkManualMetadata(metaBlock));
+  const draft = /\bdraft:\s*true\b/.test(metaBlock);
+
+  if (!bodyContent.includes('<PostSchema')) {
+    postErrors.push('missing <PostSchema> component');
+  } else {
+    // Check PostSchema props match metadata values
+    const metaTitle = matchQuoted(metaBlock, 'title');
+    const schemaTitle = matchQuotedProp(content, 'PostSchema', 'title');
+    if (metaTitle && schemaTitle && metaTitle !== schemaTitle) {
+      postErrors.push(`PostSchema title "${schemaTitle}" does not match metadata title "${metaTitle}"`);
+    }
+
+    const metaDate = matchQuoted(metaBlock, 'date');
+    const schemaDate = matchQuotedProp(content, 'PostSchema', 'date');
+    if (metaDate && schemaDate && metaDate !== schemaDate) {
+      postErrors.push(`PostSchema date "${schemaDate}" does not match metadata date "${metaDate}"`);
+    }
+
+    const schemaSlug = matchQuotedProp(content, 'PostSchema', 'slug');
+    if (schemaSlug && schemaSlug !== slug) {
+      postErrors.push(`PostSchema slug "${schemaSlug}" does not match directory "${slug}"`);
+    }
+
+    // If the post has OG images, require PostSchema to pass an image prop too,
+    // so JSON-LD includes it.
+    const schemaImage = matchQuotedProp(content, 'PostSchema', 'image');
+    if (ogImageUrls.length > 0 && !schemaImage) {
+      postErrors.push('missing <PostSchema image="..."> prop (required when openGraph.images is set)');
+    }
+    if (schemaImage) {
+      const publicPath = resolvePublicPath(schemaImage);
+      if (publicPath && !(await fileExists(publicPath))) {
+        postErrors.push(`PostSchema image file missing on disk: ${schemaImage}`);
+      }
+    }
+  }
+
+  // Check PostNav component exists and points at this post.
+  // The posts listing and prev/next navigation are generated from the
+  // filesystem (lib/posts.ts), so each post only needs its own PostNav.
+  const navSlugMatch = content.match(/<PostNav[^>]*\bslug\s*=\s*"([^"]+)"/);
+  if (!navSlugMatch) {
+    postErrors.push('missing <PostNav> component');
+  } else {
+    if (navSlugMatch[1] !== slug) {
+      postErrors.push(`PostNav slug "${navSlugMatch[1]}" does not match directory "${slug}"`);
+    }
+    const relatedMatch = content.match(/<PostNav[^>]*\brelated\s*=\s*\{\[([^\]]*)\]\}/);
+    if (relatedMatch) {
+      const relatedSlugs = [...relatedMatch[1].matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
+      for (const relatedSlug of relatedSlugs) {
+        if (!postDirs.includes(relatedSlug)) {
+          postErrors.push(`PostNav related slug "${relatedSlug}" has no matching post directory`);
+        }
+        if (relatedSlug === slug) {
+          postErrors.push('PostNav related slugs must not include the post itself');
+        }
+      }
+    }
+  }
+
+  return { errors: postErrors, draft };
+}
+
 async function main() {
   let errors = 0;
 
@@ -168,118 +288,8 @@ async function main() {
       continue;
     }
 
-    const postErrors = [];
-    const metaBlock = extractMetadataBlock(content, { includeExportPrefix: false });
-
-    if (!metaBlock) {
-      fail(slug, 'no metadata export found');
-      continue;
-    }
-
-    // Check required top-level fields
-    for (const field of ['title', 'date', 'description']) {
-      if (!new RegExp(`\\b${field}\\s*:`).test(metaBlock)) {
-        postErrors.push(`missing metadata.${field}`);
-      }
-    }
-
-    // Check alternates.canonical
-    if (!metaBlock.includes('alternates') || !metaBlock.includes('canonical')) {
-      postErrors.push('missing alternates.canonical');
-    }
-
-    // Check openGraph and its required contents
-    let ogImageUrls = [];
-    if (!metaBlock.includes('openGraph')) {
-      postErrors.push('missing openGraph');
-    } else {
-      // A post's openGraph replaces the root layout's, so it has to say it's
-      // an article itself (og:type, article:published_time).
-      if (!/\btype:\s*["']article["']/.test(metaBlock)) {
-        postErrors.push('missing openGraph type: "article"');
-      }
-      if (!/\bpublishedTime:\s*["']\d{4}-\d{2}-\d{2}["']/.test(metaBlock)) {
-        postErrors.push('missing openGraph publishedTime');
-      }
-      if (!metaBlock.includes('images')) {
-        postErrors.push('missing openGraph.images');
-      } else {
-        ogImageUrls = extractOgImageUrls(metaBlock);
-        for (const url of ogImageUrls) {
-          const publicPath = resolvePublicPath(url);
-          if (publicPath && !(await fileExists(publicPath))) {
-            postErrors.push(`openGraph image file missing on disk: ${url}`);
-          }
-        }
-      }
-    }
-
-    // Check PostSchema component exists in the body (after metadata block)
-    const metaEnd = findMetadataBlockEnd(content);
-    const bodyContent = metaEnd === -1 ? content : content.slice(metaEnd);
-
-    postErrors.push(...checkPostHeaderFormat(bodyContent, slug));
-    postErrors.push(...checkManualMetadata(metaBlock));
-    if (!/\bdraft:\s*true\b/.test(metaBlock)) published.add(slug);
-
-    if (!bodyContent.includes('<PostSchema')) {
-      postErrors.push('missing <PostSchema> component');
-    } else {
-      // Check PostSchema props match metadata values
-      const metaTitle = matchQuoted(metaBlock, 'title');
-      const schemaTitle = matchQuotedProp(content, 'PostSchema', 'title');
-      if (metaTitle && schemaTitle && metaTitle !== schemaTitle) {
-        postErrors.push(`PostSchema title "${schemaTitle}" does not match metadata title "${metaTitle}"`);
-      }
-
-      const metaDate = matchQuoted(metaBlock, 'date');
-      const schemaDate = matchQuotedProp(content, 'PostSchema', 'date');
-      if (metaDate && schemaDate && metaDate !== schemaDate) {
-        postErrors.push(`PostSchema date "${schemaDate}" does not match metadata date "${metaDate}"`);
-      }
-
-      const schemaSlug = matchQuotedProp(content, 'PostSchema', 'slug');
-      if (schemaSlug && schemaSlug !== slug) {
-        postErrors.push(`PostSchema slug "${schemaSlug}" does not match directory "${slug}"`);
-      }
-
-      // If the post has OG images, require PostSchema to pass an image prop too,
-      // so JSON-LD includes it.
-      const schemaImage = matchQuotedProp(content, 'PostSchema', 'image');
-      if (ogImageUrls.length > 0 && !schemaImage) {
-        postErrors.push('missing <PostSchema image="..."> prop (required when openGraph.images is set)');
-      }
-      if (schemaImage) {
-        const publicPath = resolvePublicPath(schemaImage);
-        if (publicPath && !(await fileExists(publicPath))) {
-          postErrors.push(`PostSchema image file missing on disk: ${schemaImage}`);
-        }
-      }
-    }
-
-    // Check PostNav component exists and points at this post.
-    // The posts listing and prev/next navigation are generated from the
-    // filesystem (lib/posts.ts), so each post only needs its own PostNav.
-    const navSlugMatch = content.match(/<PostNav[^>]*\bslug\s*=\s*"([^"]+)"/);
-    if (!navSlugMatch) {
-      postErrors.push('missing <PostNav> component');
-    } else {
-      if (navSlugMatch[1] !== slug) {
-        postErrors.push(`PostNav slug "${navSlugMatch[1]}" does not match directory "${slug}"`);
-      }
-      const relatedMatch = content.match(/<PostNav[^>]*\brelated\s*=\s*\{\[([^\]]*)\]\}/);
-      if (relatedMatch) {
-        const relatedSlugs = [...relatedMatch[1].matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
-        for (const relatedSlug of relatedSlugs) {
-          if (!postDirs.includes(relatedSlug)) {
-            postErrors.push(`PostNav related slug "${relatedSlug}" has no matching post directory`);
-          }
-          if (relatedSlug === slug) {
-            postErrors.push('PostNav related slugs must not include the post itself');
-          }
-        }
-      }
-    }
+    const { errors: postErrors, draft } = await checkPost(slug, content, postDirs);
+    if (!draft && postErrors[0] !== 'no metadata export found') published.add(slug);
 
     if (postErrors.length > 0) {
       for (const err of postErrors) {
