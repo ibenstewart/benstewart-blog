@@ -103,8 +103,9 @@ Available components in `mdx-components.tsx`:
 - Click a paragraph in the preview to put the cursor on it in the source; move the cursor and the preview follows. Following a link to another entry in the preview opens that entry in the editor.
 - **Notes** runs `scripts/write/house-style.mjs`, the mechanical half of the tone guide below (And/But/Because openers, US spellings, hedging, a pull quote that isn't in the post), and the validator's checks for this post on every save. Notes are nudges, not failures.
 - **Changed** shows what's different from the last commit, as prose. Type `/` on an empty line (or press Insert) for the components. Select text for bold, italic, link, "Pull quote" and, if the `claude` command is installed, "Ask Claude", which proposes a rewrite of the selection for you to take or leave.
+- Run it in your own terminal tab and leave it open; it stops when that tab closes. Don't have an agent start it as a background job of its session, because it dies when the session restarts.
 - It saves to disk and nothing else: no commits, no pushes. If the file changes underneath it (git, another editor, Claude Code) it reloads, or asks which version to keep if you were mid-edit.
-- It is a local tool, not part of the site: nothing under `scripts/write/` is routed, bundled or deployed, and the server listens on 127.0.0.1 only and writes only `page.mdx` files inside existing post folders.
+- It is a local tool, not part of the site: nothing under `scripts/write/` is routed, bundled or deployed, and the server listens on this machine's loopback addresses only and writes only `page.mdx` files inside existing post folders.
 
 ## Adding a New Post
 1. Create folder: `app/posts/[slug]/`

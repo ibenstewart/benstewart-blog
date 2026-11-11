@@ -12,7 +12,7 @@
  *    on the same origin as the desk
  *
  * Nothing here is part of the site: no route, no bundle, nothing deployed.
- * It listens on 127.0.0.1 only.
+ * It listens on the loopback addresses only (127.0.0.1 and ::1).
  */
 
 import { spawn, execFile } from 'node:child_process';
@@ -357,6 +357,12 @@ async function main() {
     child?.kill();
     process.exit(1);
   });
+  // `localhost` is ::1 first on some machines (Safari on macOS among them), so
+  // answer on the IPv6 loopback too. It hands everything to the same server.
+  const v6 = http.createServer((req, res) => server.emit('request', req, res));
+  v6.on('upgrade', (req, socket, head) => server.emit('upgrade', req, socket, head));
+  v6.on('error', () => {}); // no IPv6 here, or the port is taken there: IPv4 still works
+  v6.listen(port, '::1');
   server.listen(port, '127.0.0.1', () => {
     const url = `http://localhost:${port}${PREFIX}/`;
     console.log(`\n  The writing desk is at ${url}\n  Ctrl+C to stop.\n`);
