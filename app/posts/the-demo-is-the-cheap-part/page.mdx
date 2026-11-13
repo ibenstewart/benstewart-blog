@@ -22,7 +22,7 @@ export const metadata = {
   }
 };
 
-<PostHeader title="The Demo Is the Cheap Part" slug="the-demo-is-the-cheap-part" />
+<PostHeader title="When the demo is the cheapest part" slug="the-demo-is-the-cheap-part" />
 
 <PostSchema
   title="Three Redesigns in One Evening: The Demo Is the Cheap Part"
@@ -32,9 +32,9 @@ export const metadata = {
   image="https://www.benstewart.ai/images/posts/the-demo-is-the-cheap-part-og.png"
 />
 
-<Lede>It's Friday night and I should be switching off. Instead I'm typing into Claude Code, about a website I finished redesigning a month ago. "Why don't we spend some of tonight, and offer me some complete redesigns?"</Lede>
+It's the end of a long work week and instead of **switching off** for the weekend, I'm typing into Claude Code about a website I finished redesigning a month ago. "Why don't we spend some of tonight, and offer me some complete redesigns?"
 
-I didn't need one. Glasgow Civic was about a month old and I liked it. I think I wanted to ask for the thing you'd be too embarrassed to ask a designer for. Bin the lot and show me three different sites by morning.
+The annoying thing is I didn't need to. I liked the redesign I already had, but Fable 5.2 had just been released, so why not? Bin the lot and show me three different sites by morning.
 
 <Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-1.jpg" alt="The Glasgow Civic homepage: a pale page with a blue pill navigation, a very large Ben Stewart headline, a photo of Ben speaking into a microphone and a short introduction." caption="What I was offering to bin. Glasgow Civic, a month old." />
 
@@ -44,19 +44,19 @@ That part took one evening. Picking one took three days. Shipping it properly to
 
 ## Three sites before bed
 
-**Atlas** treated the blog as data. Twenty-five posts and 22,548 words, counted, charted and laid out along a river of dates. It was gorgeous, and it was mostly about me. You'd admire it once and never come back.
+**Atlas** treated the blog as data. Twenty-five posts and 22,548 words, counted, charted and laid out along a river of dates. It looked great, but it was mostly about me. Meh.
 
 <Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-2.jpg" alt="The Atlas homepage: a huge headline reading 25 posts, 7 years, five things I keep coming back to, over a row of stats for words written, minutes of reading, posts and the longest post, with a filter for the five themes." caption="Atlas. Every word I've written, counted." />
 
-**Broadsheet** turned me into a newspaper. My name across the top in type big enough to announce a war, a ticker of my own quotes running underneath, the old Substack posts filed as back issues. Great fun. I'd have hated it by Christmas.
+**Broadsheet** turned me into a newspaper. My name across the top in type big enough to announce a war, a ticker of my own quotes running underneath, the old Substack posts filed as back issues. Great fun. I'd have hated it by Christmas and likely wanted to have changed it again.
 
 <Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-3.jpg" alt="The Broadsheet homepage: a serif newspaper masthead reading Ben Stewart, a section bar of the five themes, a black ticker of pull quotes and the latest post set as the lead story with a drop cap." caption="Broadsheet. It had a ticker. Of me." />
 
-**Field manual** didn't open with me at all. It opened with a question. What are you dealing with today? Something's on fire. I've just become a manager. I talk too much in meetings. Pick one and it hands you three things to read, in order, with a line on why each one earns its place. The frameworks I keep banging on about turned into cards you can flip over.
+**Field manual** didn't open with me at all. It opened with a question. **What are you dealing with today?** Something's on fire. I've just become a manager. I talk too much in meetings. Pick one and it hands you three things to read, in order, with a line on why each one earns its place. The frameworks I keep banging on about turned into cards you can flip over.
 
 <Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-4.jpg" alt="The Field manual homepage as first built: a big question asking what are you dealing with today, a list of situations with Something's on fire selected, and a blue panel showing its three-post reading order." caption="Field manual, the night it was built. Keep an eye on the top right corner." />
 
-It was the only one of the three built for the person reading it. I'd love to tell you that's why I chose it.
+It was the only one of the three built for the person reading it. So as I chose that and moved on. But why did I really choose it?
 
 ## I chose it because of a footer
 
@@ -80,7 +80,7 @@ It went live with the site and it was fine. Fine is a terrible thing for a pictu
 
 <Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-7.jpg" alt="The Scottish mountains redraw: tall white peaks with vertical streaks rising out of flat ground, a stag and walkers in the foreground. They look more like icebergs than hills." caption="Proper Scottish mountains, apparently." />
 
-So I did what I should have done on Monday morning, and asked him. He said yes. The riders are back, with his name underneath them. I still owe him a pint.
+So I did what I should have done on Monday morning, and just went back to the original post and gave the artist credit. The riders are back, with his name underneath them. I owe him a pint because it looks lovely.
 
 <Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-8.jpg" alt="The footer as it is now: riders on horseback crossing a desert of blue mesas, with the site links above and a credit line reading Illustration by @uixhassan." caption="Back where they belong." />
 
@@ -122,12 +122,25 @@ I [wrote a while ago](/posts/ai-made-writing-free) that AI didn't make writing f
 
 (Which, honestly, is what I learned [the first time I built this blog with Claude](/posts/i-built-this-blog-with-claude-code). The tool doesn't have taste. You do.)
 
+## Twenty-one minutes
+
+On the Wednesday I did it again. Editing these entries by describing the change in a chat window was fiddly, so I sent Claude a message. "Crazy idea. Could you create a text editor that I could use locally, which would edit the posts like live?"
+
+Twenty-one minutes later there was a pull request, 2,616 lines of it. The writing sits on the left and the real page on the right, redrawing as I type. It runs my own tone guide over every save, so it tells me off when I start a sentence with "But".
+
+<Figure screenshot src="/images/posts/the-demo-is-the-cheap-part-10.jpg" alt="The writing desk open on this entry: the markdown source of the Twenty-one minutes section in a plain editor on the left, and the same section on the real page on the right, with the paragraph under the cursor outlined in yellow." caption="The editor. This entry on the left, the real page on the right." />
+
+Getting it to stay running on my own laptop took the rest of the day. My copy of the blog had an edit in it I'd never committed, which blocked the update. My npm login had expired. When it finally started, it ran for a while and then quietly stopped, because Claude had launched it as a side job of its own session and the editor went down when that session did. That evening I sent a bug report three words long. "doesnt work locally"
+
+None of it was hard, and none of it was in the screenshot. The pull request had even warned me. Under "Not tested" it listed Safari, Firefox and "macOS itself".
+
 ## What I'd do again
 
 - **Ask for directions, not a design.** Three wildly different sites taught me more about what I wanted than one polished one would have.
 - **Make the demo real.** I only met the squiggle because the numbers were sitting on real posts.
 - **Ask who made it, then ask them.** Claude raised it before I did. Getting a yes from the artist was quicker than drawing a replacement, and a lot better.
 - **Ask the boring question early.** "What would it take to ship this properly?" belongs before you fall in love, not after.
+- **Run it where you'll use it.** The editor passed every test it was given and still fell over on the one laptop I write on.
 
 Anyway, scroll down. The riders are at the bottom of this page, still heading out.
 
